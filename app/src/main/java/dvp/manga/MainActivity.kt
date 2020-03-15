@@ -2,6 +2,9 @@ package dvp.manga
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+/**
+ * @author dvphu on 10,March,2020
+ */
 
 class MainActivity : AppCompatActivity() {
 
