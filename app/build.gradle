@@ -9,7 +9,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "dvp.manga"
-        minSdkVersion 22
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -25,7 +25,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //kotlin
     implementation deps.kotlin.stdlib
     implementation deps.core_ktx
@@ -37,16 +37,19 @@ dependencies {
     implementation deps.constraint_layout
     //Architecture components
     implementation deps.lifecycle.runtime
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     annotationProcessor deps.lifecycle.compiler
     implementation deps.room.runtime
     annotationProcessor deps.room.compiler
     //Jsoup
 
     implementation 'org.jsoup:jsoup:1.11.3'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 //    implementation deps.coroutines
 
     //test compile
-    androidTestImplementation   'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation   'androidx.test.espresso:espresso-core:3.2.0'
-    testImplementation          'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'junit:junit:4.12'
 }
