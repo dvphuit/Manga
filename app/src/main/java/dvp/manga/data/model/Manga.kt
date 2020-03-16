@@ -12,7 +12,8 @@ data class Manga(
     var name: String? = null,
     var cover: String? = null,
     var href: String? = null,
-    var genres: String? = null
+    var genres: String? = null,
+    var last_chap: String? = null
 ){
     @PrimaryKey(autoGenerate = true)  val id: Int = 0
 
