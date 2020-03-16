@@ -6,9 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import dvp.manga.data.model.Chapter
 import dvp.manga.data.model.Manga
-import dvp.manga.data.model.Page
+import dvp.manga.data.model.ChapContent
 
-@Database(entities = [Manga::class, Chapter::class, Page::class], version = 1)
+@Database(entities = [Manga::class, Chapter::class, ChapContent::class], version = 1)
 abstract class MangaDatabase : RoomDatabase() {
 
     companion object {
