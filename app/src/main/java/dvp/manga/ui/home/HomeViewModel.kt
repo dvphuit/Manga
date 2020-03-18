@@ -1,16 +1,36 @@
 package dvp.manga.ui.home
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.MangaRepository
+import kotlinx.coroutines.launch
 
-class HomeViewModel(app: Application) : AndroidViewModel(app) {
-    private val mangaRepository = MangaRepository(app)
-    private val mangas = mangaRepository.getMangas()
+class HomeViewModel(private val repository: MangaRepository) : ViewModel() {
 
-    fun getMangas(): LiveData<List<Manga>> {
-        return mangas
+    var mangas = MutableLiveData<List<Manga>>()
+
+    init {
+        getMangas()
     }
+
+    private fun getMangas() {
+        launch({
+            mangas.value = repository.getMangas()
+        }, {
+            Log.e(this.javaClass.simpleName, it.message!!)
+        })
+    }
+
+
+    private fun launch(block: suspend () -> Unit, error: suspend (Throwable) -> Unit) =
+        viewModelScope.launch {
+            try {
+                block()
+            } catch (e: Throwable) {
+                error(e)
+            }
+        }
 }

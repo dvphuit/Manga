@@ -1,16 +1,29 @@
 package dvp.manga.data.repository
 
-import android.app.Application
-import androidx.lifecycle.LiveData
 import dvp.manga.data.model.Manga
-import dvp.manga.data.remote.TruyenQQ
+import dvp.manga.data.remote.BaseCrawler
 
-class MangaRepository(app: Application) {
+class MangaRepository(private val crawler: BaseCrawler) {
 
-    private val mangas: LiveData<List<Manga>> = TruyenQQ().getMangas()
+    private lateinit var mangas: List<Manga>
 
-    fun getMangas(): LiveData<List<Manga>> {
+    suspend fun getMangas(): List<Manga> {
+        mangas = crawler.getMangas()
         return mangas
     }
 
+    companion object {
+        private lateinit var instance: MangaRepository
+        fun getInstance(crawler: BaseCrawler): MangaRepository {
+            if (!::instance.isInitialized) {
+                synchronized(MangaRepository::class.java) {
+                    if (!::instance.isInitialized) {
+                        instance = MangaRepository(crawler)
+                    }
+                }
+            }
+            return instance
+        }
+
+    }
 }

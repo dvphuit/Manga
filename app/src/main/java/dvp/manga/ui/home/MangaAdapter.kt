@@ -9,7 +9,8 @@ import dvp.manga.R
 import dvp.manga.data.model.Manga
 import kotlinx.android.synthetic.main.manga_item.view.*
 
-class MangaAdapter : RecyclerView.Adapter<MangaAdapter.ViewHolder>() {
+
+class MangaAdapter(var picasso: Picasso) : RecyclerView.Adapter<MangaAdapter.ViewHolder>() {
 
     private var mangas: List<Manga> = arrayListOf()
 
@@ -21,15 +22,18 @@ class MangaAdapter : RecyclerView.Adapter<MangaAdapter.ViewHolder>() {
     override fun getItemCount(): Int = mangas.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(mangas[position])
+        holder.bind(mangas[position], picasso)
     }
 
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(manga: Manga) {
+        fun bind(manga: Manga, picasso: Picasso) {
             itemView.tvName.text = manga.name
             itemView.tvLastChap.text = manga.last_chap
-            Picasso.get().load(manga.cover).into(itemView.imgCover)
+            picasso.load(manga.cover).into(itemView.imgCover)
         }
+
+
     }
 
     fun setMangas(manga: List<Manga>) {

@@ -22,7 +22,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="name"
-        android:textColor="#fff"
+        android:textColor="#004D40"
         android:textSize="14sp" />
 
     <TextView

@@ -4,12 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import dvp.manga.data.local.dao.ChapContentDao
+import dvp.manga.data.local.dao.ChapterDao
+import dvp.manga.data.local.dao.MangaDao
+import dvp.manga.data.model.ChapContent
 import dvp.manga.data.model.Chapter
 import dvp.manga.data.model.Manga
-import dvp.manga.data.model.ChapContent
 
 @Database(entities = [Manga::class, Chapter::class, ChapContent::class], version = 1)
 abstract class MangaDatabase : RoomDatabase() {
+
+    abstract fun mangaDao(): MangaDao
+    abstract fun chapDao(): ChapterDao
+    abstract fun chapContentDao(): ChapContentDao
 
     companion object {
         private var instance: MangaDatabase? = null

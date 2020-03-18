@@ -37,16 +37,17 @@ dependencies {
     implementation deps.constraint_layout
     //Architecture components
     implementation deps.lifecycle.runtime
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation deps.lifecycle.viewmodel_ktx
+    implementation deps.lifecycle.livedata_ktx
+//    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     annotationProcessor deps.lifecycle.compiler
     implementation deps.room.runtime
     annotationProcessor deps.room.compiler
     //Jsoup
 
-    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
-//    implementation deps.coroutines
+    implementation deps.coroutines.android
 
     //test compile
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
