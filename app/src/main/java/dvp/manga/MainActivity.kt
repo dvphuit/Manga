@@ -2,7 +2,12 @@ package dvp.manga
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.squareup.picasso.OkHttp3Downloader
+import com.squareup.picasso.Picasso
 import dvp.manga.ui.home.HomeFragment
+import okhttp3.OkHttpClient
+import okhttp3.Request
+
 
 /**
  * @author dvphu on 10,March,2020

@@ -1,44 +1,52 @@
 package dvp.manga.ui.home
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import dvp.manga.R
 import dvp.manga.data.model.Manga
-import kotlinx.android.synthetic.main.manga_item.view.*
+import dvp.manga.databinding.MangaItemBinding
 
 
-class MangaAdapter(var picasso: Picasso) : RecyclerView.Adapter<MangaAdapter.ViewHolder>() {
-
-    private var mangas: List<Manga> = arrayListOf()
+class MangaAdapter : ListAdapter<Manga, MangaAdapter.ViewHolder>(MangaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.manga_item, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context),
+                R.layout.manga_item,
+                parent,
+                false
+            )
+        )
     }
-
-    override fun getItemCount(): Int = mangas.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(mangas[position], picasso)
+        holder.bind(getItem(position))
     }
 
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(manga: Manga, picasso: Picasso) {
-            itemView.tvName.text = manga.name
-            itemView.tvLastChap.text = manga.last_chap
-            picasso.load(manga.cover).into(itemView.imgCover)
+    class ViewHolder(private val binding: MangaItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.setClickListener { view ->
+                //                binding.data?.let { plantId ->
+//                    navigateToPlant(plantId, view)
+//                }
+            }
         }
 
-
+        fun bind(manga: Manga) {
+            with(binding) {
+                data = MangaVM(manga)
+                executePendingBindings()
+            }
+        }
     }
+}
 
-    fun setMangas(manga: List<Manga>) {
-        this.mangas = manga
-        notifyDataSetChanged()
-    }
-
+private class MangaDiffCallback : DiffUtil.ItemCallback<Manga>() {
+    override fun areItemsTheSame(oldItem: Manga, newItem: Manga): Boolean = oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: Manga, newItem: Manga): Boolean = oldItem == newItem
 }

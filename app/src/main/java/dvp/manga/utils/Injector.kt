@@ -1,5 +1,6 @@
 package dvp.manga.utils
 
+import android.app.Application
 import android.content.Context
 import dvp.manga.data.remote.TruyenQQ
 import dvp.manga.data.repository.MangaRepository
@@ -13,8 +14,8 @@ object Injector {
 
     private fun getMangaRepository(context: Context) = MangaRepository.getInstance(
 //        MangaDatabase.getInstance(context)!!.mangaDao(),
-        TruyenQQ.getInstance()
+        TruyenQQ.getInstance(context)
     )
 
-    fun getHomeVMFactory(context: Context) = HomeVMFactory(getMangaRepository(context))
+    fun getHomeVMFactory(app: Application, context: Context) = HomeVMFactory(app, getMangaRepository(context))
 }

@@ -9,5 +9,5 @@ import android.net.ConnectivityManager
 
 fun Context.isOnline() : Boolean{
     val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return cm.allNetworks.isEmpty()
+    return cm.allNetworks.isNotEmpty()
 }

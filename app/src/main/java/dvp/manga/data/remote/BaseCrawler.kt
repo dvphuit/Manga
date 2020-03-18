@@ -2,10 +2,12 @@ package dvp.manga.data.remote
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.ChapContent
 import dvp.manga.data.model.Chapter
 import dvp.manga.data.model.Manga
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -31,6 +33,5 @@ abstract class BaseCrawler {
             return body!!
         }
     }
-
 
 }

@@ -13,17 +13,10 @@ class MangaRepository(private val crawler: BaseCrawler) {
     }
 
     companion object {
-        private lateinit var instance: MangaRepository
-        fun getInstance(crawler: BaseCrawler): MangaRepository {
-            if (!::instance.isInitialized) {
-                synchronized(MangaRepository::class.java) {
-                    if (!::instance.isInitialized) {
-                        instance = MangaRepository(crawler)
-                    }
-                }
+        @Volatile private var instance: MangaRepository? = null
+        fun getInstance(crawler: BaseCrawler) =
+            instance ?: synchronized(this) {
+                instance ?: MangaRepository(crawler).also { instance = it }
             }
-            return instance
-        }
-
     }
 }
