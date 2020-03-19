@@ -11,6 +11,7 @@ import androidx.lifecycle.observe
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.MangaDetailFragmentBinding
 import dvp.manga.ui.ViewState
+import dvp.manga.ui.adapter.ChapAdapter
 import dvp.manga.utils.Injector
 
 class MangaDetailFragment : Fragment() {

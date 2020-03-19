@@ -1,4 +1,4 @@
-package dvp.manga.ui.detail
+package dvp.manga.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

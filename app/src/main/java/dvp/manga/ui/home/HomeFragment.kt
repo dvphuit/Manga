@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.ViewState
-import dvp.manga.ui.common.MangaAdapter
+import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.utils.Injector
 
 
