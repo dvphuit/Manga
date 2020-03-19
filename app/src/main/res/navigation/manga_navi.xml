@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/home_fragment"
+    android:id="@+id/manga_navi">
+
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="dvp.manga.ui.home.HomeFragment"
+        tools:layout="@layout/home_fragment">
+
+        <action
+            android:id="@+id/action_manga_to_detail"
+            app:destination="@id/manga_detail_fragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/manga_detail_fragment"
+        android:name="dvp.manga.ui.detail.MangaDetailFragment"
+        android:label="Manga Detail"
+        tools:layout="@layout/manga_detail_fragment">
+        <argument
+            android:name="manga"
+            app:argType="dvp.manga.data.model.Manga" />
+    </fragment>
+</navigation>

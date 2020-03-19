@@ -2,8 +2,11 @@ package dvp.manga.utils
 
 import android.app.Application
 import android.content.Context
+import dvp.manga.data.model.Manga
 import dvp.manga.data.remote.TruyenQQ
+import dvp.manga.data.repository.ChapterRepository
 import dvp.manga.data.repository.MangaRepository
+import dvp.manga.ui.detail.MangaDetailVMFactory
 import dvp.manga.ui.home.HomeVMFactory
 
 /**
@@ -17,5 +20,12 @@ object Injector {
         TruyenQQ.getInstance(context)
     )
 
-    fun getHomeVMFactory(app: Application, context: Context) = HomeVMFactory(app, getMangaRepository(context))
+    private fun getChapterRepository(context: Context)
+            = ChapterRepository.getInstance(TruyenQQ.getInstance(context))
+
+    fun getHomeVMFactory(app: Application, context: Context)
+            = HomeVMFactory(app, getMangaRepository(context))
+
+    fun getMangaDetailVMFactory(app: Application, context: Context, manga: Manga)
+            = MangaDetailVMFactory(app, getChapterRepository(context), manga)
 }

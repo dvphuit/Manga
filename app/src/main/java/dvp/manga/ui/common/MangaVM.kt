@@ -1,4 +1,4 @@
-package dvp.manga.ui.home
+package dvp.manga.ui.common
 
 import dvp.manga.data.model.Manga
 

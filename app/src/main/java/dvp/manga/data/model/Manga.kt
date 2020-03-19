@@ -2,6 +2,8 @@ package dvp.manga.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
+
 /**
  * @author dvphu on 10,March,2020
  */
@@ -14,7 +16,7 @@ data class Manga(
     var href: String? = null,
     var genres: String? = null,
     var last_chap: String? = null
-){
-    @PrimaryKey(autoGenerate = true)  val id: Int = 0
-
+) : Serializable {
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
 }

@@ -9,13 +9,14 @@
 
         <variable
             name="data"
-            type="dvp.manga.ui.home.MangaVM" />
+            type="dvp.manga.data.model.Manga" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:selectableItemBackgroundBorderless"
+        android:onClick="@{clickListener}"
         android:padding="4dp"
         android:stateListAnimator="@animator/press_hover">
 
