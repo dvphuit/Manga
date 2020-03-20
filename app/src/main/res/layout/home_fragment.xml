@@ -10,16 +10,29 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <dvp.manga.ui.custom.BouncyRecyclerView
             android:id="@+id/manga_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/bottom_progress"
             app:spanCount="3"
             tools:context=".ui.home.HomeFragment"
             tools:listitem="@layout/manga_item" />
+
+        <FrameLayout
+            android:id="@+id/bottom_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

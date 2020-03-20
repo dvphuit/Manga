@@ -20,11 +20,11 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         initPicasso()
     }
 
-    private val url = "http://truyenqq.com/"
-    override suspend fun getMangas(): List<Manga> {
+    private val url = "http://truyenqq.com"
+    override suspend fun getMangas(page: Int): List<Manga> {
         val mangas = mutableListOf<Manga>()
         val list = withContext(Dispatchers.IO) {
-            getBody(url + "truyen-con-trai.html?country=4").getElementsByClass("story-item")
+            getBody("$url/truyen-con-trai/trang-$page.html?country=4").getElementsByClass("story-item")
         }
         list.map { element ->
             val manga = Manga(host = url)
@@ -55,8 +55,19 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         return chaps
     }
 
-    override suspend fun getChapContent(): List<ChapContent> {
-        return listOf()
+    override suspend fun getChapContent(href: String): List<ChapContent> {
+        val contents = mutableListOf<ChapContent>()
+        val list = withContext(Dispatchers.IO) {
+            getBody(href).getElementsByClass("lazy")
+        }
+        list.map { element ->
+            val content = ChapContent()
+            with(element) {
+                content.img_url = attr("src")
+                contents.add(content)
+            }
+        }
+        return contents
     }
 
     private fun initPicasso() {

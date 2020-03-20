@@ -7,8 +7,8 @@ class MangaRepository(private val crawler: BaseCrawler) {
 
     private lateinit var mangas: List<Manga>
 
-    suspend fun getMangas(): List<Manga> {
-        mangas = crawler.getMangas()
+    suspend fun getMangas(page: Int): List<Manga> {
+        mangas = crawler.getMangas(page)
         return mangas
     }
 

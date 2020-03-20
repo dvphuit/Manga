@@ -24,5 +24,18 @@
         <argument
             android:name="manga"
             app:argType="dvp.manga.data.model.Manga" />
+        <action
+            android:id="@+id/action_chap_to_story"
+            app:destination="@id/story_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/story_fragment"
+        android:name="dvp.manga.ui.story.StoryFragment"
+        android:label="Story"
+        tools:layout="@layout/story_fragment">
+        <argument
+            android:name="chap"
+            app:argType="dvp.manga.data.model.Chapter" />
     </fragment>
 </navigation>

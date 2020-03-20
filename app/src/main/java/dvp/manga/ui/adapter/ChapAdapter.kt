@@ -1,12 +1,15 @@
 package dvp.manga.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Chapter
 import dvp.manga.databinding.ChapterItemBinding
+import dvp.manga.ui.detail.MangaDetailFragmentDirections
 
 /**
  * @author dvphu on 19,March,2020
@@ -17,11 +20,22 @@ class ChapAdapter : RecyclerView.Adapter<ChapAdapter.ViewHolder>() {
     private var chaps = emptyList<Chapter>()
 
     class ViewHolder(private val binding: ChapterItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.setClickListener {
+                gotoChapContent(binding.data!!, it)
+            }
+        }
+
         fun bind(chap: Chapter) {
             with(binding) {
                 data = chap
                 executePendingBindings()
             }
+        }
+
+        private fun gotoChapContent(chap: Chapter, view: View) {
+            val direction = MangaDetailFragmentDirections.actionChapToStory(chap)
+            view.findNavController().navigate(direction)
         }
     }
 
@@ -34,9 +48,9 @@ class ChapAdapter : RecyclerView.Adapter<ChapAdapter.ViewHolder>() {
         holder.bind(chaps[position])
     }
 
-    override fun getItemCount(): Int  = chaps.size
+    override fun getItemCount(): Int = chaps.size
 
-    fun submitList(chaps: List<Chapter>){
+    fun submitList(chaps: List<Chapter>) {
         this.chaps = chaps
         notifyDataSetChanged()
     }

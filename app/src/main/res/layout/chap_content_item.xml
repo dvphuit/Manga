@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="data"
+            type="dvp.manga.data.model.ChapContent" />
+    </data>
+
+    <ImageView
+        android:id="@+id/img_chap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="chap_content"
+        app:imageFromUrl="@{data.img_url}" />
+
+</layout>

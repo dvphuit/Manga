@@ -7,17 +7,13 @@ import dvp.manga.ui.BaseViewModel
 
 class HomeViewModel internal constructor(app: Application, private val repository: MangaRepository) : BaseViewModel(app) {
 
-    lateinit var mangas: List<Manga>
+    var mangas = mutableListOf<Manga>()
+    lateinit var top: List<Manga>
 
-    init {
-        getMangas()
-    }
-
-    private fun getMangas() {
+    fun fetchMangas(page: Int) {
         launch {
-            mangas = repository.getMangas()
+            mangas.addAll(repository.getMangas(page))
             return@launch mangas.isNotEmpty()
         }
     }
-
 }
