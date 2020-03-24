@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Manga
@@ -13,12 +12,19 @@ import dvp.manga.databinding.MangaItemBinding
 import dvp.manga.ui.home.HomeFragmentDirections
 
 
-class MangaAdapter(recyclerView: RecyclerView) :  LazyAdapter<Manga>(recyclerView) {
+class MangaAdapter(recyclerView: RecyclerView) : LazyAdapter<Manga>(recyclerView) {
 
-    private var mangas = emptyList<Manga>()
+    override fun implCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+        return MangaHolder(DataBindingUtil.inflate(LayoutInflater.from(parent!!.context), R.layout.manga_item, parent, false))
+    }
+
+    override fun getSpan(position: Int) = if (getItemViewType(position) == LOADING) 3 else 1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as MangaHolder).bind(mangas[position])
+        super.onBindViewHolder(holder, position)
+        if (holder is MangaHolder) {
+            holder.bind(list[position])
+        }
     }
 
     inner class MangaHolder(private val binding: MangaItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -41,33 +47,8 @@ class MangaAdapter(recyclerView: RecyclerView) :  LazyAdapter<Manga>(recyclerVie
         }
     }
 
-    fun submitData(list: List<Manga>) {
-        val start = mangas.size
-        this.mangas = list
-        notifyItemRangeChanged(start, itemCount)
-    }
-
     override fun getItemCount(): Int {
-        return mangas.size
-    }
-
-    override fun implCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
-        return MangaHolder(DataBindingUtil.inflate(LayoutInflater.from(parent!!.context), R.layout.manga_item, parent, false))
-    }
-
-    override fun setSpan(layoutManager: GridLayoutManager) {
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return when (getItemViewType(position)) {
-                    LOADING -> 3
-                    else -> 1
-                }
-            }
-        }
-    }
-
-    override fun setDataSource() {
-
+        return list.size
     }
 
 }
