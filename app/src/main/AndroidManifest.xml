@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:theme="@style/Theme.AppCompat.Translucent"
+            android:theme="@style/SearchTheme"
             android:name=".SearchActivity">
 
         </activity>

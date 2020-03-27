@@ -12,4 +12,10 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
         (bt_search.drawable as AnimatedVectorDrawable).start()
     }
+
+    override fun onDestroy() {
+        supportFinishAfterTransition()
+        super.onDestroy()
+    }
+
 }

@@ -8,47 +8,43 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_bar"
-        android:paddingHorizontal="8dp"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/bg_search_bar"
+        android:transitionName="bt_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:transitionName="bt_search"
         tools:context=".TestActivity">
 
         <ImageView
             android:id="@+id/bt_search"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="64dp"
+            android:layout_height="40dp"
             android:background="@null"
+            android:padding="4dp"
             android:src="@drawable/search_to_back"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/search_input"
+            app:layout_constraintRight_toLeftOf="@id/search_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/search_input"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:autofillHints="@null"
-            android:background="@null"
-            android:inputType="text"
+
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:iconifiedByDefault="false"
+            android:transitionGroup="true"
+            android:searchIcon="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/bt_search"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="LabelFor" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:text="Search Activity"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

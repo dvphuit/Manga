@@ -8,11 +8,13 @@
 
     <ImageView
         android:id="@+id/bt_search"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="64dp"
+        android:layout_height="40dp"
         android:layout_gravity="end"
         android:layout_margin="8dp"
+        android:padding="4dp"
         android:src="@drawable/search_to_back"
+        android:background="@drawable/bg_bt_search"
         android:transitionName="bt_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
