@@ -6,18 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".BlankFragment">
 
-    <ImageView
-        android:id="@+id/bt_search"
+    <FrameLayout
+        android:id="@+id/searchback_container"
         android:layout_width="64dp"
         android:layout_height="40dp"
-        android:layout_gravity="end"
         android:layout_margin="8dp"
-        android:padding="4dp"
-        android:src="@drawable/search_to_back"
         android:background="@drawable/bg_bt_search"
-        android:transitionName="bt_search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:transitionName="search_border"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/searchback"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_search_24dp"
+            android:transitionName="@string/transition_search_back" />
+
+    </FrameLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -26,4 +34,5 @@
         android:text="Home Fragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

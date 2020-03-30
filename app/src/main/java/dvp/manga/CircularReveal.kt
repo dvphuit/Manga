@@ -36,6 +36,13 @@ class CircularReveal : Visibility {
         a.recycle()
     }
 
+    /**
+     * The center point of the reveal or conceal, relative to the target `view`.
+     */
+    fun setCenter(center: Point) {
+        this.center = center
+    }
+
     override fun onAppear(
         sceneRoot: ViewGroup, view: View?,
         startValues: TransitionValues?,

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright 2016 Google LLC.
+  Copyright 2015 Google LLC.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+      http://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,12 +15,10 @@
   limitations under the License.
   -->
 
-<resources>
-
-    <declare-styleable name="CircularReveal">
-        <attr name="startRadius" format="dimension" />
-        <attr name="endRadius" format="dimension" />
-        <attr name="centerOn" format="reference" />
-    </declare-styleable>
-
-</resources>
+<objectAnimator
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="@integer/searchback_show_hide_arrow_head_duration"
+    android:interpolator="@android:interpolator/fast_out_slow_in"
+    android:propertyName="trimPathEnd"
+    android:valueFrom="@fraction/searchback_arrow_head_back_trim_end"
+    android:valueTo="@fraction/searchback_arrow_head_search_trim_end" />

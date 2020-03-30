@@ -16,23 +16,27 @@
   ~
   -->
 
-<transitionSet
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:duration="600"
     android:transitionOrdering="together">
 
     <targets>
-        <target android:targetId="@id/bt_search" />
+        <target android:targetId="@id/searchback" />
+        <target android:targetId="@+id/search_toolbar"/>
     </targets>
     <changeBounds android:interpolator="@android:interpolator/fast_out_slow_in" />
-<!--    <fade android:duration="400"-->
-<!--        android:interpolator="@android:interpolator/linear_out_slow_in">-->
-<!--        <targets>-->
-<!--            <target android:targetId="@id/bt_search" />-->
-<!--        </targets>-->
-<!--    </fade>-->
-<!--    <transition-->
-<!--        class="io.plaidapp.core.ui.transitions.StartAnimatable"-->
-<!--        android:src="@drawable/avd_back_to_search" />-->
 
+    <transition
+        class="dvp.manga.AVDTransition"
+        android:src="@drawable/avd_back_to_search" />
+
+    <transition
+        class="dvp.manga.BackgroundTransition"
+        app:startColor="#fff"
+        app:endColor="#FF9800">>
+        <targets>
+            <target android:targetId="@id/search_toolbar" />
+        </targets>
+    </transition>
 </transitionSet>

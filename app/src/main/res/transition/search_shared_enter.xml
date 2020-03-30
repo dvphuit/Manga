@@ -16,17 +16,28 @@
   ~
   -->
 
-<transitionSet
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:duration="650"
     android:transitionOrdering="together">
 
-<!--    <targets>-->
-<!--        <target android:targetId="@id/searchback" />-->
-<!--    </targets>-->
-<!--    <changeBounds android:interpolator="@android:interpolator/fast_out_slow_in" />-->
-<!--    <transition-->
-<!--        class="io.plaidapp.core.ui.transitions.StartAnimatable"-->
-<!--        android:src="@drawable/avd_search_to_back" />-->
+    <targets>
+        <target android:targetId="@id/searchback" />
+        <target android:targetId="@+id/search_toolbar"/>
+    </targets>
 
+    <changeBounds android:interpolator="@android:interpolator/fast_out_slow_in" />
+
+    <transition
+        class="dvp.manga.AVDTransition"
+        android:src="@drawable/avd_search_to_back" />
+
+    <transition
+        class="dvp.manga.BackgroundTransition"
+        app:startColor="#FF9800"
+        app:endColor="#fff">
+        <targets>
+            <target android:targetId="@id/search_toolbar" />
+        </targets>
+    </transition>
 </transitionSet>

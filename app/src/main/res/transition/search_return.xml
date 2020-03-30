@@ -18,22 +18,22 @@
 
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!--    <transition-->
-<!--        class="io.plaidapp.search.ui.transitions.CircularReveal"-->
-<!--        android:duration="600"-->
-<!--        android:interpolator="@android:interpolator/fast_out_linear_in">-->
-<!--        <targets>-->
-<!--            <target android:targetId="@id/results_container" />-->
-<!--        </targets>-->
-<!--    </transition>-->
+    <transition
+        class="dvp.manga.CircularReveal"
+        android:duration="600"
+        android:interpolator="@android:interpolator/fast_out_linear_in">
+        <targets>
+            <target android:targetId="@id/results_container" />
+        </targets>
+    </transition>
 
-<!--    <fade-->
-<!--        android:duration="120"-->
-<!--        android:interpolator="@android:interpolator/fast_out_linear_in">-->
-<!--        <targets>-->
-<!--            <target android:targetId="@id/search_view" />-->
-<!--        </targets>-->
-<!--    </fade>-->
+    <fade
+        android:duration="120"
+        android:interpolator="@android:interpolator/fast_out_linear_in">
+        <targets>
+            <target android:targetId="@id/search_view" />
+        </targets>
+    </fade>
 
 <!--    <fade-->
 <!--        android:startDelay="300"-->
@@ -44,20 +44,20 @@
 <!--        </targets>-->
 <!--    </fade>-->
 
-<!--    <fade-->
-<!--        android:duration="400"-->
-<!--        android:interpolator="@android:interpolator/fast_out_linear_in">-->
-<!--        <targets>-->
-<!--            <target android:targetId="@id/scrim"/>-->
-<!--        </targets>-->
-<!--    </fade>-->
+    <fade
+        android:duration="400"
+        android:interpolator="@android:interpolator/fast_out_linear_in">
+        <targets>
+            <target android:targetId="@id/scrim"/>
+        </targets>
+    </fade>
 
-<!--    <fade-->
-<!--        android:duration="400"-->
-<!--        android:interpolator="@android:interpolator/fast_out_slow_in">-->
-<!--        <targets>-->
-<!--            <target android:targetId="@android:id/navigationBarBackground"/>-->
-<!--        </targets>-->
-<!--    </fade>-->
+    <fade
+        android:duration="400"
+        android:interpolator="@android:interpolator/fast_out_slow_in">
+        <targets>
+            <target android:targetId="@android:id/navigationBarBackground"/>
+        </targets>
+    </fade>
 
 </transitionSet>

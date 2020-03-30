@@ -7,7 +7,6 @@ import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_blank.*
 
@@ -24,17 +23,13 @@ class BlankFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_blank, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity!!.window.sharedElementEnterTransition.duration = 2000
-        activity!!.window.sharedElementReturnTransition.setDuration(2000).interpolator = DecelerateInterpolator()
-        bt_search.setOnClickListener {
-            val element = Pair<View, String>(bt_search, "bt_search")
-            val options = ActivityOptions.makeSceneTransitionAnimation(activity, element)
-            val i = Intent(activity, SearchActivity::class.java)
-            i.putExtra("item_name", "item 2")
-            startActivity(i, options.toBundle())
+        searchback.setOnClickListener {
+            val element1 = Pair<View, String>(searchback, searchback.transitionName)
+            val element2 = Pair<View, String>(searchback_container, searchback_container.transitionName)
+            val options = ActivityOptions.makeSceneTransitionAnimation(activity, element1, element2).toBundle()
+            startActivity(Intent(context, SearchActivity::class.java), options)
         }
     }
 }
