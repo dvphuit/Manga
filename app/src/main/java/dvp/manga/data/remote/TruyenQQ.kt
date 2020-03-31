@@ -70,6 +70,25 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         return contents
     }
 
+    override suspend fun searchManga(query: String): List<Manga> {
+        val mangas = mutableListOf<Manga>()
+        val list = withContext(Dispatchers.IO) {
+            getBody("$url/tim-kiem.html?q=$query").getElementsByClass("story-item")
+        }
+        list.map { element ->
+            val manga = Manga(host = url)
+            with(element) {
+                manga.name = getElementsByClass("title-book").text()
+                manga.href = getElementsByClass("title-book").select("a").attr("href")
+                manga.last_chap = getElementsByClass("episode-book").text()
+                manga.cover = getElementsByClass("story-cover").attr("src")
+                mangas.add(manga)
+            }
+        }
+        return mangas
+    }
+
+    //region init TruyenQQ
     private fun initPicasso() {
         val client = OkHttpClient.Builder().addInterceptor { chain ->
             val request = chain.request()
@@ -92,4 +111,6 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
             instance ?: TruyenQQ(ctx).also { instance = it }
         }
     }
+
+    //endregion
 }

@@ -15,6 +15,8 @@ abstract class BaseCrawler {
     abstract suspend fun getChapters(href: String): List<Chapter>
     abstract suspend fun getChapContent(href: String): List<ChapContent>
 
+    abstract suspend fun searchManga(query: String): List<Manga>
+
     internal fun getBody(url: String): Element {
         return Jsoup.connect(url).timeout(5000).get().body()
     }

@@ -12,6 +12,11 @@ class MangaRepository(private val crawler: BaseCrawler) {
         return mangas
     }
 
+    suspend fun searchManga(query: String): List<Manga> {
+        mangas = crawler.searchManga(query)
+        return mangas
+    }
+
     companion object {
         @Volatile private var instance: MangaRepository? = null
         fun getInstance(crawler: BaseCrawler) =

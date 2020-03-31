@@ -10,6 +10,7 @@ import dvp.manga.data.repository.ChapterRepository
 import dvp.manga.data.repository.MangaRepository
 import dvp.manga.ui.detail.MangaDetailVMFactory
 import dvp.manga.ui.home.HomeVMFactory
+import dvp.manga.ui.search.SearchVMFactory
 import dvp.manga.ui.story.StoryVMFactory
 
 /**
@@ -32,4 +33,6 @@ object Injector {
     fun getMangaDetailVMFactory(app: Application, context: Context, manga: Manga) = MangaDetailVMFactory(app, getChapterRepository(context), manga)
 
     fun getChapContentVMFactory(app: Application, context: Context, chap: Chapter) = StoryVMFactory(app, getChapContentRepository(context), chap)
+
+    fun getSearchVMFactory(app: Application, context: Context) = SearchVMFactory(app, getMangaRepository(context))
 }
