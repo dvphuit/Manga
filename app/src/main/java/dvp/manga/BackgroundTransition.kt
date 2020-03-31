@@ -4,11 +4,13 @@ import android.animation.Animator
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.PorterDuff
 import android.graphics.drawable.GradientDrawable
 import android.transition.Transition
 import android.transition.TransitionValues
 import android.util.AttributeSet
 import android.view.ViewGroup
+import android.widget.ImageView
 
 
 /**
@@ -34,11 +36,21 @@ class BackgroundTransition : Transition {
 
     override fun createAnimator(sceneRoot: ViewGroup, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
         if (startValues == null || endValues == null) return null
-        val background = endValues.view.background as GradientDrawable
-        return ValueAnimator.ofInt(startColor, endColor).apply {
+
+        return if (endValues.view is ImageView)
+            ValueAnimator.ofInt(endColor, startColor).apply {
+                setEvaluator(ArgbEvaluator())
+                addUpdateListener { listener ->
+                    val value = listener.animatedValue as Int
+                    (endValues.view as ImageView).setColorFilter(value, PorterDuff.Mode.SRC_IN)
+
+                }
+            }
+        else ValueAnimator.ofInt(startColor, endColor).apply {
             setEvaluator(ArgbEvaluator())
             addUpdateListener { listener ->
-                background.setColor(listener.animatedValue as Int)
+                val value = listener.animatedValue as Int
+                (endValues.view.background as GradientDrawable).setColor(value)
             }
         }
     }

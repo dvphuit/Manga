@@ -36,11 +36,11 @@
     </fade>
 
 <!--    <fade-->
-<!--        android:startDelay="300"-->
+<!--        android:startDelay="400"-->
 <!--        android:duration="160"-->
 <!--        android:interpolator="@android:interpolator/fast_out_linear_in">-->
 <!--        <targets>-->
-<!--            <target android:targetId="@id/search_background" />-->
+<!--            <target android:targetId="@id/search_toolbar" />-->
 <!--        </targets>-->
 <!--    </fade>-->
 
@@ -56,7 +56,7 @@
         android:duration="400"
         android:interpolator="@android:interpolator/fast_out_slow_in">
         <targets>
-            <target android:targetId="@android:id/navigationBarBackground"/>
+            <target android:excludeId="@android:id/navigationBarBackground"/>
         </targets>
     </fade>
 

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import androidx.annotation.IdRes
+import dvp.manga.utils.NoPauseAnimator
 import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -50,13 +51,13 @@ class CircularReveal : Visibility {
     ): Animator? {
         if (view == null || view.height == 0 || view.width == 0) return null
         ensureCenterPoint(sceneRoot, view)
-        return ViewAnimationUtils.createCircularReveal(
+        return NoPauseAnimator(ViewAnimationUtils.createCircularReveal(
             view,
             center!!.x,
             center!!.y,
             startRadius,
             getFullyRevealedRadius(view)
-        )
+        ))
     }
 
     override fun onDisappear(
@@ -66,13 +67,13 @@ class CircularReveal : Visibility {
     ): Animator? {
         if (view == null || view.height == 0 || view.width == 0) return null
         ensureCenterPoint(sceneRoot, view)
-        return ViewAnimationUtils.createCircularReveal(
+        return NoPauseAnimator(ViewAnimationUtils.createCircularReveal(
             view,
             center!!.x,
             center!!.y,
             getFullyRevealedRadius(view),
             endRadius
-        )
+        ))
     }
 
     private fun ensureCenterPoint(sceneRoot: ViewGroup, view: View) {

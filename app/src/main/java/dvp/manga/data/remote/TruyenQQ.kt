@@ -70,10 +70,10 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         return contents
     }
 
-    override suspend fun searchManga(query: String): List<Manga> {
+    override suspend fun searchManga(query: String, page: Int): List<Manga> {
         val mangas = mutableListOf<Manga>()
         val list = withContext(Dispatchers.IO) {
-            getBody("$url/tim-kiem.html?q=$query").getElementsByClass("story-item")
+            getBody("$url/tim-kiem/trang-$page?q=$query").getElementsByClass("story-item")
         }
         list.map { element ->
             val manga = Manga(host = url)

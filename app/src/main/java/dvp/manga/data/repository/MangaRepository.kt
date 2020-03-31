@@ -12,8 +12,8 @@ class MangaRepository(private val crawler: BaseCrawler) {
         return mangas
     }
 
-    suspend fun searchManga(query: String): List<Manga> {
-        mangas = crawler.searchManga(query)
+    suspend fun searchManga(query: String, page: Int): List<Manga> {
+        mangas = crawler.searchManga(query, page)
         return mangas
     }
 

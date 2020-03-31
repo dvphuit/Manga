@@ -7,6 +7,7 @@
     tools:context=".BlankFragment">
 
     <FrameLayout
+        android:elevation="2dp"
         android:id="@+id/searchback_container"
         android:layout_width="64dp"
         android:layout_height="40dp"
@@ -18,11 +19,12 @@
 
         <ImageButton
             android:id="@+id/searchback"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="?android:selectableItemBackgroundBorderless"
             android:src="@drawable/ic_search_24dp"
+            android:tint="#fff"
             android:transitionName="@string/transition_search_back" />
 
     </FrameLayout>
@@ -33,6 +35,7 @@
         android:gravity="center"
         android:text="Home Fragment"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchback_container"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

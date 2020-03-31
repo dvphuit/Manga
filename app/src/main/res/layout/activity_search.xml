@@ -1,72 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SearchActivity">
 
-    <View
-        android:id="@+id/scrim"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/scrim" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/search_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="8dp"
-        android:background="@drawable/bg_search_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:transitionName="search_border"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.search.SearchActivity">
 
+        <View
+            android:id="@+id/scrim"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/scrim" />
 
         <FrameLayout
-            android:id="@+id/searchback_container"
-            android:layout_width="96dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/search_view"
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/scrim"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageButton
-                android:id="@+id/searchback"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/search_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/bg_search_bar"
+                android:elevation="2dp"
+                android:orientation="horizontal"
+                android:transitionName="search_border">
+
+                <FrameLayout
+                    android:id="@+id/searchback_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent">
+
+                    <ImageButton
+                        android:id="@+id/searchback"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="?android:selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_arrow_back_padded"
+                        android:tint="#FF9800"
+                        android:transitionName="@string/transition_search_back" />
+
+                </FrameLayout>
+
+                <EditText
+                    android:id="@+id/search_view"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:lines="1"
+                    android:textColor="#000" />
+                <!--        <SearchView-->
+                <!--            android:id="@+id/search_view"-->
+                <!--            android:layout_width="0dp"-->
+                <!--            android:layout_height="match_parent"-->
+                <!--            android:layout_marginEnd="8dp"-->
+                <!--            android:layout_weight="1"-->
+                <!--            android:iconifiedByDefault="false"-->
+                <!--            android:searchIcon="@null"-->
+                <!--            android:background="@null"-->
+                <!--            android:transitionGroup="true" />-->
+            </LinearLayout>
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/results_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#fff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_view">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/manga_list"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?android:selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_arrow_back_padded"
-                android:transitionName="@string/transition_search_back" />
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintBottom_toTopOf="@id/bottom_progress"
+                app:spanCount="3"
+                tools:listitem="@layout/manga_item" />
 
         </FrameLayout>
 
-        <SearchView
-            android:id="@+id/search_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:iconifiedByDefault="false"
-            android:searchIcon="@null"
-            android:transitionGroup="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/searchback_container" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <FrameLayout
-        android:id="@+id/results_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="?android:actionBarSize"
-        app:layout_constraintTop_toBottomOf="@id/search_toolbar">
-
-
-    </FrameLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

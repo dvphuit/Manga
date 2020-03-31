@@ -4,7 +4,6 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
 import android.view.animation.ScaleAnimation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -80,10 +79,10 @@ abstract class LazyAdapter<T : LazyModel>(private val recyclerView: RecyclerView
         }
     }
 
-    abstract fun getSpan(position: Int) : Int
+    abstract fun getSpan(position: Int): Int
 
-    private fun setSpan(layoutManager: RecyclerView.LayoutManager){
-        if (layoutManager is GridLayoutManager){
+    private fun setSpan(layoutManager: RecyclerView.LayoutManager) {
+        if (layoutManager is GridLayoutManager) {
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     return getSpan(position)
@@ -100,10 +99,8 @@ abstract class LazyAdapter<T : LazyModel>(private val recyclerView: RecyclerView
     }
 
     private fun stopLazyLoad(success: Boolean) {
-        if (list.isEmpty()) return
         list.remove(lazyItem)
         notifyItemChanged(list.lastIndex)
-        recyclerView.smoothScrollBy(0, 400, DecelerateInterpolator())
         Handler().postDelayed({
             isLoading = false
             if (success) pageIndex++
@@ -117,7 +114,23 @@ abstract class LazyAdapter<T : LazyModel>(private val recyclerView: RecyclerView
         notifyItemChanged(start, itemCount)
     }
 
+    fun addData(newList: List<T>) {
+        stopLazyLoad(newList.isNotEmpty())
+        val start = this.list.size
+        this.list.addAll(newList)
+        notifyItemChanged(start, itemCount)
+    }
+
+    fun noMoreData() {
+        list.remove(lazyItem)
+        notifyItemChanged(list.size)
+        isLoading = false
+    }
+
     fun setLazyCallback(callback: (Int) -> Unit) {
+        pageIndex = 1
+        list.clear()
+        notifyDataSetChanged()
         startLazyLoad()
         lazyCallback = callback
     }
@@ -126,6 +139,6 @@ abstract class LazyAdapter<T : LazyModel>(private val recyclerView: RecyclerView
         @Suppress("UNCHECKED_CAST")
         list.add(lazyItem as T)
         notifyItemInserted(list.size)
-        lazyCallback!!.invoke(pageIndex)
+        lazyCallback?.invoke(pageIndex)
     }
 }

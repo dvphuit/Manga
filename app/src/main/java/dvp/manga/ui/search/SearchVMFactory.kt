@@ -12,6 +12,6 @@ import dvp.manga.data.repository.MangaRepository
 class SearchVMFactory(private val app: Application, private val repository: MangaRepository): ViewModelProvider.AndroidViewModelFactory(app){
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return SearchViewModel(app, repository) as T
+        return SearchViewModel2(app, repository) as T
     }
 }

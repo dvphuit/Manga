@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:theme="@style/SearchTheme"
-            android:name=".SearchActivity">
+            android:name=".ui.search.SearchActivity">
 
         </activity>
         <activity android:name=".TestActivity">

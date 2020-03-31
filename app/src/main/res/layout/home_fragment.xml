@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layoutManager="dvp.manga.ui.custom.NpaGridLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/bottom_progress"
             app:spanCount="3"
             tools:context=".ui.home.HomeFragment"
