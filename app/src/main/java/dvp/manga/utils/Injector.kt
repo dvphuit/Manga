@@ -34,5 +34,5 @@ object Injector {
 
     fun getChapContentVMFactory(app: Application, context: Context, chap: Chapter) = StoryVMFactory(app, getChapContentRepository(context), chap)
 
-    fun getSearchVMFactory(app: Application, context: Context) = SearchVMFactory(app, getMangaRepository(context))
+    fun getSearchVMFactory(context: Context) = SearchVMFactory(getMangaRepository(context))
 }

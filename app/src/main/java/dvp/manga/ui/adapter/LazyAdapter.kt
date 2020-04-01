@@ -1,6 +1,7 @@
 package dvp.manga.ui.adapter
 
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.view.animation.ScaleAnimation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
+import dvp.manga.data.model.Entity
 
 /**
  * @author dvphu on 24,March,2020
@@ -16,12 +18,13 @@ import dvp.manga.R
 const val LOADING = 11
 const val ITEM = 0
 
-abstract class LazyAdapter<T : LazyModel>(private val recyclerView: RecyclerView) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    var list: MutableList<T> = mutableListOf()
 
     private var isLoading = false
     private var pageIndex = 1
     private val lazyItem = LazyModel(true)
-    var list: MutableList<T> = mutableListOf()
     private var lazyCallback: ((Int) -> Unit)? = null
 
     init {
@@ -29,7 +32,7 @@ abstract class LazyAdapter<T : LazyModel>(private val recyclerView: RecyclerView
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (list[position].loading) LOADING else ITEM
+        return if (list[position] is LazyModel) LOADING else ITEM
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -98,33 +101,21 @@ abstract class LazyAdapter<T : LazyModel>(private val recyclerView: RecyclerView
         Handler().post(insertLoading)
     }
 
-    private fun stopLazyLoad(success: Boolean) {
-        list.remove(lazyItem)
-        notifyItemChanged(list.lastIndex)
-        Handler().postDelayed({
-            isLoading = false
-            if (success) pageIndex++
-        }, 1)
+    private fun stopLazyLoad(hasData: Boolean) {
+        Log.d("TEST", "has data $hasData")
+        list.remove(lazyItem as Entity)
+        notifyItemRemoved(list.size)
+        isLoading = !hasData
+        if (hasData) {
+            pageIndex++
+        }
     }
 
-    fun submitData(list: MutableList<T>) {
-        stopLazyLoad(list.isNotEmpty())
-        val start = this.list.size
-        this.list = list
-        notifyItemChanged(start, itemCount)
-    }
-
-    fun addData(newList: List<T>) {
-        stopLazyLoad(newList.isNotEmpty())
-        val start = this.list.size
-        this.list.addAll(newList)
-        notifyItemChanged(start, itemCount)
-    }
-
-    fun noMoreData() {
-        list.remove(lazyItem)
-        notifyItemChanged(list.size)
-        isLoading = false
+    fun submitData(list: List<T>) {
+        val oldItemCount = this.list.size
+        stopLazyLoad(list.size > oldItemCount)
+        this.list = list.toMutableList()
+        notifyItemRangeInserted(oldItemCount, itemCount)
     }
 
     fun setLazyCallback(callback: (Int) -> Unit) {
@@ -135,8 +126,8 @@ abstract class LazyAdapter<T : LazyModel>(private val recyclerView: RecyclerView
         lazyCallback = callback
     }
 
+    @Suppress("UNCHECKED_CAST")
     private val insertLoading = Runnable {
-        @Suppress("UNCHECKED_CAST")
         list.add(lazyItem as T)
         notifyItemInserted(list.size)
         lazyCallback?.invoke(pageIndex)

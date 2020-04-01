@@ -16,11 +16,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import dvp.manga.CircularReveal
 import dvp.manga.R
-import dvp.manga.data.remote.TruyenQQ
-import dvp.manga.data.repository.MangaRepository
+import dvp.manga.data.model.Manga
 import dvp.manga.databinding.ActivitySearchBinding
 import dvp.manga.ui.adapter.MangaAdapter
-import kotlinx.coroutines.Dispatchers
+import dvp.manga.utils.Injector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
@@ -28,126 +27,59 @@ import kotlinx.coroutines.launch
 
 class SearchActivity : AppCompatActivity() {
 
-//    private val viewModel: SearchViewModel by viewModels {
-//        Injector.getSearchVMFactory(application, this)
-//    }
+    private val viewModel: SearchViewModel by viewModels {
+        Injector.getSearchVMFactory(this)
+    }
 
     private lateinit var adapter: MangaAdapter
 
-    private val viewModel: SearchViewModel by viewModels {
-        SearchViewModel.Factory(
-            MangaRepository.getInstance(TruyenQQ.getInstance(this)),
-            Dispatchers.IO
-        )
-    }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<ActivitySearchBinding>(this, R.layout.activity_search)
-        adapter = MangaAdapter(binding.mangaList)
-        with(adapter) {
-            binding.mangaList.adapter = this
-//            subscribeUi(this)
-//            setQueryListener(this, binding.searchView)
-            viewModel.searchResult.observe(this@SearchActivity) { data ->
-                handleSearchResult(this, data)
-            }
-        }
-        binding.searchView.doAfterTextChanged { query ->
-            adapter.setLazyCallback { page ->
-                lifecycleScope.launch {
-                    viewModel.queryChannel.send(QueryModel(query.toString(), page))
+        with(DataBindingUtil.setContentView<ActivitySearchBinding>(this, R.layout.activity_search)) {
+            adapter = MangaAdapter(mangaList)
+            mangaList.adapter = adapter
+            subscribeUi(adapter)
+            searchView.doAfterTextChanged { query ->
+                adapter.setLazyCallback { page ->
+                    sendQuery(query.toString(), page)
                 }
             }
         }
         setupTransitions()
     }
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    private fun sendQuery(query: String, page: Int) {
+        lifecycleScope.launch {
+            viewModel.query.send(QueryModel(query, page))
+        }
+    }
 
-    private fun handleSearchResult(adapter: MangaAdapter, it: SearchResult) {
-        when (it) {
-            is ValidResult -> {
-                adapter.addData(it.result)
-            }
-            is ErrorResult -> {
-                println("Error result")
-                Toast.makeText(this, "ErrorResult", Toast.LENGTH_SHORT).show()
-            }
-            is EmptyResult -> {
-                Toast.makeText(this, "EmptyResult", Toast.LENGTH_SHORT).show()
-                adapter.noMoreData()
-            }
-            is EmptyQuery -> {
-                println("Empty query")
-                Toast.makeText(this, "EmptyQuery", Toast.LENGTH_SHORT).show()
-            }
-            is TerminalError -> {
-                println("Our Flow terminated unexpectedly, so we're bailing!")
-                Toast.makeText(this, "Unexpected error in SearchRepository!", Toast.LENGTH_SHORT).show()
-                finish()
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    private fun subscribeUi(adapter: MangaAdapter) {
+        viewModel.state.observe(this) {
+            when (it) {
+                is Result.Success -> {
+                    @Suppress("UNCHECKED_CAST")
+                    adapter.submitData(it.data as List<Manga>)
+                }
+                is Result.Error -> {
+                    Toast.makeText(this, it.errMsg, Toast.LENGTH_SHORT).show()
+                }
+                is Result.EmptyQuery -> {
+                    Toast.makeText(this, "Must be over 3 characters", Toast.LENGTH_SHORT).show()
+                    adapter.submitData(emptyList())
+                }
             }
         }
     }
-//    internal class DebouncingQueryTextListener(
-//        lifecycle: Lifecycle,
-//        private val onDebouncingQueryTextChange: (String?) -> Unit
-//    ) : SearchView.OnQueryTextListener {
-//        private var debouncePeriod: Long = 500
-//
-//        private val coroutineScope = lifecycle.coroutineScope
-//
-//        private var searchJob: Job? = null
-//
-//        override fun onQueryTextSubmit(query: String?): Boolean {
-//            return false
-//        }
-//
-//        override fun onQueryTextChange(newText: String?): Boolean {
-//            searchJob?.cancel()
-//            searchJob = coroutineScope.launch {
-//                newText?.let {
-//                    delay(debouncePeriod)
-//                    onDebouncingQueryTextChange(newText)
-//                }
-//            }
-//            return false
-//        }
-//    }
-
-//    private fun setQueryListener(adapter: MangaAdapter, searchView: EditText) {
-//        searchView.addTextChangedListener(object : DelayTextChanged() {
-//            override fun textWasChanged(s: String) {
-//                runOnUiThread {
-//                    adapter.setLazyCallback { pageIndex ->
-//                        viewModel.searchManga(s, pageIndex)
-//                    }
-//                }
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//
-//            }
-//        })
-//    }
-
-
-//    private fun subscribeUi(adapter: MangaAdapter) {
-//        viewModel.state.observe(this) {
-//            when (it!!) {
-//                ViewState.LOADING -> Toast.makeText(this, "LOADING", Toast.LENGTH_SHORT).show()
-//                ViewState.SUCCESS -> adapter.submitData(viewModel.mangas)
-//                ViewState.EMPTY -> Toast.makeText(this, "EMPTY", Toast.LENGTH_SHORT).show()
-//                ViewState.ERROR -> Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
 
     private fun setupTransitions() {
-        // grab the position that the search icon transitions in *from*
-        // & use it to configure the return transition
         setEnterSharedElementCallback(object : SharedElementCallback() {
             override fun onSharedElementStart(
                 sharedElementNames: List<String>,

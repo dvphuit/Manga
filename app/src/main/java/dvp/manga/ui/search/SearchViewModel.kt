@@ -1,47 +1,27 @@
 package dvp.manga.ui.search
 
-import android.app.Application
-import androidx.annotation.VisibleForTesting
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import dvp.manga.data.model.Entity
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.MangaRepository
-import dvp.manga.ui.BaseViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.mapLatest
 
-class SearchViewModel2 internal constructor(app: Application, private val repository: MangaRepository) : BaseViewModel(app) {
-
-    var mangas = mutableListOf<Manga>()
-
-    lateinit var top: List<Manga>
-
-    fun searchManga(query: String, page: Int) {
-        if (query.length < 2) return
-        launch {
-            //            mangas.clear()
-            mangas.addAll(repository.searchManga(query, page))
-            return@launch mangas.isNotEmpty()
-        }
-    }
-
-
+sealed class Result {
+    class Success(val data: List<Entity>) : Result()
+    class Error(val errMsg: String) : Result()
+    object EmptyQuery : Result()
+    object TerminalError : Result()
 }
 
-
-sealed class SearchResult
-class ValidResult(val result: List<Manga>) : SearchResult()
-object EmptyResult : SearchResult()
-object EmptyQuery : SearchResult()
-class ErrorResult(val e: Throwable) : SearchResult()
-object TerminalError : SearchResult()
 data class QueryModel(val query: String, val page: Int = 1)
+
 
 class SearchViewModel(
     private val repository: MangaRepository,
@@ -52,59 +32,42 @@ class SearchViewModel(
         const val MIN_QUERY_LENGTH = 3
     }
 
+    private val data = mutableListOf<Manga>()
+    private var preQuery = ""
+    private fun handleData(newQuery: String, nextData: List<Manga>): List<Manga> {
+        if (preQuery != newQuery) {
+            preQuery = newQuery
+            data.clear()
+        }
+        data.addAll(nextData)
+        return data
+    }
+
     @ExperimentalCoroutinesApi
-    @VisibleForTesting
-    internal val queryChannel = BroadcastChannel<QueryModel>(Channel.CONFLATED)
+    internal val query = BroadcastChannel<QueryModel>(Channel.CONFLATED)
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @VisibleForTesting
-    internal val internalSearchResult = queryChannel
+    val state = query
         .asFlow()
-        .debounce(SEARCH_DELAY_MS)
+//        .debounce(SEARCH_DELAY_MS)
         .mapLatest {
             try {
                 if (it.query.length >= MIN_QUERY_LENGTH) {
-                    val result = withContext(ioDispatcher) { repository.searchManga(it.query, it.page) }
-                    println("Search result: ${result.size} hits")
-                    if (result.isNotEmpty()) {
-                        ValidResult(result)
-                    } else {
-                        EmptyResult
+                    val result = withContext(ioDispatcher) {
+                        repository.searchManga(it.query, it.page)
                     }
-                } else {
-                    EmptyQuery
-                }
+                    Result.Success(handleData(it.query, result))
+                } else Result.EmptyQuery
             } catch (e: Throwable) {
                 if (e is CancellationException) {
-                    println("Search was cancelled!")
+                    Log.d(this.javaClass.simpleName, "search \"${it.query}\" was cancelled")
                     throw e
                 } else {
-                    ErrorResult(e)
+                    Result.Error(e.localizedMessage!!)
                 }
+
             }
-        }.catch {
-            emit(TerminalError)
-        }
+        }.catch { emit(Result.TerminalError) }.asLiveData()
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
-    var searchResult = internalSearchResult.asLiveData()
-
-//    @FlowPreview
-//    @ExperimentalCoroutinesApi
-//    fun loadMore(page: Int) {
-//        viewModelScope.launch {
-//            val result = withContext(ioDispatcher) { repository.searchManga(this@SearchViewModel.query, page) }
-//            searchResult.value = ValidResult(result)
-//        }
-//    }
-
-    class Factory(private val repo: MangaRepository, private val dispatcher: CoroutineDispatcher) :
-        ViewModelProvider.NewInstanceFactory() {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return SearchViewModel(repo, dispatcher) as T
-        }
-    }
 }

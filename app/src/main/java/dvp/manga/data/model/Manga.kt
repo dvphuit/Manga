@@ -2,7 +2,6 @@ package dvp.manga.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dvp.manga.ui.adapter.LazyModel
 import java.io.Serializable
 
 /**
@@ -17,7 +16,7 @@ data class Manga(
     var href: String? = null,
     var genres: String? = null,
     var last_chap: String? = null
-) : LazyModel(false), Serializable {
+) : dvp.manga.data.model.Entity(), Serializable {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 }
