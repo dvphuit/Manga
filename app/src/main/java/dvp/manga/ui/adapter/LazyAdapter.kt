@@ -29,6 +29,7 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
 
     init {
         setLoadMoreListener()
+        Log.d("TEST", "adapter init $pageIndex")
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -101,19 +102,16 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
         Handler().post(insertLoading)
     }
 
-    private fun stopLazyLoad(hasData: Boolean) {
-        Log.d("TEST", "has data $hasData")
+    private fun stopLazyLoad() {
         list.remove(lazyItem as Entity)
         notifyItemRemoved(list.size)
-        isLoading = !hasData
-        if (hasData) {
-            pageIndex++
-        }
+        isLoading = false
+        pageIndex++
     }
 
     fun submitData(list: List<T>) {
+        stopLazyLoad()
         val oldItemCount = this.list.size
-        stopLazyLoad(list.size > oldItemCount)
         this.list = list.toMutableList()
         notifyItemRangeInserted(oldItemCount, itemCount)
     }
@@ -126,10 +124,31 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
         lazyCallback = callback
     }
 
+    fun resetLazyList() {
+        pageIndex = 1
+        list.clear()
+        notifyDataSetChanged()
+        startLazyLoad()
+    }
+
+    fun setNoMoreData() {
+        isLoading = true
+        if (list.contains(lazyItem as Entity)) {
+            list.remove(lazyItem as Entity)
+            notifyItemRemoved(list.size)
+        }
+    }
+
+    fun registerLazyCallback(callback: (Int) -> Unit) {
+        lazyCallback = callback
+    }
+
     @Suppress("UNCHECKED_CAST")
     private val insertLoading = Runnable {
-        list.add(lazyItem as T)
-        notifyItemInserted(list.size)
-        lazyCallback?.invoke(pageIndex)
+        if (!list.contains(lazyItem as Entity)) {
+            list.add(lazyItem as T)
+            notifyItemInserted(list.size)
+            lazyCallback?.invoke(pageIndex)
+        }
     }
 }

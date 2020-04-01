@@ -5,6 +5,7 @@ import android.graphics.Point
 import android.os.Bundle
 import android.transition.Transition
 import android.transition.TransitionSet
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -12,7 +13,6 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import dvp.manga.CircularReveal
 import dvp.manga.R
@@ -22,7 +22,6 @@ import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.utils.Injector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.launch
 
 
 class SearchActivity : AppCompatActivity() {
@@ -32,8 +31,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private lateinit var adapter: MangaAdapter
-
-
     @FlowPreview
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,34 +39,46 @@ class SearchActivity : AppCompatActivity() {
             adapter = MangaAdapter(mangaList)
             mangaList.adapter = adapter
             subscribeUi(adapter)
-            searchView.doAfterTextChanged { query ->
-                adapter.setLazyCallback { page ->
-                    sendQuery(query.toString(), page)
-                }
+            searchView.doAfterTextChanged {
+                searchFor(it.toString())
             }
         }
         setupTransitions()
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
-    private fun sendQuery(query: String, page: Int) {
-        lifecycleScope.launch {
-            viewModel.query.send(QueryModel(query, page))
+//    @FlowPreview
+//    @ExperimentalCoroutinesApi
+    private fun searchFor(query: String) {
+        adapter.registerLazyCallback { page ->
+//            viewModel.query.key = query
+//            lifecycleScope.launch {
+//                Log.d("TEST", "lazy callback $query -- $page")
+//                viewModel.queryChannel.send(viewModel.query)
+//            }
+            viewModel.query.value = query
         }
+        if (viewModel.isQueryChanged(query))
+            adapter.resetLazyList()
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     private fun subscribeUi(adapter: MangaAdapter) {
         viewModel.state.observe(this) {
+
             when (it) {
                 is Result.Success -> {
                     @Suppress("UNCHECKED_CAST")
                     adapter.submitData(it.data as List<Manga>)
+                    Log.d("TEST", "state success")
+                }
+                is Result.Empty -> {
+                    adapter.setNoMoreData()
+                    Log.d("TEST", "state empty")
                 }
                 is Result.Error -> {
                     Toast.makeText(this, it.errMsg, Toast.LENGTH_SHORT).show()
+                    Log.d("TEST", "state error")
                 }
                 is Result.EmptyQuery -> {
                     Toast.makeText(this, "Must be over 3 characters", Toast.LENGTH_SHORT).show()
