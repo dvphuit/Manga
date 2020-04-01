@@ -1,30 +1,18 @@
 package dvp.manga.ui.search
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
-import dvp.manga.data.model.Entity
+import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.MangaRepository
+import dvp.manga.ui.Result
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.*
 
-sealed class Result {
-    class Success(val data: List<Entity>) : Result()
-    object Empty : Result()
-    class Error(val errMsg: String) : Result()
-    object EmptyQuery : Result()
-    object TerminalError : Result()
-}
-
-data class QueryModel(var key: String, var page: Int = 1)
-
+data class QueryData(var key: String, var page: Int = 1)
 
 class SearchViewModel(
     private val repository: MangaRepository,
@@ -35,51 +23,60 @@ class SearchViewModel(
         const val MIN_QUERY_LENGTH = 3
     }
 
+    //region private variables
     private val data = mutableListOf<Manga>()
-    //    var query: QueryModel = QueryModel("", 1)
     private var preQuery = ""
     private var pageIndex = 1
+    @ExperimentalCoroutinesApi
+    private val queryChannel = BroadcastChannel<QueryData>(Channel.CONFLATED)
 
-    private fun handleData(newQuery: String, nextData: List<Manga>): List<Manga> {
-        if (preQuery != newQuery) {
-            preQuery = newQuery
+    private fun checkQuery(query: String){
+        if (preQuery != query) {
+            preQuery = query
             pageIndex = 1
             data.clear()
         }
-        data.addAll(nextData)
-        return data
     }
+    //endregion
 
-    fun isQueryChanged(newQuery: String): Boolean {
-        return preQuery != newQuery
-    }
-
-    @ExperimentalCoroutinesApi
-    internal val queryChannel = BroadcastChannel<QueryModel>(Channel.CONFLATED)
-
-    val query = MutableLiveData<String>()
+    fun isQueryChanged(newQuery: String) = preQuery != newQuery
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    val state = query
+    fun submitQuery(query: String) {
+        checkQuery(query)
+        loadMore()
+    }
+
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    fun loadMore() {
+        viewModelScope.launch {
+            queryChannel.send(QueryData(preQuery, pageIndex))
+        }
+    }
+
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    val state = queryChannel
         .asFlow()
         .debounce(SEARCH_DELAY_MS)
+        .distinctUntilChanged()
         .mapLatest {
             try {
-                if (it.length >= MIN_QUERY_LENGTH) {
-                    val result = withContext(ioDispatcher) {
-                        repository.searchManga(it, pageIndex)
-                    }
-                    Log.d("TEST", "searching $it -- $pageIndex -- ${data.size}")
-
-                    if (result.isEmpty()) {
+                if (it.key.length >= MIN_QUERY_LENGTH) {
+                    val result = withContext(ioDispatcher) { repository.searchManga(it.key, it.page) }
+                    if (result.isEmpty() && data.isEmpty()) {
+                        pageIndex = 1
                         Result.Empty
                     } else {
                         pageIndex++
-                        Log.d("TEST", "search done $pageIndex")
-                        Result.Success(handleData(it, result))
+                        data.addAll(result)
+                        Result.Success(data, result.isNotEmpty())
                     }
-                } else Result.EmptyQuery
+                } else {
+                    Result.EmptyQuery
+                }
             } catch (e: Throwable) {
                 if (e is CancellationException) {
                     Log.d(this.javaClass.simpleName, "search \"${it}\" was cancelled")

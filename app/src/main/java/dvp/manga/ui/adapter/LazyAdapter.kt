@@ -1,11 +1,10 @@
 package dvp.manga.ui.adapter
 
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.ScaleAnimation
+import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
@@ -20,20 +19,18 @@ const val ITEM = 0
 
 abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var list: MutableList<T> = mutableListOf()
+    var mList: MutableList<T> = mutableListOf()
 
-    private var isLoading = false
-    private var pageIndex = 1
+    private var endLoadMore = false
     private val lazyItem = LazyModel(true)
-    private var lazyCallback: ((Int) -> Unit)? = null
+    private var lazyCallback: (() -> Unit)? = null
 
     init {
         setLoadMoreListener()
-        Log.d("TEST", "adapter init $pageIndex")
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (list[position] is LazyModel) LOADING else ITEM
+        return if (mList[position] is LazyModel) LOADING else ITEM
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -60,8 +57,8 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
     internal class ProgressHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!)
 
     private fun setFadeAnimation(view: View) {
-        val anim = ScaleAnimation(.8f, 1f, .8f, 1f)
-        anim.duration = 150
+        val anim = AlphaAnimation(0.5f, 1f)
+        anim.duration = 250
         view.startAnimation(anim)
     }
 
@@ -71,10 +68,10 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if (dy < 0 || isLoading) return
+                    if (dy < 0 || endLoadMore) return
                     val totalItemCount = layoutManager.getItemCount()
                     val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-                    if (!isLoading && lastVisibleItem >= totalItemCount - 5) {
+                    if (!endLoadMore && lastVisibleItem >= totalItemCount - 5) {
                         startLazyLoad()
                     }
                 }
@@ -95,60 +92,57 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
         }
     }
 
-    override fun getItemCount() = list.size
+    override fun getItemCount() = mList.size
 
     private fun startLazyLoad() {
-        isLoading = true
         Handler().post(insertLoading)
+        endLoadMore = true
     }
 
     private fun stopLazyLoad() {
-        list.remove(lazyItem as Entity)
-        notifyItemRemoved(list.size)
-        isLoading = false
-        pageIndex++
+        mList.remove(lazyItem as Entity)
+        notifyItemRemoved(mList.size)
     }
 
-    fun submitData(list: List<T>) {
+    fun submitData(data: List<T>, hasNext: Boolean) {
         stopLazyLoad()
-        val oldItemCount = this.list.size
-        this.list = list.toMutableList()
-        notifyItemRangeInserted(oldItemCount, itemCount)
+        val oldItemCount = this.mList.size
+        endLoadMore = !hasNext
+        this.mList = data.toMutableList()
+        notifyItemRangeInserted(oldItemCount, mList.size)
     }
 
-    fun setLazyCallback(callback: (Int) -> Unit) {
-        pageIndex = 1
-        list.clear()
+    fun setLazyCallback(callback: () -> Unit) {
+        mList.clear()
         notifyDataSetChanged()
         startLazyLoad()
         lazyCallback = callback
     }
 
     fun resetLazyList() {
-        pageIndex = 1
-        list.clear()
+        mList.clear()
         notifyDataSetChanged()
         startLazyLoad()
     }
 
     fun setNoMoreData() {
-        isLoading = true
-        if (list.contains(lazyItem as Entity)) {
-            list.remove(lazyItem as Entity)
-            notifyItemRemoved(list.size)
+        endLoadMore = true
+        if (mList.contains(lazyItem as Entity)) {
+            mList.remove(lazyItem as Entity)
+            notifyItemRemoved(mList.size)
         }
     }
 
-    fun registerLazyCallback(callback: (Int) -> Unit) {
+    fun registerLazyCallback(callback: () -> Unit) {
         lazyCallback = callback
     }
 
     @Suppress("UNCHECKED_CAST")
     private val insertLoading = Runnable {
-        if (!list.contains(lazyItem as Entity)) {
-            list.add(lazyItem as T)
-            notifyItemInserted(list.size)
-            lazyCallback?.invoke(pageIndex)
+        if (!mList.contains(lazyItem as Entity)) {
+            mList.add(lazyItem as T)
+            notifyItemInserted(mList.size)
+            lazyCallback?.invoke()
         }
     }
 }

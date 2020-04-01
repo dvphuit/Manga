@@ -23,7 +23,7 @@ class MangaAdapter(recyclerView: RecyclerView) : LazyAdapter<Manga>(recyclerView
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         if (holder is MangaHolder) {
-            holder.bind(list[position])
+            holder.bind(mList[position])
         }
     }
 
@@ -48,7 +48,7 @@ class MangaAdapter(recyclerView: RecyclerView) : LazyAdapter<Manga>(recyclerView
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return mList.size
     }
 
 }

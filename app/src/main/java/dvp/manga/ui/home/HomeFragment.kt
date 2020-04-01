@@ -33,8 +33,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun registerLazyLoading(adapter: MangaAdapter) {
-        adapter.setLazyCallback { pageIndex ->
-            viewModel.fetchMangas(pageIndex)
+        adapter.setLazyCallback {
+            viewModel.fetchMangas(1)
         }
     }
 
@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it!!) {
                 ViewState.LOADING -> Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
-                ViewState.SUCCESS -> adapter.submitData(viewModel.mangas)
+                ViewState.SUCCESS -> adapter.submitData(viewModel.mangas, false)
                 ViewState.EMPTY -> Toast.makeText(requireContext(), "EMPTY", Toast.LENGTH_SHORT).show()
                 ViewState.ERROR -> Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
             }

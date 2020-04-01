@@ -18,11 +18,11 @@ import dvp.manga.CircularReveal
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.ActivitySearchBinding
+import dvp.manga.ui.Result
 import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.utils.Injector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-
 
 class SearchActivity : AppCompatActivity() {
 
@@ -39,42 +39,34 @@ class SearchActivity : AppCompatActivity() {
             adapter = MangaAdapter(mangaList)
             mangaList.adapter = adapter
             subscribeUi(adapter)
-            searchView.doAfterTextChanged {
-                searchFor(it.toString())
-            }
+            adapter.registerLazyCallback { viewModel.loadMore() }
+            searchView.doAfterTextChanged { searchFor(it.toString()) }
         }
-        setupTransitions()
+//        setupTransitions()
     }
 
-//    @FlowPreview
-//    @ExperimentalCoroutinesApi
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     private fun searchFor(query: String) {
-        adapter.registerLazyCallback { page ->
-//            viewModel.query.key = query
-//            lifecycleScope.launch {
-//                Log.d("TEST", "lazy callback $query -- $page")
-//                viewModel.queryChannel.send(viewModel.query)
-//            }
-            viewModel.query.value = query
-        }
-        if (viewModel.isQueryChanged(query))
+        if (viewModel.isQueryChanged(query)) {
             adapter.resetLazyList()
+            viewModel.submitQuery(query)
+        }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     private fun subscribeUi(adapter: MangaAdapter) {
         viewModel.state.observe(this) {
-
             when (it) {
                 is Result.Success -> {
                     @Suppress("UNCHECKED_CAST")
-                    adapter.submitData(it.data as List<Manga>)
-                    Log.d("TEST", "state success")
+                    adapter.submitData(it.data as List<Manga>, it.hasNext)
+                    Log.d("TEST", "state success ${it.data.size}")
                 }
                 is Result.Empty -> {
-                    adapter.setNoMoreData()
                     Log.d("TEST", "state empty")
+                    adapter.setNoMoreData()
                 }
                 is Result.Error -> {
                     Toast.makeText(this, it.errMsg, Toast.LENGTH_SHORT).show()
@@ -82,7 +74,7 @@ class SearchActivity : AppCompatActivity() {
                 }
                 is Result.EmptyQuery -> {
                     Toast.makeText(this, "Must be over 3 characters", Toast.LENGTH_SHORT).show()
-                    adapter.submitData(emptyList())
+                    adapter.submitData(emptyList(), false)
                 }
             }
         }
