@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".ui.search.SearchActivity">
 
         <View
@@ -18,24 +18,25 @@
         <FrameLayout
             android:id="@+id/top_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:background="@color/scrim"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:id="@+id/search_toolbar"
+                android:id="@+id/search_bar"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="34dp"
                 android:layout_margin="8dp"
                 android:background="@drawable/bg_search_bar"
                 android:elevation="2dp"
                 android:orientation="horizontal"
-                android:transitionName="search_border">
+                android:layout_gravity="center"
+                android:transitionName="transition_search_bar">
 
                 <FrameLayout
-                    android:id="@+id/searchback_container"
+                    android:id="@+id/bt_back_wrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent">
@@ -57,19 +58,14 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
+                    android:autofillHints="no"
                     android:background="@null"
+                    android:hint="Search Manga"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
                     android:lines="1"
+                    android:textColorHint="#676767"
                     android:textColor="#000" />
-                <!--                <SearchView-->
-                <!--                    android:id="@+id/search_view"-->
-                <!--                    android:layout_width="0dp"-->
-                <!--                    android:layout_height="match_parent"-->
-                <!--                    android:layout_marginEnd="8dp"-->
-                <!--                    android:layout_weight="1"-->
-                <!--                    android:background="@null"-->
-                <!--                    android:iconifiedByDefault="false"-->
-                <!--                    android:searchIcon="@null"-->
-                <!--                    android:transitionGroup="true" />-->
             </LinearLayout>
         </FrameLayout>
 
@@ -77,10 +73,9 @@
         <FrameLayout
             android:id="@+id/results_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="#fff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/top_view">
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:background="#fff">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/manga_list"
@@ -88,11 +83,10 @@
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintBottom_toTopOf="@id/bottom_progress"
-                app:spanCount="3"
-                tools:listitem="@layout/manga_item" />
+                app:spanCount="3"/>
 
         </FrameLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
 </layout>

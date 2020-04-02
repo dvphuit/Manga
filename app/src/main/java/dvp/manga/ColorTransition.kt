@@ -17,14 +17,14 @@ import android.widget.ImageView
  * @author dvphu on 30,March,2020
  */
 
-class BackgroundTransition : Transition {
+class ColorTransition : Transition {
     private var startColor: Int = -1
     private var endColor: Int = -1
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        val a = context!!.obtainStyledAttributes(attrs, R.styleable.BackgroundTransition)
-        startColor = a.getColor(R.styleable.BackgroundTransition_startColor, -1)
-        endColor = a.getColor(R.styleable.BackgroundTransition_endColor, -1)
+        val a = context!!.obtainStyledAttributes(attrs, R.styleable.ColorTransition)
+        startColor = a.getColor(R.styleable.ColorTransition_startColor, -1)
+        endColor = a.getColor(R.styleable.ColorTransition_endColor, -1)
         a.recycle()
     }
 
@@ -36,14 +36,12 @@ class BackgroundTransition : Transition {
 
     override fun createAnimator(sceneRoot: ViewGroup, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
         if (startValues == null || endValues == null) return null
-
         return if (endValues.view is ImageView)
             ValueAnimator.ofInt(endColor, startColor).apply {
                 setEvaluator(ArgbEvaluator())
                 addUpdateListener { listener ->
                     val value = listener.animatedValue as Int
                     (endValues.view as ImageView).setColorFilter(value, PorterDuff.Mode.SRC_IN)
-
                 }
             }
         else ValueAnimator.ofInt(startColor, endColor).apply {

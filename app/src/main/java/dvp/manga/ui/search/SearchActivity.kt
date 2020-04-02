@@ -24,6 +24,7 @@ import dvp.manga.utils.Injector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
+
 class SearchActivity : AppCompatActivity() {
 
     private val viewModel: SearchViewModel by viewModels {

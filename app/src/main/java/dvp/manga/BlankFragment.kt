@@ -1,15 +1,13 @@
 package dvp.manga
 
-import android.app.ActivityOptions
-import android.content.Intent
 import android.os.Bundle
-import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import dvp.manga.ui.search.SearchActivity
-import kotlinx.android.synthetic.main.fragment_blank.*
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import dvp.manga.databinding.FragmentBlankBinding
 
 
 /**
@@ -17,20 +15,31 @@ import kotlinx.android.synthetic.main.fragment_blank.*
  */
 class BlankFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_blank, container, false)
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding = FragmentBlankBinding.inflate(inflater, container, false)
+        context ?: return binding.root
+        with(binding) {
+            searchback.setOnClickListener {
+                //                val element1 = android.util.Pair<View, String>(searchback, searchback.transitionName)
+//                val element2 = android.util.Pair<View, String>(binding.searchbackContainer, searchbackContainer.transitionName)
+//                val options = ActivityOptions.makeSceneTransitionAnimation(activity, element1, element2).toBundle()
+//                startActivity(Intent(requireContext(), SearchActivity::class.java), options)
+
+                gotoSearch(searchback, searchBar)
+            }
+        }
+
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        searchback.setOnClickListener {
-            val element1 = Pair<View, String>(searchback, searchback.transitionName)
-            val element2 = Pair<View, String>(searchback_container, searchback_container.transitionName)
-            val options = ActivityOptions.makeSceneTransitionAnimation(activity, element1, element2).toBundle()
-            startActivity(Intent(context, SearchActivity::class.java), options)
-        }
+
+    private fun gotoSearch(vararg view: View) {
+        val extras = FragmentNavigatorExtras(
+            view[0] to view[0].transitionName,
+            view[1] to view[1].transitionName
+        )
+        val direction = BlankFragmentDirections.gotoSearch()
+        view[0].findNavController().navigate(direction, extras)
     }
 }

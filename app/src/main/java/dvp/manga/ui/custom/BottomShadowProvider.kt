@@ -7,8 +7,8 @@ import android.view.ViewOutlineProvider
 /**
  * @author dvphu on 31,March,2020
  */
-open class BottomShadowProvider : ViewOutlineProvider(){
+open class BottomShadowProvider : ViewOutlineProvider() {
     override fun getOutline(view: View?, outline: Outline?) {
-        outline!!.setRoundRect(view!!.left, view.top, view.width - view.left, view.height, view.height.toFloat())
+        outline!!.setRoundRect(0, view!!.top, view.width, view.height, view.height.toFloat())
     }
 }

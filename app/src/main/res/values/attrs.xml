@@ -4,7 +4,7 @@
         <attr name="android:src" />
     </declare-styleable>
 
-    <declare-styleable name="BackgroundTransition">
+    <declare-styleable name="ColorTransition">
         <attr name="startColor" format="color" />
         <attr name="endColor" format="color" />
     </declare-styleable>
