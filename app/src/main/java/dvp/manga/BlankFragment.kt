@@ -15,21 +15,14 @@ import dvp.manga.databinding.FragmentBlankBinding
  */
 class BlankFragment : Fragment() {
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentBlankBinding.inflate(inflater, container, false)
         context ?: return binding.root
         with(binding) {
             searchback.setOnClickListener {
-                //                val element1 = android.util.Pair<View, String>(searchback, searchback.transitionName)
-//                val element2 = android.util.Pair<View, String>(binding.searchbackContainer, searchbackContainer.transitionName)
-//                val options = ActivityOptions.makeSceneTransitionAnimation(activity, element1, element2).toBundle()
-//                startActivity(Intent(requireContext(), SearchActivity::class.java), options)
-
                 gotoSearch(searchback, searchBar)
             }
         }
-
         return binding.root
     }
 

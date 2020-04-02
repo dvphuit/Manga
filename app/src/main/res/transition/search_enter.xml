@@ -9,7 +9,7 @@
         </targets>
         <fade />
         <transition
-            class="dvp.manga.CircularReveal"
+            class="dvp.manga.ui.custom.transition.CircularReveal"
             app:centerOn="@id/searchback"
             android:interpolator="@android:interpolator/linear_out_slow_in" />
     </transitionSet>

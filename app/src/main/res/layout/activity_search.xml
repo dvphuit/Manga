@@ -33,7 +33,7 @@
                 android:elevation="2dp"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:transitionName="transition_search_bar">
+                android:transitionName="@string/transition_search_bar">
 
                 <FrameLayout
                     android:id="@+id/bt_back_wrapper"
