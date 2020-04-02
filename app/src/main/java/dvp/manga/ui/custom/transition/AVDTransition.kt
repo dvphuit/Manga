@@ -1,4 +1,4 @@
-package dvp.manga
+package dvp.manga.ui.custom.transition
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -11,6 +11,7 @@ import android.transition.TransitionValues
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.ImageView
+import dvp.manga.R
 
 /**
  * @author dvphu on 30,March,2020

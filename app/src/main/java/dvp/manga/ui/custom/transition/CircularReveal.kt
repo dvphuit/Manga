@@ -1,4 +1,4 @@
-package dvp.manga
+package dvp.manga.ui.custom.transition
 
 import android.animation.Animator
 import android.content.Context
@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import androidx.annotation.IdRes
+import dvp.manga.R
 import dvp.manga.utils.NoPauseAnimator
 import kotlin.math.hypot
 import kotlin.math.max

@@ -5,11 +5,11 @@
     android:transitionOrdering="together">
     <changeBounds android:interpolator="@android:interpolator/fast_out_slow_in" />
     <transition
-        class="dvp.manga.AVDTransition"
+        class="dvp.manga.ui.custom.transition.AVDTransition"
         android:src="@drawable/avd_search_to_back" />
 
     <transition
-        class="dvp.manga.ColorTransition"
+        class="dvp.manga.ui.custom.transition.ColorTransition"
         app:startColor="#FF9800"
         app:endColor="#fff">
         <targets>

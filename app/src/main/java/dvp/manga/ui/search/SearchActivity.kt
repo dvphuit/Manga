@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
-import dvp.manga.CircularReveal
+import dvp.manga.ui.custom.transition.CircularReveal
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.ActivitySearchBinding

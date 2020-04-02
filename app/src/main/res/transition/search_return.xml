@@ -2,7 +2,7 @@
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
 
     <transition
-        class="dvp.manga.CircularReveal"
+        class="dvp.manga.ui.custom.transition.CircularReveal"
         android:duration="600"
         android:interpolator="@android:interpolator/fast_out_linear_in">
         <targets>
