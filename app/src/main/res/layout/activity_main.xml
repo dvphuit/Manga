@@ -2,12 +2,29 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/manga_navi" />
+        android:orientation="vertical">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/manga_navi" />
+
+        <lib.botnavi.BotNav
+            android:elevation="2dp"
+            android:id="@+id/bot_navi"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:menu="@menu/bot_menu">
+
+        </lib.botnavi.BotNav>
+    </LinearLayout>
+
 
 </layout>

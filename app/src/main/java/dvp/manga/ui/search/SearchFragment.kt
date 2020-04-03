@@ -50,6 +50,7 @@ class SearchFragment : Fragment() {
             subscribeUi(adapter)
             adapter.registerLazyCallback { viewModel.loadMore() }
             searchView.doAfterTextChanged { searchFor(it.toString()) }
+            searchView.requestFocus()
         }
         return binding.root
     }

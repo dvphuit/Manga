@@ -64,7 +64,7 @@
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:lines="1"
-                    android:textColorHint="#676767"
+                    android:textColorHint="#AEAEAE"
                     android:textColor="#000" />
             </LinearLayout>
         </FrameLayout>
