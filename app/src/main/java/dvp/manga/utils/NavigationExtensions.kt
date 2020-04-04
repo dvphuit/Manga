@@ -146,16 +146,16 @@ fun BotNav.setupWithNavController(
     // Finally, ensure that we update our BottomNavigationView when the back stack changes
     fragmentManager.addOnBackStackChangedListener {
         if (!isOnFirstFragment && !fragmentManager.isOnBackStack(firstFragmentTag)) {
-            this.selectedItemId = firstFragmentGraphId
+            this.setSelectedItem(firstFragmentGraphId)
         }
 
         // Reset the graph if the currentDestination is not valid (happens when the back
         // stack is popped after using the back button).
-        selectedNavController.value?.let { controller ->
-            if (controller.currentDestination == null) {
-                controller.navigate(controller.graph.id)
-            }
-        }
+//        selectedNavController.value?.let { controller ->
+//            if (controller.currentDestination == null) {
+//                controller.navigate(controller.graph.id)
+//            }
+//        }
     }
     return selectedNavController
 }

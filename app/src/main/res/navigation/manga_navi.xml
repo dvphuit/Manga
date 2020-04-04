@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:startDestination="@id/homeFragment"
-    android:id="@+id/homeFragment">
+    android:id="@+id/home">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -12,12 +12,12 @@
 
         <action
             android:id="@+id/action_manga_to_detail"
-            app:destination="@id/manga_detail_fragment" />
+            app:destination="@id/mangaDetail" />
 
     </fragment>
 
     <fragment
-        android:id="@+id/manga_detail_fragment"
+        android:id="@+id/mangaDetail"
         android:name="dvp.manga.ui.detail.MangaDetailFragment"
         android:label="Manga Detail"
         tools:layout="@layout/manga_detail_fragment">

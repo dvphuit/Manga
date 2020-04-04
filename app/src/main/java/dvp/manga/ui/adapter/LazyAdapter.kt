@@ -57,8 +57,8 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
     internal class ProgressHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!)
 
     private fun setFadeAnimation(view: View) {
-        val anim = AlphaAnimation(0.5f, 1f)
-        anim.duration = 250
+        val anim = AlphaAnimation(0.1f, 1f)
+        anim.duration = 150
         view.startAnimation(anim)
     }
 

@@ -17,7 +17,7 @@ import dvp.manga.utils.Injector
 class MangaDetailFragment : Fragment() {
 
     private val viewModel: MangaDetailVM by viewModels {
-        Injector.getMangaDetailVMFactory(requireActivity().application, requireContext(), arguments!!.get("manga") as Manga)
+        Injector.getMangaDetailVMFactory(requireActivity().application, requireContext(), arguments?.get("manga") as Manga)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

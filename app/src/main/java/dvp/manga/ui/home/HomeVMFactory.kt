@@ -9,9 +9,9 @@ import dvp.manga.data.repository.MangaRepository
  * @author dvphu on 18,March,2020
  */
 
-class HomeVMFactory(private val app: Application, private val repository: MangaRepository): ViewModelProvider.AndroidViewModelFactory(app){
+class HomeVMFactory(private val repository: MangaRepository): ViewModelProvider.NewInstanceFactory(){
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return HomeViewModel(app, repository) as T
+        return HomeViewModel(repository) as T
     }
 }

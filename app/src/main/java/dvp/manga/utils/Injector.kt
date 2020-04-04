@@ -28,7 +28,7 @@ object Injector {
 
     private fun getChapContentRepository(context: Context) = ChapContentRepository.getInstance(TruyenQQ.getInstance(context))
 
-    fun getHomeVMFactory(app: Application, context: Context) = HomeVMFactory(app, getMangaRepository(context))
+    fun getHomeVMFactory(context: Context) = HomeVMFactory(getMangaRepository(context))
 
     fun getMangaDetailVMFactory(app: Application, context: Context, manga: Manga) = MangaDetailVMFactory(app, getChapterRepository(context), manga)
 

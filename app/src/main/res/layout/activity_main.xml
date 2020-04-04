@@ -8,29 +8,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-<!--        <fragment-->
-<!--            android:id="@+id/nav_host"-->
-<!--            android:name="androidx.navigation.fragment.NavHostFragment"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            app:defaultNavHost="true"-->
-<!--            app:navGraph="@navigation/manga_navi"-->
-<!--            tools:ignore="FragmentTagUsage" />-->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+
+
         <lib.botnavi.BotNav
             android:id="@+id/bot_nav"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:elevation="2dp"
-            app:menu="@menu/bot_menu">
+            app:menu="@menu/bot_menu"/>
 
-        </lib.botnavi.BotNav>
     </LinearLayout>
 
 

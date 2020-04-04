@@ -1,17 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/home"
         android:icon="@drawable/ic_home"
         android:title="Home"
         app:color="@color/colorPrimary" />
     <item
-        android:id="@+id/bookmarkFragment"
+        android:id="@+id/bookmark"
         android:icon="@drawable/ic_bookmark"
         android:title="Bookmark"
         app:color="@color/colorPrimary" />
     <item
-        android:id="@+id/settingFragment"
+        android:id="@+id/setting"
         android:icon="@drawable/ic_user"
         android:title="Profile"
         app:color="@color/colorPrimary" />
