@@ -43,23 +43,15 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-<<<<<<< HEAD
-    private fun gotoSearch(vararg view: View) {
-        val extras = FragmentNavigatorExtras(
-            view[0] to view[0].transitionName,
-            view[1] to view[1].transitionName
-        )
-        val direction = HomeFragmentDirections.gotoSearch()
-        view[0].findNavController().navigate(direction, extras)
+//    private fun gotoSearch(vararg view: View) {
+//        val extras = FragmentNavigatorExtras(
+//            view[0] to view[0].transitionName,
+//            view[1] to view[1].transitionName
+//        )
+//        val direction = HomeFragmentDirections.gotoSearch()
+//        view[0].findNavController().navigate(direction, extras)
+//    }
 
-//        val element1 = Pair<View, String>(view[0], view[0].transitionName)
-//        val element2 = Pair<View, String>(view[1], view[1].transitionName)
-//        val options = ActivityOptions.makeSceneTransitionAnimation(activity, element1, element2).toBundle()
-//        startActivity(Intent(context, SearchActivity::class.java), options)
-    }
-
-=======
->>>>>>> parent of 4975aa6... add search view
     private fun subscribeUi(adapter: MangaAdapter) {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {

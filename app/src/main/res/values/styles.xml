@@ -9,23 +9,23 @@
     </style>
 
     <style name="SearchTheme" parent="Theme.AppCompat.Translucent">
-        <item name="android:windowAnimationStyle">@style/SearchWindowAnimations</item>
+<!--        <item name="android:windowAnimationStyle">@style/SearchWindowAnimations</item>-->
 
-<!--        <item name="android:windowEnterTransition">@transition/search_enter</item>-->
-<!--        <item name="android:windowReturnTransition">@transition/search_return</item>-->
-<!--        <item name="android:windowSharedElementEnterTransition">@transition/search_shared_enter</item>-->
-<!--        <item name="android:windowSharedElementReturnTransition">@transition/search_shared_return</item>-->
-        <item name="android:windowSharedElementsUseOverlay">true</item>
+        <item name="android:windowEnterTransition">@transition/search_enter</item>
+        <item name="android:windowReturnTransition">@transition/search_return</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/search_shared_enter</item>
+        <item name="android:windowSharedElementReturnTransition">@transition/search_shared_return</item>
+<!--        <item name="android:windowSharedElementsUseOverlay">true</item>-->
     </style>
 
     <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">#FFFFFF</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">#6D353535</item>
+<!--        <item name="android:colorBackgroundCacheHint">@null</item>-->
+<!--        <item name="android:windowContentOverlay">@null</item>-->
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+<!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
     </style>
 
     <style name="SearchWindowAnimations">

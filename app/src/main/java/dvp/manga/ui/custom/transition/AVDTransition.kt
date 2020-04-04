@@ -48,16 +48,11 @@ class AVDTransition : Transition {
         startValues: TransitionValues?,
         endValues: TransitionValues?
     ): Animator? {
-<<<<<<< HEAD
-        if (endValues?.view !is ImageView) return null
-        (endValues.view as ImageView).setImageDrawable(animatable as Drawable?)
-=======
         if (animatable == null || endValues == null || endValues.view !is ImageView
         ) return null
         val iv = endValues.view as ImageView
         iv.setImageDrawable(animatable as Drawable?)
         // need to return a non-null Animator even though we just want to listen for the start
->>>>>>> parent of 4975aa6... add search view
         val transition = ValueAnimator.ofInt(0, 1)
         transition.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {
