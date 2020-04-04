@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.Result
@@ -31,16 +33,29 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = HomeFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        with(MangaAdapter(binding.mangaList)) {
-            binding.mangaList.setHasFixedSize(true)
-            binding.mangaList.adapter = this
-            registerLazyCallback { viewModel.loadMore() }
-            if (!viewModel.isInitialized) {
-                resetLazyList()
+        binding.apply {
+            mangaList.setHasFixedSize(true)
+            mangaList.adapter = MangaAdapter(mangaList).apply {
+                registerLazyCallback { viewModel.loadMore() }
+                if (!viewModel.isInitialized) {
+                    resetLazyList()
+                }
+                subscribeUi(this)
             }
-            subscribeUi(this)
+            searchback.setOnClickListener {
+                gotoSearch(binding.searchback, binding.searchBar)
+            }
         }
         return binding.root
+    }
+
+    private fun gotoSearch(vararg view: View) {
+        val extras = FragmentNavigatorExtras(
+            view[0] to view[0].transitionName,
+            view[1] to view[1].transitionName
+        )
+        val direction = HomeFragmentDirections.gotoSearch()
+        view[0].findNavController().navigate(direction, extras)
     }
 
     private fun subscribeUi(adapter: MangaAdapter) {

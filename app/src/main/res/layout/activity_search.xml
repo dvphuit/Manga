@@ -82,7 +82,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintBottom_toTopOf="@id/bottom_progress"
                 app:spanCount="3"/>
 
         </FrameLayout>
