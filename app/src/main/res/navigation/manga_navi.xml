@@ -47,5 +47,8 @@
         android:name="dvp.manga.ui.search.SearchFragment"
         android:label="Search Manga"
         tools:layout="@layout/activity_search">
+        <action
+            android:id="@+id/action_manga_to_detail"
+            app:destination="@id/mangaDetail" />
     </fragment>
 </navigation>
