@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <transitionSet android:duration="400">
+    <transitionSet android:duration="650">
         <targets>
             <target android:targetId="@id/scrim" />
         </targets>
@@ -14,13 +14,21 @@
             android:interpolator="@android:interpolator/linear_out_slow_in" />
     </transitionSet>
 
-<!--    <fade-->
-<!--        android:duration="400"-->
-<!--        android:interpolator="@android:interpolator/linear_out_slow_in">-->
-<!--        <targets>-->
-<!--            <target android:targetId="@id/search_toolbar" />-->
-<!--        </targets>-->
-<!--    </fade>-->
+    <fade
+        android:duration="650"
+        android:interpolator="@android:interpolator/fast_out_linear_in">
+        <targets>
+            <target android:targetId="@id/scrim"/>
+        </targets>
+    </fade>
+
+    <fade
+        android:duration="400"
+        android:interpolator="@android:interpolator/linear_out_slow_in">
+        <targets>
+            <target android:targetId="@id/search_bar" />
+        </targets>
+    </fade>
 
     <fade
         android:startDelay="400"

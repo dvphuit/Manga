@@ -56,6 +56,11 @@ class HomeFragment : Fragment() {
         )
         val direction = HomeFragmentDirections.gotoSearch()
         view[0].findNavController().navigate(direction, extras)
+
+//        val element1 = Pair<View, String>(view[0], view[0].transitionName)
+//        val element2 = Pair<View, String>(view[1], view[1].transitionName)
+//        val options = ActivityOptions.makeSceneTransitionAnimation(activity, element1, element2).toBundle()
+//        startActivity(Intent(context, SearchActivity::class.java), options)
     }
 
     private fun subscribeUi(adapter: MangaAdapter) {

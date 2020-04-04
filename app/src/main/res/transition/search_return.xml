@@ -10,20 +10,20 @@
         </targets>
     </transition>
 
-    <fade
-        android:duration="120"
-        android:interpolator="@android:interpolator/fast_out_linear_in">
-        <targets>
-            <target android:targetId="@id/search_view" />
-        </targets>
-    </fade>
+<!--    <fade-->
+<!--        android:duration="120"-->
+<!--        android:interpolator="@android:interpolator/fast_out_linear_in">-->
+<!--        <targets>-->
+<!--            <target android:targetId="@id/search_view" />-->
+<!--        </targets>-->
+<!--    </fade>-->
 
 <!--    <fade-->
 <!--        android:startDelay="400"-->
 <!--        android:duration="160"-->
 <!--        android:interpolator="@android:interpolator/fast_out_linear_in">-->
 <!--        <targets>-->
-<!--            <target android:targetId="@id/search_toolbar" />-->
+<!--            <target android:targetId="@id/search_bar" />-->
 <!--        </targets>-->
 <!--    </fade>-->
 

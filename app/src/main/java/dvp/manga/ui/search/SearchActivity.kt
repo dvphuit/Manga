@@ -14,12 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
-import dvp.manga.ui.custom.transition.CircularReveal
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.ActivitySearchBinding
 import dvp.manga.ui.Result
 import dvp.manga.ui.adapter.MangaAdapter
+import dvp.manga.ui.custom.transition.CircularReveal
 import dvp.manga.utils.Injector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -43,7 +43,7 @@ class SearchActivity : AppCompatActivity() {
             adapter.registerLazyCallback { viewModel.loadMore() }
             searchView.doAfterTextChanged { searchFor(it.toString()) }
         }
-//        setupTransitions()
+        setupTransitions()
     }
 
     @FlowPreview

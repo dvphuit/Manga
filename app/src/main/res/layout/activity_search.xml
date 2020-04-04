@@ -6,7 +6,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:background="#FFFFFF"
         tools:context=".ui.search.SearchActivity">
 
         <View
@@ -15,74 +15,65 @@
             android:layout_height="match_parent"
             android:background="@color/scrim" />
 
-        <FrameLayout
-            android:id="@+id/top_view"
+        <LinearLayout
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/scrim"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="40dp"
+            android:layout_gravity="top"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/bg_search_bar"
+            android:elevation="2dp"
+            android:orientation="horizontal"
+            android:transitionName="@string/transition_search_bar">
 
-            <LinearLayout
-                android:id="@+id/search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/bg_search_bar"
-                android:elevation="2dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:transitionName="@string/transition_search_bar">
+            <FrameLayout
+                android:id="@+id/bt_back_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent">
 
-                <FrameLayout
-                    android:id="@+id/bt_back_wrapper"
+                <ImageButton
+                    android:id="@+id/searchback"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@android:color/transparent">
+                    android:background="?android:selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_arrow_back_padded"
+                    android:tint="#FF9800"
+                    android:transitionName="@string/transition_search_back" />
 
-                    <ImageButton
-                        android:id="@+id/searchback"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="?android:selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_arrow_back_padded"
-                        android:tint="#FF9800"
-                        android:transitionName="@string/transition_search_back" />
+            </FrameLayout>
 
-                </FrameLayout>
-
-                <EditText
-                    android:id="@+id/search_view"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:autofillHints="no"
-                    android:background="@null"
-                    android:hint="Search Manga"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:lines="1"
-                    android:textColorHint="#AEAEAE"
-                    android:textColor="#000" />
-            </LinearLayout>
-        </FrameLayout>
-
+            <EditText
+                android:id="@+id/search_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:autofillHints="no"
+                android:background="@null"
+                android:hint="Search Manga"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:lines="1"
+                android:textColor="#000"
+                android:textColorHint="#AEAEAE" />
+        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/results_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
-            android:background="#fff">
+            android:background="#fff"
+            android:visibility="visible">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/manga_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="3"/>
+                app:spanCount="3" />
 
         </FrameLayout>
 
