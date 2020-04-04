@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
-        <!--        <include android:id="toolbar" layout="@layout/toolbar" />-->
+<!--        <include android:id="toolbar" layout="@layout/toolbar" />-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"

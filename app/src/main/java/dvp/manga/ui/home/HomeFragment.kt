@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.Result
@@ -43,14 +45,15 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-//    private fun gotoSearch(vararg view: View) {
-//        val extras = FragmentNavigatorExtras(
-//            view[0] to view[0].transitionName,
-//            view[1] to view[1].transitionName
-//        )
-//        val direction = HomeFragmentDirections.gotoSearch()
-//        view[0].findNavController().navigate(direction, extras)
-//    }
+
+    private fun gotoSearch(vararg view: View) {
+        val extras = FragmentNavigatorExtras(
+            view[0] to view[0].transitionName,
+            view[1] to view[1].transitionName
+        )
+        val direction = HomeFragmentDirections.gotoSearch()
+        view[0].findNavController().navigate(direction, extras)
+    }
 
     private fun subscribeUi(adapter: MangaAdapter) {
         viewModel.state.observe(viewLifecycleOwner) {
