@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.Result
@@ -33,22 +31,19 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = HomeFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        binding.apply {
-            mangaList.setHasFixedSize(true)
-            mangaList.adapter = MangaAdapter(mangaList).apply {
-                registerLazyCallback { viewModel.loadMore() }
-                if (!viewModel.isInitialized) {
-                    resetLazyList()
-                }
-                subscribeUi(this)
+        with(MangaAdapter(binding.mangaList)) {
+            binding.mangaList.setHasFixedSize(true)
+            binding.mangaList.adapter = this
+            registerLazyCallback { viewModel.loadMore() }
+            if (!viewModel.isInitialized) {
+                resetLazyList()
             }
-            searchback.setOnClickListener {
-                gotoSearch(binding.searchback, binding.searchBar)
-            }
+            subscribeUi(this)
         }
         return binding.root
     }
 
+<<<<<<< HEAD
     private fun gotoSearch(vararg view: View) {
         val extras = FragmentNavigatorExtras(
             view[0] to view[0].transitionName,
@@ -63,6 +58,8 @@ class HomeFragment : Fragment() {
 //        startActivity(Intent(context, SearchActivity::class.java), options)
     }
 
+=======
+>>>>>>> parent of 4975aa6... add search view
     private fun subscribeUi(adapter: MangaAdapter) {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {

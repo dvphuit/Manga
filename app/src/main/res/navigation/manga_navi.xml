@@ -14,9 +14,6 @@
             android:id="@+id/action_manga_to_detail"
             app:destination="@id/mangaDetail" />
 
-        <action
-            android:id="@+id/goto_search"
-            app:destination="@id/search_fragment"/>
     </fragment>
 
     <fragment
@@ -42,10 +39,4 @@
             app:argType="dvp.manga.data.model.Chapter" />
     </fragment>
 
-    <fragment
-        android:id="@+id/search_fragment"
-        android:name="dvp.manga.ui.search.SearchFragment"
-        android:label="Search Manga"
-        tools:layout="@layout/activity_search">
-    </fragment>
 </navigation>

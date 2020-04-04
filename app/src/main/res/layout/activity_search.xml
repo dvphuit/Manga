@@ -73,7 +73,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+<<<<<<< HEAD
                 app:spanCount="3" />
+=======
+                app:layout_constraintBottom_toTopOf="@id/bottom_progress"
+                app:spanCount="3"/>
+>>>>>>> parent of 4975aa6... add search view
 
         </FrameLayout>
 

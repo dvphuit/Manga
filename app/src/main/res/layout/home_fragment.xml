@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context=".ui.home.HomeFragment">
 
+<<<<<<< HEAD
         <!--        <include android:id="toolbar" layout="@layout/toolbar" />-->
 
         <FrameLayout
@@ -54,16 +54,32 @@
         </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+=======
+        <dvp.manga.ui.custom.BouncyRecyclerView
+>>>>>>> parent of 4975aa6... add search view
             android:id="@+id/manga_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             app:layoutManager="dvp.manga.ui.custom.NpaGridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/bottom_progress"
             app:spanCount="3"
             tools:context=".ui.home.HomeFragment"
             tools:listitem="@layout/manga_item" />
 
-    </LinearLayout>
+        <FrameLayout
+            android:id="@+id/bottom_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
