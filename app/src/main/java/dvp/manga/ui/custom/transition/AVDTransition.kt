@@ -41,9 +41,8 @@ class AVDTransition : Transition {
         startValues: TransitionValues?,
         endValues: TransitionValues?
     ): Animator? {
-        if (endValues == null || endValues.view !is ImageView) return null
-        val iv = endValues.view as ImageView
-        iv.setImageDrawable(animatable as Drawable?)
+        if (endValues?.view !is ImageView) return null
+        (endValues.view as ImageView).setImageDrawable(animatable as Drawable?)
         val transition = ValueAnimator.ofInt(0, 1)
         transition.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {
