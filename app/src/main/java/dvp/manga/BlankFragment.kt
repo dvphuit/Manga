@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import dvp.manga.databinding.FragmentBlankBinding
 
 
@@ -20,19 +18,10 @@ class BlankFragment : Fragment() {
         context ?: return binding.root
         with(binding) {
             searchback.setOnClickListener {
-                gotoSearch(searchback, searchBar)
             }
         }
         return binding.root
     }
 
 
-    private fun gotoSearch(vararg view: View) {
-        val extras = FragmentNavigatorExtras(
-            view[0] to view[0].transitionName,
-            view[1] to view[1].transitionName
-        )
-        val direction = BlankFragmentDirections.gotoSearch()
-        view[0].findNavController().navigate(direction, extras)
-    }
 }

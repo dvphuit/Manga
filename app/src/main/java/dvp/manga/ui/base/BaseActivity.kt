@@ -1,4 +1,4 @@
-package dvp.manga.ui.screen
+package dvp.manga.ui.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

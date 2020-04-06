@@ -54,8 +54,9 @@ class CircularReveal : Visibility {
         ensureCenterPoint(sceneRoot, view)
         return NoPauseAnimator(ViewAnimationUtils.createCircularReveal(
             view,
-            center!!.x,
-            center!!.y,
+            960, 95,
+//            center!!.x,
+//            center!!.y,
             startRadius,
             getFullyRevealedRadius(view)
         ))
@@ -70,8 +71,9 @@ class CircularReveal : Visibility {
         ensureCenterPoint(sceneRoot, view)
         return NoPauseAnimator(ViewAnimationUtils.createCircularReveal(
             view,
-            center!!.x,
-            center!!.y,
+//            center!!.x,
+//            center!!.y,
+            960, 95,
             getFullyRevealedRadius(view),
             endRadius
         ))

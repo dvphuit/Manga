@@ -13,11 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".ui.search.SearchActivity"
-            android:theme="@style/SearchTheme">
 
-        </activity>
         <activity android:name=".TestActivity">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->

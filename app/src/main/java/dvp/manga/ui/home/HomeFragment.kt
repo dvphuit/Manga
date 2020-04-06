@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
@@ -15,6 +14,7 @@ import dvp.manga.data.model.Manga
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.Result
 import dvp.manga.ui.adapter.MangaAdapter
+import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -22,37 +22,37 @@ import kotlinx.coroutines.FlowPreview
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class HomeFragment : Fragment() {
-
-    private lateinit var binding: HomeFragmentBinding
+class HomeFragment : BaseFragment() {
 
     private val viewModel: HomeViewModel by viewModels {
         Injector.getHomeVMFactory(requireContext())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = HomeFragmentBinding.inflate(inflater, container, false)
+        val binding = HomeFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        with(MangaAdapter(binding.mangaList)) {
-            binding.mangaList.setHasFixedSize(true)
-            binding.mangaList.adapter = this
-            registerLazyCallback { viewModel.loadMore() }
-            if (!viewModel.isInitialized) {
-                resetLazyList()
+        return binding.apply {
+            mangaList.setHasFixedSize(true)
+            mangaList.adapter = MangaAdapter(mangaList).apply {
+                registerLazyCallback { viewModel.loadMore() }
+                if (!viewModel.isInitialized) {
+                    resetLazyList()
+                }
+                subscribeUi(this)
             }
-            subscribeUi(this)
-        }
-        return binding.root
+            searchback.setOnClickListener {
+                gotoSearch(searchback, searchBar)
+            }
+        }.root
     }
 
-
-    private fun gotoSearch(vararg view: View) {
+    private fun gotoSearch(vararg views: View) {
         val extras = FragmentNavigatorExtras(
-            view[0] to view[0].transitionName,
-            view[1] to view[1].transitionName
+            views[0] to views[0].transitionName,
+            views[1] to views[1].transitionName
         )
         val direction = HomeFragmentDirections.gotoSearch()
-        view[0].findNavController().navigate(direction, extras)
+        views[0].findNavController().navigate(direction, extras)
     }
 
     private fun subscribeUi(adapter: MangaAdapter) {
@@ -72,7 +72,11 @@ class HomeFragment : Fragment() {
                     Log.d("TEST", "state error")
                 }
                 is Result.EmptyQuery -> {
-                    Toast.makeText(requireContext(), "Must be over 3 characters", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Must be over 3 characters",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     adapter.submitData(emptyList(), false)
                 }
             }

@@ -32,10 +32,10 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_enter)
-//        returnTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_return)
+        enterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_enter)
+        returnTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_return)
         sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_shared_enter)
-        sharedElementReturnTransition   = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_shared_return)
+        sharedElementReturnTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_shared_return)
     }
 
     override fun onCreateView(
@@ -44,15 +44,14 @@ class SearchFragment : Fragment() {
     ): View? {
         val binding = ActivitySearchBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        with(binding) {
-            adapter = MangaAdapter(mangaList)
-            mangaList.adapter = adapter
+        return binding.apply {
+            adapter = MangaAdapter(mangaList2)
+            mangaList2.adapter = adapter
             subscribeUi(adapter)
             adapter.registerLazyCallback { viewModel.loadMore() }
             searchView.doAfterTextChanged { searchFor(it.toString()) }
             searchView.requestFocus()
-        }
-        return binding.root
+        }.root
     }
 
     private fun searchFor(query: String) {
@@ -79,7 +78,11 @@ class SearchFragment : Fragment() {
                     Log.d("TEST", "state error")
                 }
                 is Result.EmptyQuery -> {
-                    Toast.makeText(requireContext(), "Must be over 3 characters", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Must be over 3 characters",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     adapter.submitData(emptyList(), false)
                 }
             }

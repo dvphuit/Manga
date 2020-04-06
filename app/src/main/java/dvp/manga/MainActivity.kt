@@ -2,10 +2,8 @@ package dvp.manga
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
-import dvp.manga.databinding.ActivityMainBinding
 import dvp.manga.utils.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -20,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
@@ -32,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigationBar() {
-        val navGraphIds = listOf(R.navigation.manga_navi, R.navigation.bookmark_nav, R.navigation.setting_nav)
+        val navGraphIds = listOf(R.navigation.home_nav, R.navigation.bookmark_nav, R.navigation.setting_nav)
         currentNavController = bot_nav.setupWithNavController(
             navGraphIds = navGraphIds,
             fragmentManager = supportFragmentManager,
@@ -41,7 +39,5 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return currentNavController?.value?.navigateUp() ?: false
-    }
+    override fun onSupportNavigateUp() = currentNavController?.value?.navigateUp() ?: false
 }
