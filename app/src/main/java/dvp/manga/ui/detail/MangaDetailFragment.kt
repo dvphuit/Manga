@@ -23,10 +23,13 @@ class MangaDetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = MangaDetailFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        val adapter = ChapAdapter()
-        binding.chapList.adapter = adapter
-        subscribeUi(adapter)
-        return binding.root
+        return binding.apply {
+            data = viewModel.manga
+            genres.setList(viewModel.manga.genres)
+            chapList.adapter = ChapAdapter().apply {
+                subscribeUi(this)
+            }
+        }.root
     }
 
     private fun subscribeUi(adapter: ChapAdapter) {

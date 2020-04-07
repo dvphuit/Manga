@@ -12,41 +12,46 @@
             type="dvp.manga.data.model.Manga" />
     </data>
 
-    <RelativeLayout
-        android:id="@+id/manga_item"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?android:selectableItemBackgroundBorderless"
         android:onClick="@{clickListener}"
-        android:padding="4dp"
-        android:stateListAnimator="@animator/press_hover">
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginVertical="8dp"
+        android:orientation="vertical"
+        android:foreground="?android:selectableItemBackgroundBorderless">
 
-        <dvp.manga.ui.custom.RatioImageView
-            android:id="@+id/imgCover"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:transitionName="cover"
-            app:imageFromUrl="@{data.cover}" />
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp">
+
+            <dvp.manga.ui.custom.RatioImageView
+                android:id="@+id/imgCover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:transitionName="cover"
+                app:imageFromUrl="@{data.cover}" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imgCover"
             android:layout_gravity="bottom"
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="@{data.name}"
-            android:textColor="#004D40"
-            android:textSize="14sp" />
+            android:textColor="#222222"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tvLastChap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvName"
             android:layout_gravity="bottom"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
@@ -54,6 +59,7 @@
             android:lines="1"
             android:text="@{data.last_chap}"
             android:textColor="#ED3333"
-            android:textSize="12sp" />
-    </RelativeLayout>
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </LinearLayout>
 </layout>

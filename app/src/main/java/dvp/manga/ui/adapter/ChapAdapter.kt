@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Chapter
 import dvp.manga.databinding.ChapterItemBinding
+import dvp.manga.ui.detail.MangaDetailFragmentDirections
 
 /**
  * @author dvphu on 19,March,2020
@@ -32,9 +34,10 @@ class ChapAdapter : RecyclerView.Adapter<ChapAdapter.ViewHolder>() {
         }
 
         private fun gotoChapContent(chap: Chapter, view: View) {
-//            val direction = MangaDetailFragmentDirections.actionChapToStory(chap)
-//            view.findNavController().navigate(direction)
+            val direction = MangaDetailFragmentDirections.actionChapToStory(chap)
+            view.findNavController().navigate(direction)
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

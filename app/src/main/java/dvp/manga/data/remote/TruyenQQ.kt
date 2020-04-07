@@ -3,12 +3,11 @@ package dvp.manga.data.remote
 import android.content.Context
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
-import dvp.manga.data.model.ChapContent
-import dvp.manga.data.model.Chapter
-import dvp.manga.data.model.Manga
+import dvp.manga.data.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import org.jsoup.nodes.Element
 
 /**
  * @author dvphu on 16,March,2020
@@ -27,14 +26,8 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
             getBody("$url/truyen-con-trai/trang-$page.html?country=4").getElementsByClass("story-item")
         }
         list.map { element ->
-            val manga = Manga(host = url)
-            with(element) {
-                manga.name = getElementsByClass("title-book").text()
-                manga.href = getElementsByClass("title-book").select("a").attr("href")
-                manga.last_chap = getElementsByClass("episode-book").text()
-                manga.cover = getElementsByClass("story-cover").attr("src")
-                mangas.add(manga)
-            }
+            Manga(host = url)
+            mangas.add(parseManga(element))
         }
         return mangas
     }
@@ -75,17 +68,43 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         val list = withContext(Dispatchers.IO) {
             getBody("$url/tim-kiem/trang-$page?q=$query").getElementsByClass("story-item")
         }
-        list.map { element ->
-            val manga = Manga(host = url)
-            with(element) {
-                manga.name = getElementsByClass("title-book").text()
-                manga.href = getElementsByClass("title-book").select("a").attr("href")
-                manga.last_chap = getElementsByClass("episode-book").text()
-                manga.cover = getElementsByClass("story-cover").attr("src")
-                mangas.add(manga)
-            }
+        list.forEach { element ->
+            mangas.add(parseManga(element))
         }
         return mangas
+    }
+
+    private fun parseManga(element: Element): Manga {
+        val manga = Manga()
+        with(element) {
+            manga.name = getElementsByClass("title-book").text()
+            manga.href = getElementsByClass("title-book").select("a").attr("href")
+            manga.last_chap = getElementsByClass("episode-book").text()
+            manga.cover = getElementsByClass("story-cover").attr("src")
+            manga.info = parseInfo(element)
+            manga.genres = parseGenres(element)
+        }
+        return manga
+    }
+
+    private fun parseInfo(element: Element): Info {
+        val info = Info()
+        element.getElementsByClass("info").forEach {
+            val value = it.text().replace(",", "")
+            if (value.contains("tình trạng", true)) info.status = value
+            if (value.contains("lượt xem", true)) info.viewed = Regex("\\d+").find(value)?.value ?: "0"
+            if (value.contains("theo dõi", true)) info.followed = Regex("\\d+").find(value)?.value ?: "0"
+        }
+        info.description = element.getElementsByClass("excerpt").first().text()
+        return info
+    }
+
+    private fun parseGenres(element: Element): List<Genres> {
+        val genres = mutableListOf<Genres>()
+        element.getElementsByClass("list-tags").select("a").forEach {
+            genres.add(Genres(it.text(), it.attr("href")))
+        }
+        return genres
     }
 
     //region init TruyenQQ

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import dvp.manga.R
@@ -16,13 +15,14 @@ import dvp.manga.data.model.Manga
 import dvp.manga.databinding.ActivitySearchBinding
 import dvp.manga.ui.Result
 import dvp.manga.ui.adapter.MangaAdapter
+import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SearchFragment : Fragment() {
+class SearchFragment : BaseFragment() {
 
     private val viewModel: SearchViewModel by viewModels {
         Injector.getSearchVMFactory(requireContext())

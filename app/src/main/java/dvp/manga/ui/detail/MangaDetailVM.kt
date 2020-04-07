@@ -6,8 +6,9 @@ import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.ChapterRepository
 import dvp.manga.ui.BaseViewModel
 
-class MangaDetailVM(app: Application, private val repository: ChapterRepository, private val manga: Manga) : BaseViewModel(app) {
+class MangaDetailVM(app: Application, private val repository: ChapterRepository, private val _manga: Manga) : BaseViewModel(app) {
     lateinit var chaps: List<Chapter>
+    var manga = _manga
 
     init {
         getChapters()
@@ -15,7 +16,7 @@ class MangaDetailVM(app: Application, private val repository: ChapterRepository,
 
     private fun getChapters() {
         launch {
-            chaps = repository.getChaps(manga.href!!)
+            chaps = repository.getChaps(_manga.href!!)
             return@launch chaps.isNotEmpty()
         }
     }
