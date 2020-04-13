@@ -1,23 +1,16 @@
 package dvp.manga.ui.detail
 
-import android.app.Application
-import dvp.manga.data.model.Chapter
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.ChapterRepository
-import dvp.manga.ui.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 
-class MangaDetailVM(app: Application, private val repository: ChapterRepository, private val _manga: Manga) : BaseViewModel(app) {
-    lateinit var chaps: List<Chapter>
+class MangaDetailVM(private val repository: ChapterRepository, private val _manga: Manga) : ViewModel() {
     var manga = _manga
 
-    init {
-        getChapters()
-    }
-
-    private fun getChapters() {
-        launch {
-            chaps = repository.getChaps(_manga.href!!)
-            return@launch chaps.isNotEmpty()
-        }
+    val chapters = liveData(Dispatchers.IO) {
+        val commentResponse = repository.getChaps(_manga.href!!)
+        emit(commentResponse)
     }
 }

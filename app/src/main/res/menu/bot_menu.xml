@@ -4,15 +4,15 @@
         android:id="@+id/home"
         android:icon="@drawable/ic_home"
         android:title="Home"
-        app:color="@color/colorPrimary" />
+        app:color="@color/colorAccent" />
     <item
         android:id="@+id/bookmark"
         android:icon="@drawable/ic_bookmark"
         android:title="Bookmark"
-        app:color="@color/colorPrimary" />
+        app:color="@color/colorAccent" />
     <item
         android:id="@+id/setting"
         android:icon="@drawable/ic_user"
         android:title="Profile"
-        app:color="@color/colorPrimary" />
+        app:color="@color/colorAccent" />
 </menu>

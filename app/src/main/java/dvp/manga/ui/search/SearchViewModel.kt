@@ -1,16 +1,12 @@
 package dvp.manga.ui.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.MangaRepository
-import dvp.manga.ui.Result
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
 
 data class QueryData(var key: String, var page: Int = 1)
 
@@ -56,38 +52,38 @@ class SearchViewModel(
         }
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
-    val state = queryChannel
-        .asFlow()
-        .debounce(SEARCH_DELAY_MS)
-        .distinctUntilChanged()
-        .mapLatest {
-            try {
-                if (it.key.length >= MIN_QUERY_LENGTH) {
-                    val result = withContext(ioDispatcher) { repository.searchManga(it.key, it.page) }
-                    if (result.isEmpty() && data.isEmpty()) {
-                        pageIndex = 1
-                        Result.Empty
-                    } else {
-                        pageIndex++
-                        data.addAll(result)
-                        Result.Success(data, result.isNotEmpty())
-                    }
-                } else {
-                    Result.EmptyQuery
-                }
-            } catch (e: Throwable) {
-                if (e is CancellationException) {
-                    Log.d(this.javaClass.simpleName, "search \"${it}\" was cancelled")
-                    throw e
-                } else {
-                    Result.Error(e.localizedMessage!!)
-                }
-
-            }
-        }
-        .catch { emit(Result.TerminalError) }
-        .asLiveData()
+//    @FlowPreview
+//    @ExperimentalCoroutinesApi
+//    val state = queryChannel
+//        .asFlow()
+//        .debounce(SEARCH_DELAY_MS)
+//        .distinctUntilChanged()
+//        .mapLatest {
+//            try {
+//                if (it.key.length >= MIN_QUERY_LENGTH) {
+//                    val result = withContext(ioDispatcher) { repository.searchManga(it.key, it.page) }
+//                    if (result.isEmpty() && data.isEmpty()) {
+//                        pageIndex = 1
+//                        Result.Empty
+//                    } else {
+//                        pageIndex++
+//                        data.addAll(result)
+//                        Result.Success(data, result.isNotEmpty())
+//                    }
+//                } else {
+//                    Result.EmptyQuery
+//                }
+//            } catch (e: Throwable) {
+//                if (e is CancellationException) {
+//                    Log.d(this.javaClass.simpleName, "search \"${it}\" was cancelled")
+//                    throw e
+//                } else {
+//                    Result.Error(e.localizedMessage!!)
+//                }
+//
+//            }
+//        }
+//        .catch { emit(Result.TerminalError) }
+//        .asLiveData()
 
 }

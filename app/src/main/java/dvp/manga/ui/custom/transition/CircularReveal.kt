@@ -38,45 +38,38 @@ class CircularReveal : Visibility {
         a.recycle()
     }
 
-    /**
-     * The center point of the reveal or conceal, relative to the target `view`.
-     */
     fun setCenter(center: Point) {
         this.center = center
     }
 
-    override fun onAppear(
-        sceneRoot: ViewGroup, view: View?,
-        startValues: TransitionValues?,
-        endValues: TransitionValues?
-    ): Animator? {
+    override fun onAppear(sceneRoot: ViewGroup, view: View?, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
         if (view == null || view.height == 0 || view.width == 0) return null
         ensureCenterPoint(sceneRoot, view)
-        return NoPauseAnimator(ViewAnimationUtils.createCircularReveal(
-            view,
-            960, 95,
+        return NoPauseAnimator(
+            ViewAnimationUtils.createCircularReveal(
+                view,
+                960, 95,
 //            center!!.x,
 //            center!!.y,
-            startRadius,
-            getFullyRevealedRadius(view)
-        ))
+                startRadius,
+                getFullyRevealedRadius(view)
+            )
+        )
     }
 
-    override fun onDisappear(
-        sceneRoot: ViewGroup, view: View?,
-        startValues: TransitionValues?,
-        endValues: TransitionValues?
-    ): Animator? {
+    override fun onDisappear(sceneRoot: ViewGroup, view: View?, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
         if (view == null || view.height == 0 || view.width == 0) return null
         ensureCenterPoint(sceneRoot, view)
-        return NoPauseAnimator(ViewAnimationUtils.createCircularReveal(
-            view,
+        return NoPauseAnimator(
+            ViewAnimationUtils.createCircularReveal(
+                view,
 //            center!!.x,
 //            center!!.y,
-            960, 95,
-            getFullyRevealedRadius(view),
-            endRadius
-        ))
+                960, 94,
+                getFullyRevealedRadius(view),
+                endRadius
+            )
+        )
     }
 
     private fun ensureCenterPoint(sceneRoot: ViewGroup, view: View) {

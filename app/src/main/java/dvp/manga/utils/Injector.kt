@@ -30,7 +30,7 @@ object Injector {
 
     fun getHomeVMFactory(context: Context) = HomeVMFactory(getMangaRepository(context))
 
-    fun getMangaDetailVMFactory(app: Application, context: Context, manga: Manga) = MangaDetailVMFactory(app, getChapterRepository(context), manga)
+    fun getMangaDetailVMFactory(context: Context, manga: Manga) = MangaDetailVMFactory(getChapterRepository(context), manga)
 
     fun getChapContentVMFactory(app: Application, context: Context, chap: Chapter) = StoryVMFactory(app, getChapContentRepository(context), chap)
 

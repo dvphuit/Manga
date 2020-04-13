@@ -16,6 +16,7 @@ import dvp.manga.ui.Result
 import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
+import dvp.manga.utils.delayForSharedElement
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
@@ -32,6 +33,7 @@ class HomeFragment : BaseFragment() {
         val binding = HomeFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
         return binding.apply {
+            mangaList.delayForSharedElement(this@HomeFragment)
             mangaList.setHasFixedSize(true)
             mangaList.adapter = MangaAdapter(mangaList).apply {
                 registerLazyCallback { viewModel.loadMore() }

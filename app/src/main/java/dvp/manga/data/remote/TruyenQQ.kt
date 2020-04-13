@@ -92,7 +92,7 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         element.getElementsByClass("info").forEach {
             val value = it.text().replace(",", "")
             if (value.contains("tình trạng", true)) info.status = value
-            if (value.contains("lượt xem", true)) info.viewed = Regex("\\d+").find(value)?.value ?: "0"
+            if (value.contains("lượt xem", true)) info.viewed = value
             if (value.contains("theo dõi", true)) info.followed = Regex("\\d+").find(value)?.value ?: "0"
         }
         info.description = element.getElementsByClass("excerpt").first().text()

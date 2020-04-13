@@ -9,123 +9,142 @@
         <variable
             name="data"
             type="dvp.manga.data.model.Manga" />
+
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/manga_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff"
-        android:orientation="vertical"
-        android:padding="8dp"
+        app:layoutDescription="@xml/collapsing_toolbar"
         tools:context=".ui.detail.MangaDetailFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <View
+            android:id="@+id/background"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/img_wrapper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+        <View
+            android:id="@+id/toolbar_view"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="#fff"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                <dvp.manga.ui.custom.RatioImageView
-                    android:id="@+id/imgCover"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    app:imageFromUrl="@{data.cover}" />
+        <ImageButton
+            android:id="@+id/bt_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back_padded"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_view"
+            app:layout_constraintStart_toStartOf="@id/toolbar_view"
+            app:layout_constraintTop_toTopOf="@id/toolbar_view" />
 
-            </com.google.android.material.card.MaterialCardView>
+        <dvp.manga.ui.custom.RatioImageView
+            android:id="@+id/img_wrapper"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:imageFromUrl="@{data.cover}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_view" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:lines="1"
-                android:padding="8dp"
-                android:text="@{data.name}"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/img_wrapper"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:padding="8dp"
+            android:text="@{data.name}"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/img_wrapper"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_view" />
 
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:lines="1"
-                android:padding="8dp"
-                android:text="@{data.info.status}"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/img_wrapper"
-                app:layout_constraintTop_toBottomOf="@id/title" />
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:padding="8dp"
+            android:text="@{data.info.status}"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/img_wrapper"
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
-            <TextView
-                android:id="@+id/viewed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_eye"
-                android:drawablePadding="4dp"
-                android:drawableTint="@color/colorPrimary"
-                android:padding="8dp"
-                android:text="@{data.info.viewed}"
-                app:layout_constraintStart_toEndOf="@id/img_wrapper"
-                app:layout_constraintTop_toBottomOf="@id/status" />
+        <TextView
+            android:id="@+id/viewed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_eye"
+            android:drawablePadding="4dp"
+            android:drawableTint="@color/colorAccent"
+            android:padding="8dp"
+            android:text="@{data.info.viewed}"
+            app:layout_constraintStart_toEndOf="@id/img_wrapper"
+            app:layout_constraintTop_toBottomOf="@id/status" />
 
-            <TextView
-                android:id="@+id/followed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_bookmarked"
-                android:drawablePadding="4dp"
-                android:drawableTint="@color/colorPrimary"
-                android:padding="8dp"
-                android:text="@{data.info.followed}"
-                app:layout_constraintStart_toEndOf="@id/viewed"
-                app:layout_constraintTop_toBottomOf="@id/status" />
+        <TextView
+            android:id="@+id/followed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_bookmarked"
+            android:drawablePadding="4dp"
+            android:drawableTint="@color/colorAccent"
+            android:padding="8dp"
+            android:text="@{data.info.followed}"
+            app:layout_constraintStart_toEndOf="@id/viewed"
+            app:layout_constraintTop_toBottomOf="@id/status" />
 
-            <TextView
-                android:id="@+id/liked"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                app:layout_constraintStart_toEndOf="@id/followed"
-                app:layout_constraintTop_toBottomOf="@id/status" />
+        <TextView
+            android:id="@+id/liked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            app:layout_constraintStart_toEndOf="@id/followed"
+            app:layout_constraintTop_toBottomOf="@id/status" />
 
-            <dvp.manga.ui.custom.FlowLayout
-                android:id="@+id/genres"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/img_wrapper"
-                app:layout_constraintTop_toBottomOf="@id/viewed" />
+        <dvp.manga.ui.custom.FlowLayout
+            android:id="@+id/genres"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/img_wrapper"
+            app:layout_constraintTop_toBottomOf="@id/viewed"
+            app:setGenres="@{data.genres}" />
 
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{data.info.description}"
-                app:layout_constraintTop_toBottomOf="@id/img_wrapper" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@{data.info.description}"
+            app:layout_constraintTop_toBottomOf="@id/img_wrapper" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chap_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/description"
+            app:layout_constraintVertical_weight="1"
             tools:context=".ui.detail.MangaDetailFragment"
             tools:listitem="@layout/chapter_item" />
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
 </layout>

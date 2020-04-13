@@ -13,6 +13,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{clickListener}"
@@ -21,20 +22,23 @@
         android:orientation="vertical"
         android:foreground="?android:selectableItemBackgroundBorderless">
 
-        <com.google.android.material.card.MaterialCardView
+<!--        <com.google.android.material.card.MaterialCardView-->
+<!--            android:id="@+id/img_wrapper"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:cardCornerRadius="5dp">-->
+
+<!--            -->
+
+<!--        </com.google.android.material.card.MaterialCardView>-->
+        <dvp.manga.ui.custom.RatioImageView
+            android:id="@+id/img_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="5dp">
-
-            <dvp.manga.ui.custom.RatioImageView
-                android:id="@+id/imgCover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:transitionName="cover"
-                app:imageFromUrl="@{data.cover}" />
-
-        </com.google.android.material.card.MaterialCardView>
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:imageFromUrl="@{data.cover}"
+            android:background="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/tvName"

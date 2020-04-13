@@ -3,8 +3,10 @@ package dvp.manga.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Manga
@@ -30,25 +32,29 @@ class MangaAdapter(recyclerView: RecyclerView) : LazyAdapter<Manga>(recyclerView
     inner class MangaHolder(private val binding: MangaItemBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.setClickListener { view ->
-                gotoDetail(binding.data!!, view)
+                gotoDetail(binding.data!!, view, binding.imgWrapper)
             }
         }
 
         fun bind(manga: Manga) {
             with(binding) {
                 data = manga
+                ViewCompat.setTransitionName(binding.imgWrapper, "cover_${manga.name}")
+//                ViewCompat.setTransitionName(binding.parent, "parent_${manga.name}")
                 executePendingBindings()
             }
         }
 
-        private fun gotoDetail(manga: Manga, view: View) {
+        private fun gotoDetail(manga: Manga, parent: View, cover: View) {
             val direction = HomeFragmentDirections.actionMangaToDetail(manga)
-            view.findNavController().navigate(direction)
+            val extras = FragmentNavigatorExtras(
+                cover to "cover_${manga.name}"
+//                parent to "parent_${manga.name}"
+            )
+            parent.findNavController().navigate(direction, extras)
         }
     }
 
-    override fun getItemCount(): Int {
-        return mList.size
-    }
+    override fun getItemCount() = mList.size
 
 }
