@@ -5,14 +5,14 @@
         android:fillAfter="true"
         android:fillBefore="false"
         android:fillEnabled="true"
-        android:fromAlpha="1.0"
-        android:toAlpha="0.3" />
+        android:fromAlpha="0.0"
+        android:toAlpha="1" />
 
     <scale
-        android:fromXScale="1.0"
-        android:fromYScale="1.0"
+        android:fromXScale="0.95"
+        android:fromYScale="0.95"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:toXScale="0.95"
-        android:toYScale="0.95" />
+        android:toXScale="1"
+        android:toYScale="1" />
 </set>

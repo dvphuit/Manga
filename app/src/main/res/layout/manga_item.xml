@@ -20,6 +20,7 @@
         android:layout_marginHorizontal="4dp"
         android:layout_marginVertical="8dp"
         android:orientation="vertical"
+        android:background="@color/colorPrimary"
         android:foreground="?android:selectableItemBackgroundBorderless">
 
 <!--        <com.google.android.material.card.MaterialCardView-->

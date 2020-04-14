@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        app:constraintSetEnd="@id/collapsed"
+        app:constraintSetEnd="@layout/manga_detail_fragment_collapsed"
         app:constraintSetStart="@layout/manga_detail_fragment"
         app:duration="500"
         app:motionInterpolator="easeOut">

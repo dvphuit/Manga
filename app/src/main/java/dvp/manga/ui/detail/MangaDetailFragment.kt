@@ -2,7 +2,6 @@ package dvp.manga.ui.detail
 
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,18 +38,12 @@ class MangaDetailFragment : Fragment() {
         context ?: return binding.root
         return binding.apply {
             ViewCompat.setTransitionName(imgWrapper, "cover_${args.manga.name}")
-//            ViewCompat.setTransitionName(mangaDetail, "parent_${manga.name}")
             data = viewModel.manga
+            chapList.adapter = ChapAdapter().apply {
+                subscribeUi(this)
+            }
             lifecycleOwner = this@MangaDetailFragment
         }.root
-    }
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val adapter = ChapAdapter()
-        binding.chapList.adapter = adapter
-        subscribeUi(adapter)
     }
 
     private fun subscribeUi(adapter: ChapAdapter) {
@@ -68,7 +61,6 @@ class MangaDetailFragment : Fragment() {
 //        }
         viewModel.chapters.observe(viewLifecycleOwner) {
             adapter.submitList(it)
-            Log.d("TEST", "set adapter")
         }
     }
 

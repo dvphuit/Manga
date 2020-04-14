@@ -1,6 +1,8 @@
 package dvp.manga.ui.custom
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
@@ -9,7 +11,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.setMargins
 import dvp.manga.R
 import dvp.manga.utils.dp
 import kotlin.math.max
@@ -30,9 +31,11 @@ class FlowLayout(context: Context, attrs: AttributeSet?, defStyle: Int) : ViewGr
 
     private fun buildLabel(text: String, tag: Int = 0): TextView {
         return TextView(context).apply {
-            layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply { setMargins(4.dp) }
+            layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply { setMargins(0.dp, 4.dp, 8.dp, 4.dp) }
             this.text = text
-            this.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+            this.setTextColor(Color.WHITE)
+            this.typeface = Typeface.DEFAULT_BOLD
+            this.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11f)
             setPadding(8.dp, 4.dp, 8.dp, 4.dp)
             setBackgroundResource(R.drawable.bg_tag_selector)
             setOnClickListener(this@FlowLayout)

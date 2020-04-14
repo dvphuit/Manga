@@ -7,32 +7,34 @@
     <targets>
         <target android:excludeId="@android:id/navigationBarBackground" />
         <target android:excludeId="@android:id/statusBarBackground" />
+        <target android:excludeId="@id/img_wrapper" />
     </targets>
 
-    <slide android:slideEdge="top">
-        <targets>
-            <target android:targetId="@id/toolbar_view" />
-            <target android:targetId="@id/bt_back" />
-        </targets>
-    </slide>
-
-    <slide android:slideEdge="bottom">
-        <targets>
-            <target android:excludeId="@id/img_wrapper" />
-            <target android:excludeId="@id/toolbar_view" />
-            <target android:excludeId="@id/bt_back" />
-            <target android:targetId="@id/description" />
-            <target android:targetId="@id/chap_list" />
-        </targets>
-    </slide>
     <slide android:slideEdge="right">
         <targets>
             <target android:targetId="@id/title" />
-            <target android:targetId="@id/genres" />
-            <target android:targetId="@id/viewed" />
             <target android:targetId="@id/status" />
+            <target android:targetId="@id/viewed" />
             <target android:targetId="@id/followed" />
+            <target android:targetId="@id/genres" />
         </targets>
     </slide>
-    <fade android:fadingMode="fade_in"/>
+    <slide android:slideEdge="top">
+        <targets>
+            <target android:targetId="@id/bt_back" />
+        </targets>
+    </slide>
+    <slide android:slideEdge="bottom">
+        <targets>
+            <target android:targetId="@id/chap_list" />
+            <target android:targetId="@id/description" />
+        </targets>
+    </slide>
+
+    <fade android:duration="600"  android:startDelay="100"
+        android:fadingMode="fade_in">
+        <targets>
+            <target android:targetId="@id/scrim"/>
+        </targets>
+    </fade>
 </transitionSet>

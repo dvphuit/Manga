@@ -13,7 +13,8 @@
         <action
             android:id="@+id/action_manga_to_detail"
             app:destination="@id/mangaDetail"
-            app:exitAnim="@anim/scale_down"/>
+            app:exitAnim="@anim/scale_down"
+            app:popEnterAnim="@anim/scale_up"/>
 
         <action
             android:id="@+id/goto_search"

@@ -40,7 +40,6 @@ class MangaAdapter(recyclerView: RecyclerView) : LazyAdapter<Manga>(recyclerView
             with(binding) {
                 data = manga
                 ViewCompat.setTransitionName(binding.imgWrapper, "cover_${manga.name}")
-//                ViewCompat.setTransitionName(binding.parent, "parent_${manga.name}")
                 executePendingBindings()
             }
         }
@@ -49,7 +48,6 @@ class MangaAdapter(recyclerView: RecyclerView) : LazyAdapter<Manga>(recyclerView
             val direction = HomeFragmentDirections.actionMangaToDetail(manga)
             val extras = FragmentNavigatorExtras(
                 cover to "cover_${manga.name}"
-//                parent to "parent_${manga.name}"
             )
             parent.findNavController().navigate(direction, extras)
         }
