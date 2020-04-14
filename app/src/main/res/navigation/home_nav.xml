@@ -52,7 +52,9 @@
         tools:layout="@layout/activity_search">
         <action
             android:id="@+id/action_manga_to_detail"
-            app:destination="@id/mangaDetail" />
+            app:destination="@id/mangaDetail"
+            app:exitAnim="@anim/scale_down"
+            app:popEnterAnim="@anim/scale_up"/>
     </fragment>
 
 </navigation>
