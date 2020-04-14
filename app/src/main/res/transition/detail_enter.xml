@@ -31,10 +31,13 @@
         </targets>
     </slide>
 
-    <fade android:duration="600"  android:startDelay="100"
-        android:fadingMode="fade_in">
+    <fade
+        android:duration="600"
+        android:fadingMode="fade_in"
+        android:startDelay="100">
         <targets>
-            <target android:targetId="@id/scrim"/>
+            <target android:targetId="@id/toolbar_view" />
+            <target android:targetId="@id/scrim" />
         </targets>
     </fade>
 </transitionSet>
