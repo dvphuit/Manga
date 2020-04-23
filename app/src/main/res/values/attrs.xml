@@ -14,4 +14,9 @@
         <attr name="endRadius" format="dimension" />
         <attr name="centerOn" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="RatioImageView">
+        <attr name="widthRatio" format="integer" />
+        <attr name="heightRatio" format="integer" />
+    </declare-styleable>
 </resources>
