@@ -10,15 +10,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.Result
 import dvp.manga.ui.adapter.MangaAdapter
+import dvp.manga.ui.adapter.TopMangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 import dvp.manga.utils.delayForSharedElement
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlin.math.abs
 
 
 @FlowPreview
@@ -34,7 +39,6 @@ class HomeFragment : BaseFragment() {
         context ?: return binding.root
         return binding.apply {
             mangaList.delayForSharedElement(this@HomeFragment)
-            mangaList.setHasFixedSize(true)
             mangaList.adapter = MangaAdapter(mangaList).apply {
                 registerLazyCallback { viewModel.loadMore() }
                 if (!viewModel.isInitialized) {
@@ -44,6 +48,24 @@ class HomeFragment : BaseFragment() {
             }
             searchback.setOnClickListener {
                 gotoSearch(searchback, searchBar)
+            }
+
+            topMangaList.apply {
+                clipChildren = false
+                clipToPadding = false
+                offscreenPageLimit = 3
+                getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+                val transform = CompositePageTransformer()
+                transform.addTransformer(MarginPageTransformer(40))
+                transform.addTransformer { page, position ->
+                    val r = 1 - abs(position)
+                    page.scaleY = (.85 + .15 * r).toFloat()
+                }
+                setPageTransformer(transform)
+
+                adapter = TopMangaAdapter().apply {
+                    subscribeTopManga(this)
+                }
             }
         }.root
     }
@@ -55,6 +77,12 @@ class HomeFragment : BaseFragment() {
         )
         val direction = HomeFragmentDirections.gotoSearch()
         views[0].findNavController().navigate(direction, extras)
+    }
+
+    private fun subscribeTopManga(adapter: TopMangaAdapter) {
+        viewModel.topMangas.observe(viewLifecycleOwner) {
+            adapter.submitData(it)
+        }
     }
 
     private fun subscribeUi(adapter: MangaAdapter) {
