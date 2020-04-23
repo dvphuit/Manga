@@ -2,6 +2,7 @@ package dvp.manga.ui.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.MangaRepository
@@ -16,9 +17,13 @@ class HomeViewModel internal constructor(
     private var pageIndex = 1
     private val mangas = mutableListOf<Manga>()
 
-    lateinit var top: List<Manga>
     var isInitialized = false
     val state = MutableLiveData<Result>()
+
+    var topMangas = liveData(Dispatchers.IO) {
+        val response = repository.getTopManga()
+        emit(response)
+    }
 
     @FlowPreview
     @ExperimentalCoroutinesApi

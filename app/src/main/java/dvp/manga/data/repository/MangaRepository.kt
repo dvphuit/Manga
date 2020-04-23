@@ -17,6 +17,10 @@ class MangaRepository(private val crawler: BaseCrawler) {
         return mangas
     }
 
+    suspend fun getTopManga():List<Manga>{
+        return crawler.getTopManga()
+    }
+
     companion object {
         @Volatile private var instance: MangaRepository? = null
         fun getInstance(crawler: BaseCrawler) =

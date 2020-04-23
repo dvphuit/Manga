@@ -20,6 +20,18 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
     }
 
     private val url = "http://truyenqq.com"
+    override suspend fun getTopManga(): List<Manga> {
+        val mangas = mutableListOf<Manga>()
+        val list = withContext(Dispatchers.IO) {
+            getBody("$url/index.html").getElementsByClass("tile is-child")
+        }
+        list.map { element ->
+            Manga(host = url)
+            mangas.add(parseTopManga(element))
+        }
+        return mangas
+    }
+
     override suspend fun getMangas(page: Int): List<Manga> {
         val mangas = mutableListOf<Manga>()
         val list = withContext(Dispatchers.IO) {
@@ -83,6 +95,17 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
             manga.cover = getElementsByClass("story-cover").attr("src")
             manga.info = parseInfo(element)
             manga.genres = parseGenres(element)
+        }
+        return manga
+    }
+
+    private fun parseTopManga(element: Element): Manga {
+        val manga = Manga()
+        with(element.selectFirst("a")) {
+            manga.name = selectFirst("h3").text()
+            manga.cover = selectFirst("img.cover").attr("src")
+            manga.href = attr("href")
+            manga.last_chap = selectFirst("div.chapter").text()
         }
         return manga
     }
