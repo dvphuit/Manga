@@ -58,7 +58,7 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
 
     private fun setFadeAnimation(view: View) {
         val anim = AlphaAnimation(0.1f, 1f)
-        anim.duration = 150
+        anim.duration = 250
         view.startAnimation(anim)
     }
 
@@ -86,7 +86,7 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
         if (layoutManager is GridLayoutManager) {
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return getSpan(position)
+                    return 1
                 }
             }
         }

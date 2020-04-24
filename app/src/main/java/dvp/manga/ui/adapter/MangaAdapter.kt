@@ -10,17 +10,17 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Manga
-import dvp.manga.databinding.MangaItemBinding
+import dvp.manga.databinding.MangaItemSpanFullBinding
 import dvp.manga.ui.home.HomeFragmentDirections
 
 
 class MangaAdapter(recyclerView: RecyclerView) : LazyAdapter<Manga>(recyclerView) {
 
     override fun implCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
-        return MangaHolder(DataBindingUtil.inflate(LayoutInflater.from(parent!!.context), R.layout.manga_item, parent, false))
+        return MangaHolder(DataBindingUtil.inflate(LayoutInflater.from(parent!!.context), R.layout.manga_item_span_full, parent, false))
     }
 
-    override fun getSpan(position: Int) = if (getItemViewType(position) == LOADING) 3 else 1
+    override fun getSpan(position: Int) = if (getItemViewType(position) == LOADING) 3 else 3
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -29,7 +29,7 @@ class MangaAdapter(recyclerView: RecyclerView) : LazyAdapter<Manga>(recyclerView
         }
     }
 
-    inner class MangaHolder(private val binding: MangaItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MangaHolder(private val binding: MangaItemSpanFullBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.setClickListener { view ->
                 gotoDetail(binding.data!!, view, binding.imgWrapper)

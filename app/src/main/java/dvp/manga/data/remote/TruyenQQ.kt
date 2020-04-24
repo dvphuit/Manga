@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 
 /**
  * @author dvphu on 16,March,2020
@@ -32,16 +33,40 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         return mangas
     }
 
+    override suspend fun getMangaFavourite(): List<Manga> {
+        val body = withContext(Dispatchers.IO) {
+            getBody("$url/truyen-yeu-thich.html?country=4").getElementsByClass("story-item")
+        }
+        return parseManga(body)
+    }
+
+    override suspend fun getMangaForBoy(): List<Manga> {
+        val body = withContext(Dispatchers.IO) {
+            getBody("$url/truyen-con-trai.html?country=4").getElementsByClass("story-item")
+        }
+        return parseManga(body)
+    }
+
+    override suspend fun getMangaForGirl(): List<Manga> {
+        val body = withContext(Dispatchers.IO) {
+            getBody("$url/truyen-con-gai.html?country=4").getElementsByClass("story-item")
+        }
+        return parseManga(body)
+    }
+
+    override suspend fun getMangaLastUpdated(): List<Manga> {
+        val body = withContext(Dispatchers.IO) {
+            getBody("$url/truyen-moi-cap-nhat.html?country=4").getElementsByClass("story-item")
+        }
+        return parseManga(body)
+    }
+
+
     override suspend fun getMangas(page: Int): List<Manga> {
-        val mangas = mutableListOf<Manga>()
-        val list = withContext(Dispatchers.IO) {
+        val body = withContext(Dispatchers.IO) {
             getBody("$url/truyen-con-trai/trang-$page.html?country=4").getElementsByClass("story-item")
         }
-        list.map { element ->
-            Manga(host = url)
-            mangas.add(parseManga(element))
-        }
-        return mangas
+        return parseManga(body)
     }
 
     override suspend fun getChapters(href: String): List<Chapter> {
@@ -76,27 +101,27 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
     }
 
     override suspend fun searchManga(query: String, page: Int): List<Manga> {
-        val mangas = mutableListOf<Manga>()
-        val list = withContext(Dispatchers.IO) {
+        val body = withContext(Dispatchers.IO) {
             getBody("$url/tim-kiem/trang-$page?q=$query").getElementsByClass("story-item")
         }
-        list.forEach { element ->
-            mangas.add(parseManga(element))
-        }
-        return mangas
+        return parseManga(body)
     }
 
-    private fun parseManga(element: Element): Manga {
-        val manga = Manga()
-        with(element) {
-            manga.name = getElementsByClass("title-book").text()
-            manga.href = getElementsByClass("title-book").select("a").attr("href")
-            manga.last_chap = getElementsByClass("episode-book").text()
-            manga.cover = getElementsByClass("story-cover").attr("src")
-            manga.info = parseInfo(element)
-            manga.genres = parseGenres(element)
+    private fun parseManga(body: Elements): List<Manga> {
+        val mangas = mutableListOf<Manga>()
+        body.map { element ->
+            val manga = Manga()
+            with(element) {
+                manga.name = getElementsByClass("title-book").text()
+                manga.href = getElementsByClass("title-book").select("a").attr("href")
+                manga.last_chap = getElementsByClass("episode-book").text()
+                manga.cover = getElementsByClass("story-cover").attr("data-src")
+                manga.info = parseInfo(element)
+                manga.genres = parseGenres(element)
+                mangas.add(manga)
+            }
         }
-        return manga
+        return mangas
     }
 
     private fun parseTopManga(element: Element): Manga {

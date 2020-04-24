@@ -25,6 +25,26 @@ class HomeViewModel internal constructor(
         emit(response)
     }
 
+    val favourite = liveData(Dispatchers.IO) {
+        val response = repository.getFavouriteMangas()
+        emit(response)
+    }
+
+    val lastUpdated = liveData(Dispatchers.IO) {
+        val response = repository.getLastUpdatedMangas()
+        emit(response)
+    }
+
+    val forBoy = liveData(Dispatchers.IO) {
+        val response = repository.getMangaForBoy()
+        emit(response)
+    }
+
+    val forGirl = liveData(Dispatchers.IO) {
+        val response = repository.getMangaForGirl()
+        emit(response)
+    }
+
     @FlowPreview
     @ExperimentalCoroutinesApi
     fun loadMore() {

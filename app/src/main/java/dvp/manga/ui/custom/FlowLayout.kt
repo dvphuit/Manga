@@ -43,6 +43,7 @@ class FlowLayout(context: Context, attrs: AttributeSet?, defStyle: Int) : ViewGr
     }
 
     fun <T> setList(list: List<T>?) {
+        this.removeAllViews()
         list?.forEachIndexed { index, item ->
             addView(buildLabel(item.toString(), index))
         }

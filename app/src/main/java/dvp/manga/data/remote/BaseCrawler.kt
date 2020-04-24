@@ -12,6 +12,12 @@ import org.jsoup.nodes.Element
 
 abstract class BaseCrawler {
     abstract suspend fun getTopManga(): List<Manga>
+    abstract suspend fun getMangaLastUpdated(): List<Manga>
+    abstract suspend fun getMangaFavourite(): List<Manga>
+    abstract suspend fun getMangaForBoy(): List<Manga>
+    abstract suspend fun getMangaForGirl(): List<Manga>
+
+
     abstract suspend fun getMangas(page: Int): List<Manga>
     abstract suspend fun getChapters(href: String): List<Chapter>
     abstract suspend fun getChapContent(href: String): List<ChapContent>
