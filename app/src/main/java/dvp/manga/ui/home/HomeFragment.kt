@@ -11,8 +11,8 @@ import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.viewpager2.widget.ViewPager2
-import dvp.manga.data.model.ChildList
 import dvp.manga.data.model.Manga
+import dvp.manga.data.model.MangaSection
 import dvp.manga.data.model.Section
 import dvp.manga.data.model.Top
 import dvp.manga.databinding.HomeFragmentBinding
@@ -37,60 +37,28 @@ class HomeFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = HomeFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
+        postponeEnterTransition()
         return binding.apply {
-//            mangaList.delayForSharedElement(this@HomeFragment)
-//            mangaList.adapter = MangaAdapter(mangaList).apply {
-//                registerLazyCallback { viewModel.loadMore() }
-//                if (!viewModel.isInitialized) {
-//                    resetLazyList()
-//                }
-//                subscribeUi(this)
-//            }
             searchback.setOnClickListener {
                 gotoSearch(searchback, searchBar)
             }
-
-//            topMangaList.apply {
-//                clipChildren = false
-//                clipToPadding = false
-//                offscreenPageLimit = 3
-//                getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-//                val transform = CompositePageTransformer()
-//                transform.addTransformer(MarginPageTransformer(40))
-//                transform.addTransformer { page, position ->
-//                    val r = 1 - abs(position)
-//                    page.scaleY = (.85 + .15 * r).toFloat()
-//                }
-//                setPageTransformer(transform)
-//
-//                adapter = TopMangaAdapter().apply {
-//                    subscribeTopManga(topMangaList, this)
-//                }
-//            }
-
-            recyclerView.adapter = HomeAdapter(viewLifecycleOwner).apply {
+            recyclerView.adapter = HomeAdapter(this@HomeFragment).apply {
                 submitData(prepareData())
             }
-
         }.root
     }
 
 
-    private fun prepareData(): MutableList<Section> {
-        val sections = mutableListOf<Section>()
-        with(viewModel) {
-            val top = Top(topMangas)
-            val mostFavourites = ChildList("Most favourite", favourite)
-            val lastUpdated = ChildList("Last updated", lastUpdated)
-            val forBoy = ChildList("For Boy", forBoy)
-            val forGirl = ChildList("For Girl", forGirl)
-            sections.add(top)
-            sections.add(mostFavourites)
-            sections.add(lastUpdated)
-            sections.add(forBoy)
-            sections.add(forGirl)
+    private fun prepareData(): List<Section> {
+        return with(viewModel) {
+            arrayListOf(
+                Top(topMangas),
+                MangaSection("Most favourite", favourite),
+                MangaSection("Last updated", lastUpdated),
+                MangaSection("For Boy", forBoy),
+                MangaSection("For Girl", forGirl)
+            )
         }
-        return sections
     }
 
     private fun gotoSearch(vararg views: View) {

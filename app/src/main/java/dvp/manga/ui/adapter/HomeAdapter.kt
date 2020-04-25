@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.lifecycle.LifecycleOwner
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +12,10 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import dvp.manga.R
-import dvp.manga.data.model.ChildList
+import dvp.manga.data.model.MangaSection
 import dvp.manga.data.model.Section
 import dvp.manga.data.model.Top
+import dvp.manga.utils.delayForSharedElement
 import kotlin.math.abs
 
 
@@ -25,7 +26,7 @@ import kotlin.math.abs
 const val TOP_MANGA = 0
 const val SECTION = 1
 
-class HomeAdapter(val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var list = emptyList<Section>()
     private var viewPool: RecyclerView.RecycledViewPool = RecyclerView.RecycledViewPool()
@@ -37,7 +38,7 @@ class HomeAdapter(val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<Rec
                 TopMangaVH(inflater.inflate(R.layout.top_manga_list, parent, false))
             }
             SECTION -> {
-                SectionVH(inflater.inflate(R.layout.manga_section_title, parent, false))
+                SectionVH(inflater.inflate(R.layout.manga_section_item, parent, false))
             }
             else -> throw Exception("invalid view type")
         }
@@ -64,9 +65,8 @@ class HomeAdapter(val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<Rec
             }
         }
 
-
         fun bind(top: Top) {
-            top.mangaList.observe(lifecycleOwner) {
+            top.mangaList.observe(fragment) {
                 topMangaAdapter.submitData(it)
             }
         }
@@ -82,12 +82,13 @@ class HomeAdapter(val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<Rec
                 setHasFixedSize(true)
                 adapter = mangaAdapter
                 setRecycledViewPool(viewPool)
+                delayForSharedElement(fragment)
             }
         }
 
-        fun bind(mangaSection: ChildList) {
+        fun bind(mangaSection: MangaSection) {
             title.text = mangaSection.title
-            mangaSection.mangaList.observe(lifecycleOwner) {
+            mangaSection.mangaList.observe(fragment) {
                 mangaAdapter.submitData(it)
             }
         }
@@ -97,7 +98,7 @@ class HomeAdapter(val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<Rec
         if (holder is TopMangaVH) {
             holder.bind(list[position] as Top)
         } else if (holder is SectionVH) {
-            holder.bind(list[position] as ChildList)
+            holder.bind(list[position] as MangaSection)
         }
     }
 

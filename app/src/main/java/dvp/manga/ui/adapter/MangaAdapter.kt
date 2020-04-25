@@ -14,7 +14,7 @@ import dvp.manga.databinding.MangaItemSpanFullBinding
 import dvp.manga.ui.home.HomeFragmentDirections
 
 
-class MangaAdapter(recyclerView: RecyclerView) : LazyAdapter<Manga>(recyclerView) {
+class MangaAdapter(recyclerView: RecyclerView?) : LazyAdapter<Manga>(recyclerView) {
 
     override fun implCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return MangaHolder(DataBindingUtil.inflate(LayoutInflater.from(parent!!.context), R.layout.manga_item_span_full, parent, false))

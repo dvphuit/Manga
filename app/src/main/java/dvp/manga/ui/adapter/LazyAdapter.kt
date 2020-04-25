@@ -17,7 +17,7 @@ import dvp.manga.data.model.Entity
 const val LOADING = 11
 const val ITEM = 0
 
-abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var mList: MutableList<T> = mutableListOf()
 
@@ -63,6 +63,7 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView) :
     }
 
     private fun setLoadMoreListener() {
+        recyclerView ?: return
         val layoutManager = recyclerView.layoutManager
         if (layoutManager is GridLayoutManager) {
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
