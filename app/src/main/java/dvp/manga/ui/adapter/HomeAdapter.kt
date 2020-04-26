@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import dvp.manga.R
-import dvp.manga.data.model.MangaSection
-import dvp.manga.data.model.Section
-import dvp.manga.data.model.Top
+import dvp.manga.data.model.*
+import dvp.manga.ui.home.HomeFragmentDirections
 import dvp.manga.utils.delayForSharedElement
 import kotlin.math.abs
 
@@ -47,9 +47,10 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
 
     inner class TopMangaVH(view: View) : RecyclerView.ViewHolder(view) {
         private val topMangaAdapter = TopMangaAdapter()
+        private val topMangaListView = view.findViewById<ViewPager2>(R.id.top_manga_list)
 
         init {
-            view.findViewById<ViewPager2>(R.id.top_manga_list).apply {
+            topMangaListView.apply {
                 clipChildren = false
                 clipToPadding = false
                 offscreenPageLimit = 3
@@ -68,6 +69,7 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
         fun bind(top: Top) {
             top.mangaList.observe(fragment) {
                 topMangaAdapter.submitData(it)
+                topMangaListView.currentItem = it.size / 2
             }
         }
     }
@@ -75,6 +77,7 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
     inner class SectionVH(view: View) : RecyclerView.ViewHolder(view) {
         private val title = view.findViewById<TextView>(R.id.section_title)
         private val mangaAdapter = MangaSectionAdapter()
+        private lateinit var sectionDetail: SectionDetail
 
         init {
             view.findViewById<RecyclerView>(R.id.manga_list).apply {
@@ -84,13 +87,22 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
                 setRecycledViewPool(viewPool)
                 delayForSharedElement(fragment)
             }
+            view.findViewById<View>(R.id.parent).setOnClickListener {
+                gotoSection(it, sectionDetail)
+            }
         }
 
         fun bind(mangaSection: MangaSection) {
             title.text = mangaSection.title
             mangaSection.mangaList.observe(fragment) {
                 mangaAdapter.submitData(it)
+                sectionDetail = SectionDetail(mangaSection.title, it)
             }
+        }
+
+        private fun gotoSection(view: View, sectionDetail: SectionDetail) {
+            val direction = HomeFragmentDirections.gotoSection(sectionDetail)
+            view.findNavController().navigate(direction)
         }
     }
 

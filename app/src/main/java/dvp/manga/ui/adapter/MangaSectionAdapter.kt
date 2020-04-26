@@ -54,6 +54,8 @@ class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>
             )
             parent.findNavController().navigate(direction, extras)
         }
+
+
     }
 
     fun submitData(topMangas: List<Manga>) {

@@ -22,12 +22,8 @@ import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.ui.adapter.TopMangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class HomeFragment : BaseFragment() {
 
     private val viewModel: HomeViewModel by viewModels {

@@ -11,6 +11,7 @@ import dvp.manga.data.repository.MangaRepository
 import dvp.manga.ui.detail.MangaDetailVMFactory
 import dvp.manga.ui.home.HomeVMFactory
 import dvp.manga.ui.search.SearchVMFactory
+import dvp.manga.ui.section.SectionVMFactory
 import dvp.manga.ui.story.StoryVMFactory
 
 /**
@@ -29,6 +30,8 @@ object Injector {
     private fun getChapContentRepository(context: Context) = ChapContentRepository.getInstance(TruyenQQ.getInstance(context))
 
     fun getHomeVMFactory(context: Context) = HomeVMFactory(getMangaRepository(context))
+
+    fun getSectionVMFactory(context: Context) = SectionVMFactory(getMangaRepository(context))
 
     fun getMangaDetailVMFactory(context: Context, manga: Manga) = MangaDetailVMFactory(getChapterRepository(context), manga)
 
