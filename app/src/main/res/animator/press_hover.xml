@@ -5,14 +5,12 @@
         android:state_pressed="true">
         <objectAnimator
             android:duration="@android:integer/config_shortAnimTime"
-            android:interpolator="@android:interpolator/bounce"
             android:propertyName="translationZ"
             android:valueTo="6dp" />
     </item>
     <item>
         <objectAnimator
             android:duration="@android:integer/config_shortAnimTime"
-            android:interpolator="@android:interpolator/bounce"
             android:propertyName="translationZ"
             android:valueTo="-6dp" />
     </item>

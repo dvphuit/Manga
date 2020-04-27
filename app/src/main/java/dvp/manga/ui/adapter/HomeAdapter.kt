@@ -4,16 +4,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import dvp.manga.R
-import dvp.manga.data.model.*
+import dvp.manga.data.model.MangaSection
+import dvp.manga.data.model.Section
+import dvp.manga.data.model.SectionDetail
+import dvp.manga.data.model.Top
 import dvp.manga.ui.home.HomeFragmentDirections
 import dvp.manga.utils.delayForSharedElement
 import kotlin.math.abs
@@ -76,6 +81,7 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
 
     inner class SectionVH(view: View) : RecyclerView.ViewHolder(view) {
         private val title = view.findViewById<TextView>(R.id.section_title)
+        private val parent = view.findViewById<View>(R.id.parent)
         private val mangaAdapter = MangaSectionAdapter()
         private lateinit var sectionDetail: SectionDetail
 
@@ -87,7 +93,7 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
                 setRecycledViewPool(viewPool)
                 delayForSharedElement(fragment)
             }
-            view.findViewById<View>(R.id.parent).setOnClickListener {
+            parent.setOnClickListener {
                 gotoSection(it, sectionDetail)
             }
         }
@@ -98,11 +104,15 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
                 mangaAdapter.submitData(it)
                 sectionDetail = SectionDetail(mangaSection.title, it)
             }
+            ViewCompat.setTransitionName(parent, "parent_${mangaSection.title}")
         }
 
         private fun gotoSection(view: View, sectionDetail: SectionDetail) {
             val direction = HomeFragmentDirections.gotoSection(sectionDetail)
-            view.findNavController().navigate(direction)
+            val extras = FragmentNavigatorExtras(
+                parent to "parent_${sectionDetail.title}"
+            )
+            view.findNavController().navigate(direction, extras)
         }
     }
 

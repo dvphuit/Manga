@@ -15,7 +15,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:transitionGroup="true"
-        android:id="@+id/parent"
+        android:id="@+id/manga_item_full"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"

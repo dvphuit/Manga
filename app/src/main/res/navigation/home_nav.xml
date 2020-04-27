@@ -24,7 +24,8 @@
         <action
             android:id="@+id/goto_section"
             app:destination="@id/mangaSection"
-            app:exitAnim="@anim/stay"/>
+            app:exitAnim="@anim/scale_down"
+            app:popEnterAnim="@anim/scale_up"/>
     </fragment>
 
     <fragment

@@ -16,8 +16,13 @@ class SectionViewModel internal constructor(
     private var pageIndex = 1
     private val mangas = mutableListOf<Manga>()
 
-    var isInitialized = false
     val state = MutableLiveData<Result>()
+
+    fun initData(data: List<Manga>) {
+        pageIndex++
+        mangas.addAll(data)
+        state.postValue(Result.Success(mangas, data.isNotEmpty()))
+    }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
@@ -35,7 +40,6 @@ class SectionViewModel internal constructor(
                 Result.Empty
             } else {
                 pageIndex++
-                isInitialized = true
                 mangas.addAll(result)
                 Result.Success(mangas, result.isNotEmpty())
             }

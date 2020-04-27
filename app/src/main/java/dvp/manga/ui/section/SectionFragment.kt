@@ -1,15 +1,18 @@
 package dvp.manga.ui.section
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.FragmentSectionBinding
 import dvp.manga.ui.Result
@@ -24,11 +27,18 @@ import kotlinx.coroutines.FlowPreview
 @ExperimentalCoroutinesApi
 class SectionFragment : Fragment() {
 
-//    private val sectionDetail = SectionFragmentArgs.fromBundle(requireArguments()).section
     private val args by navArgs<SectionFragmentArgs>()
 
     private val viewModel: SectionViewModel by viewModels {
         Injector.getSectionVMFactory(requireContext())
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.section_enter)
+        returnTransition = TransitionInflater.from(context).inflateTransition(R.transition.section_return)
     }
 
     override fun onCreateView(
@@ -41,15 +51,13 @@ class SectionFragment : Fragment() {
         context ?: return binding.root
         postponeEnterTransition()
         return binding.apply {
-            titile.text = args.section.title
+            ViewCompat.setTransitionName(parent, "parent_${args.section.title}")
+            title.text = args.section.title
             mangaList.delayForSharedElement(this@SectionFragment)
             mangaList.adapter = MangaAdapter(mangaList).apply {
-                submitData(args.section.mangaList, true)
-//                registerLazyCallback { viewModel.loadMore() }
-//                if (!viewModel.isInitialized) {
-//                    resetLazyList()
-//                }
-//                subscribeUi(this)
+                viewModel.initData(args.section.mangaList)
+                registerLazyCallback { viewModel.loadMore() }
+                subscribeUi(this)
             }
         }.root
     }

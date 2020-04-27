@@ -1,8 +1,10 @@
 package dvp.manga.ui.home
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -10,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import dvp.manga.data.model.Manga
 import dvp.manga.data.model.MangaSection
@@ -22,12 +25,18 @@ import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.ui.adapter.TopMangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
+import dvp.manga.utils.delayForSharedElement
 
 
 class HomeFragment : BaseFragment() {
 
     private val viewModel: HomeViewModel by viewModels {
         Injector.getHomeVMFactory(requireContext())
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -41,9 +50,20 @@ class HomeFragment : BaseFragment() {
             recyclerView.adapter = HomeAdapter(this@HomeFragment).apply {
                 submitData(prepareData())
             }
+            recyclerView.delayForSharedElement(this@HomeFragment)
+            //smooth scroll multiple recyclerview
+            recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+                override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+                override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                    if (e.action == MotionEvent.ACTION_DOWN && rv.scrollState == RecyclerView.SCROLL_STATE_SETTLING) {
+                        rv.stopScroll()
+                    }
+                    return false
+                }
+                override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+            })
         }.root
     }
-
 
     private fun prepareData(): List<Section> {
         return with(viewModel) {
