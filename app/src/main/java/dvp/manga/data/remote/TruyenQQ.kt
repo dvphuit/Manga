@@ -115,7 +115,7 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
                 manga.name = getElementsByClass("title-book").text()
                 manga.href = getElementsByClass("title-book").select("a").attr("href")
                 manga.last_chap = getElementsByClass("episode-book").text()
-                manga.cover = getElementsByClass("story-cover").attr("data-src")
+                manga.cover = getElementsByClass("story-cover").attr("src")
                 manga.info = parseInfo(element)
                 manga.genres = parseGenres(element)
                 mangas.add(manga)
