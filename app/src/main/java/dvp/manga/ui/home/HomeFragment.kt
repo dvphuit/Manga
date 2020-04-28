@@ -39,7 +39,6 @@ class HomeFragment : BaseFragment() {
         if (viewModel.isInitialized) postponeEnterTransition()
 
         return binding.apply {
-            Log.d("TEST", "HomeFragment on create view")
             searchback.setOnClickListener {
                 gotoSearch(searchback, searchBar)
             }
@@ -95,7 +94,6 @@ class HomeFragment : BaseFragment() {
             loop@ for (i in 1..adapter!!.itemCount) {
                 val child = findViewHolderForAdapterPosition(i) ?: continue@loop
                 val mangaList = child.itemView.findViewById<RecyclerView>(R.id.manga_list)
-                Log.d("TEST", "save section $i -- $mangaList")
                 viewModel.recyclerViewsState[i] = mangaList.layoutManager!!.onSaveInstanceState()
             }
         }
