@@ -7,29 +7,23 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import dvp.manga.data.model.Manga
+import dvp.manga.R
 import dvp.manga.data.model.MangaSection
 import dvp.manga.data.model.Section
 import dvp.manga.data.model.Top
 import dvp.manga.databinding.HomeFragmentBinding
-import dvp.manga.ui.Result
 import dvp.manga.ui.adapter.HomeAdapter
-import dvp.manga.ui.adapter.MangaAdapter
-import dvp.manga.ui.adapter.TopMangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
-import dvp.manga.utils.delayForSharedElement
 
 
 class HomeFragment : BaseFragment() {
 
+    private lateinit var binding: HomeFragmentBinding
     private val viewModel: HomeViewModel by viewModels {
         Injector.getHomeVMFactory(requireContext())
     }
@@ -40,17 +34,19 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val binding = HomeFragmentBinding.inflate(inflater, container, false)
+        binding = HomeFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        postponeEnterTransition()
+        if (viewModel.isInitialized) postponeEnterTransition()
+
         return binding.apply {
+            Log.d("TEST", "HomeFragment on create view")
             searchback.setOnClickListener {
                 gotoSearch(searchback, searchBar)
             }
+            recyclerView.setHasFixedSize(true)
             recyclerView.adapter = HomeAdapter(this@HomeFragment).apply {
-                submitData(prepareData())
+                submitData(prepareSection())
             }
-            recyclerView.delayForSharedElement(this@HomeFragment)
             //smooth scroll multiple recyclerview
             recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
                 override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
@@ -60,19 +56,21 @@ class HomeFragment : BaseFragment() {
                     }
                     return false
                 }
+
                 override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
             })
         }.root
     }
 
-    private fun prepareData(): List<Section> {
+    //TODO: will fix hardcode
+    private fun prepareSection(): List<Section> {
         return with(viewModel) {
             arrayListOf(
                 Top(topMangas),
-                MangaSection("Most favourite", favourite),
-                MangaSection("Last updated", lastUpdated),
-                MangaSection("For Boy", forBoy),
-                MangaSection("For Girl", forGirl)
+                MangaSection("Most favourite", favourite, recyclerViewsState[1]),
+                MangaSection("Last updated", lastUpdated, recyclerViewsState[2]),
+                MangaSection("For Boy", forBoy, recyclerViewsState[3]),
+                MangaSection("For Girl", forGirl, recyclerViewsState[4])
             )
         }
     }
@@ -86,37 +84,19 @@ class HomeFragment : BaseFragment() {
         views[0].findNavController().navigate(direction, extras)
     }
 
-    private fun subscribeTopManga(topManga: ViewPager2, adapter: TopMangaAdapter) {
-        viewModel.topMangas.observe(viewLifecycleOwner) {
-            adapter.submitData(it)
-            topManga.currentItem = it.size / 2
-        }
+
+    override fun onPause() {
+        super.onPause()
+        saveSectionsState()
     }
 
-    private fun subscribeUi(adapter: MangaAdapter) {
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (it) {
-                is Result.Success -> {
-                    @Suppress("UNCHECKED_CAST")
-                    adapter.submitData(it.data as List<Manga>, it.hasNext)
-                    Log.d("TEST", "state success ${it.data.size}")
-                }
-                is Result.Empty -> {
-                    Log.d("TEST", "state empty")
-                    adapter.setNoMoreData()
-                }
-                is Result.Error -> {
-                    Toast.makeText(requireContext(), it.errMsg, Toast.LENGTH_SHORT).show()
-                    Log.d("TEST", "state error")
-                }
-                is Result.EmptyQuery -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Must be over 3 characters",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    adapter.submitData(emptyList(), false)
-                }
+    private fun saveSectionsState() {
+        with(binding.recyclerView) {
+            loop@ for (i in 1..adapter!!.itemCount) {
+                val child = findViewHolderForAdapterPosition(i) ?: continue@loop
+                val mangaList = child.itemView.findViewById<RecyclerView>(R.id.manga_list)
+                Log.d("TEST", "save section $i -- $mangaList")
+                viewModel.recyclerViewsState[i] = mangaList.layoutManager!!.onSaveInstanceState()
             }
         }
     }

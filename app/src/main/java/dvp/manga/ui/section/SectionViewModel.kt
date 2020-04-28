@@ -17,12 +17,13 @@ class SectionViewModel internal constructor(
     private val mangas = mutableListOf<Manga>()
 
     val state = MutableLiveData<Result>()
-
     fun initData(data: List<Manga>) {
+        if(mangas.isNotEmpty()) return //data init 1 times
         pageIndex++
         mangas.addAll(data)
         state.postValue(Result.Success(mangas, data.isNotEmpty()))
     }
+
 
     @FlowPreview
     @ExperimentalCoroutinesApi

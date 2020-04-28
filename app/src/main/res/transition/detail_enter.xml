@@ -9,6 +9,8 @@
         <target android:excludeId="@android:id/statusBarBackground" />
         <target android:excludeId="@id/img_wrapper" />
         <target android:excludeId="@id/top_manga_list" />
+        <target android:excludeId="@id/section_title" />
+<!--        <target android:excludeId="@id/bt_back" />-->
     </targets>
 
     <slide android:slideEdge="right">

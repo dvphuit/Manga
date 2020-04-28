@@ -37,7 +37,7 @@ class MangaDetailFragment : Fragment() {
         binding = MangaDetailFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
         return binding.apply {
-            ViewCompat.setTransitionName(imgWrapper, "cover_${args.manga.name}")
+            ViewCompat.setTransitionName(imgWrapper, "cover_${args.section}${args.manga.name}")
             data = viewModel.manga
             chapList.adapter = ChapAdapter().apply {
                 subscribeUi(this)
@@ -47,18 +47,6 @@ class MangaDetailFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: ChapAdapter) {
-//        viewModel.state.observe(viewLifecycleOwner) {
-//            when (it!!) {
-//                ViewState.LOADING -> Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
-//                ViewState.SUCCESS -> {
-//                    Toast.makeText(requireContext(), "SUCCESS", Toast.LENGTH_SHORT).show()
-//                    adapter.submitList(viewModel.chaps)
-//                    Log.d("TEST","set adapter")
-//                }
-//                ViewState.EMPTY -> Toast.makeText(requireContext(), "EMPTY", Toast.LENGTH_SHORT).show()
-//                ViewState.ERROR -> Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
-//            }
-//        }
         viewModel.chapters.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }

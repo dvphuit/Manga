@@ -20,6 +20,7 @@ import dvp.manga.ui.home.HomeFragmentDirections
 class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>() {
 
     private var list = emptyList<Manga>()
+    private var section: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.manga_item, parent, false))
@@ -31,7 +32,7 @@ class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>
         holder.bind(list[position])
     }
 
-    class ViewHolder(private val binding: MangaItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: MangaItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.setClickListener {
@@ -42,24 +43,26 @@ class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>
         fun bind(value: Manga) {
             with(binding) {
                 data = value
-                ViewCompat.setTransitionName(binding.imgWrapper, "cover_${value.name}")
+                ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName())
                 executePendingBindings()
             }
         }
 
         private fun gotoDetail(manga: Manga, parent: View, cover: View) {
-            val direction = HomeFragmentDirections.actionMangaToDetail(manga)
+            HomeAdapter.seSection = section
+            val direction = HomeFragmentDirections.actionMangaToDetail(manga, section)
             val extras = FragmentNavigatorExtras(
-                cover to "cover_${manga.name}"
+                cover to getTransitionName()
             )
             parent.findNavController().navigate(direction, extras)
         }
 
-
+        private fun getTransitionName() = "cover_$section${binding.data!!.name}"
     }
 
-    fun submitData(topMangas: List<Manga>) {
+    fun submitData(section: String, topMangas: List<Manga>) {
         this.list = topMangas
+        this.section = section
         notifyDataSetChanged()
     }
 

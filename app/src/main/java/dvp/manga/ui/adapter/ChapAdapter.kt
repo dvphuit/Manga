@@ -1,6 +1,5 @@
 package dvp.manga.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +46,6 @@ class ChapAdapter : ListAdapter<Chapter, ChapAdapter.ViewHolder>(ChapterDiffCall
         }
 
         fun bind( value: Chapter) {
-            Log.d("TEST", "binding ${value.name}")
             with(binding) {
                 data = value
                 executePendingBindings()

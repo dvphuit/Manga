@@ -20,7 +20,6 @@ import dvp.manga.data.model.Section
 import dvp.manga.data.model.SectionDetail
 import dvp.manga.data.model.Top
 import dvp.manga.ui.home.HomeFragmentDirections
-import dvp.manga.utils.delayForSharedElement
 import kotlin.math.abs
 
 
@@ -32,6 +31,10 @@ const val TOP_MANGA = 0
 const val SECTION = 1
 
 class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        var seSection = ""
+    }
 
     private var list = emptyList<Section>()
     private var viewPool: RecyclerView.RecycledViewPool = RecyclerView.RecycledViewPool()
@@ -82,16 +85,16 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
     inner class SectionVH(view: View) : RecyclerView.ViewHolder(view) {
         private val title = view.findViewById<TextView>(R.id.section_title)
         private val parent = view.findViewById<View>(R.id.parent)
+        private val mangaList = view.findViewById<RecyclerView>(R.id.manga_list)
         private val mangaAdapter = MangaSectionAdapter()
         private lateinit var sectionDetail: SectionDetail
 
         init {
-            view.findViewById<RecyclerView>(R.id.manga_list).apply {
+            mangaList.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 setHasFixedSize(true)
                 adapter = mangaAdapter
                 setRecycledViewPool(viewPool)
-                delayForSharedElement(fragment)
             }
             parent.setOnClickListener {
                 gotoSection(it, sectionDetail)
@@ -101,19 +104,26 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
         fun bind(mangaSection: MangaSection) {
             title.text = mangaSection.title
             mangaSection.mangaList.observe(fragment) {
-                mangaAdapter.submitData(it)
+                mangaAdapter.submitData(mangaSection.title, it)
                 sectionDetail = SectionDetail(mangaSection.title, it)
             }
-            ViewCompat.setTransitionName(parent, "parent_${mangaSection.title}")
+            ViewCompat.setTransitionName(parent, getTransitionName())
+            mangaList.post {
+                mangaList.layoutManager!!.onRestoreInstanceState(mangaSection.viewState)
+                if (seSection == mangaSection.title)
+                    fragment.startPostponedEnterTransition()
+            }
         }
 
         private fun gotoSection(view: View, sectionDetail: SectionDetail) {
             val direction = HomeFragmentDirections.gotoSection(sectionDetail)
             val extras = FragmentNavigatorExtras(
-                parent to "parent_${sectionDetail.title}"
+                parent to getTransitionName()
             )
             view.findNavController().navigate(direction, extras)
         }
+
+        private fun getTransitionName() = "parent_${(list[position] as MangaSection).title}"
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

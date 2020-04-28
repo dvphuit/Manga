@@ -46,7 +46,7 @@ class SearchFragment : BaseFragment() {
         val binding = ActivitySearchBinding.inflate(inflater, container, false)
         context ?: return binding.root
         return binding.apply {
-            adapter = MangaAdapter(mangaList2).apply {
+            adapter = MangaAdapter(mangaList2, "search").apply {
                 subscribeUi(this)
                 registerLazyCallback { viewModel.loadMore() }
             }

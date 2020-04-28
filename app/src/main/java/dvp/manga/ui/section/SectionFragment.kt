@@ -41,20 +41,15 @@ class SectionFragment : Fragment() {
         returnTransition = TransitionInflater.from(context).inflateTransition(R.transition.section_return)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentSectionBinding.inflate(inflater, container, false)
         context ?: return binding.root
         postponeEnterTransition()
         return binding.apply {
             ViewCompat.setTransitionName(parent, "parent_${args.section.title}")
-            title.text = args.section.title
+            sectionTitle.text = args.section.title
             mangaList.delayForSharedElement(this@SectionFragment)
-            mangaList.adapter = MangaAdapter(mangaList).apply {
+            mangaList.adapter = MangaAdapter(mangaList, args.section.title).apply {
                 viewModel.initData(args.section.mangaList)
                 registerLazyCallback { viewModel.loadMore() }
                 subscribeUi(this)
