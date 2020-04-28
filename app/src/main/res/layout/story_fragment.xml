@@ -2,23 +2,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:id="@+id/story_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff"
         tools:context=".ui.story.StoryFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/story_list"
+        <dvp.manga.ui.custom.WebtoonFrame
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:context=".ui.story.StoryFragment"
-            tools:listitem="@layout/chap_content_item" />
+            android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <dvp.manga.ui.custom.WebtoonRecyclerView
+                android:id="@+id/story_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:context=".ui.story.StoryFragment"
+                tools:listitem="@layout/chap_content_item" />
+        </dvp.manga.ui.custom.WebtoonFrame>
+
+    </FrameLayout>
 
 </layout>

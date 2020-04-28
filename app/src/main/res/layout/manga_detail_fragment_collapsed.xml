@@ -62,7 +62,7 @@
             android:adjustViewBounds="true"
             android:elevation="7dp"
             android:scaleType="centerCrop"
-            app:imageFromUrl="@{data.cover}"
+            app:loadUrl="@{data.cover}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

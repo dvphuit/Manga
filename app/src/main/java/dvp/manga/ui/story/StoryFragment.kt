@@ -8,16 +8,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import dvp.manga.data.model.Chapter
+import androidx.navigation.fragment.navArgs
 import dvp.manga.databinding.StoryFragmentBinding
 import dvp.manga.ui.ViewState
 import dvp.manga.ui.adapter.ChapContentAdapter
 import dvp.manga.utils.Injector
 
+
 class StoryFragment : Fragment() {
 
+    private val args by navArgs<StoryFragmentArgs>()
+
     private val viewModel: StoryVM by viewModels {
-        Injector.getChapContentVMFactory(requireActivity().application, requireContext(), arguments!!.get("chap") as Chapter)
+        Injector.getChapContentVMFactory(requireActivity().application, requireContext(), args.chap)
     }
 
     override fun onCreateView(
@@ -26,10 +29,12 @@ class StoryFragment : Fragment() {
     ): View? {
         val binding = StoryFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        val adapter = ChapContentAdapter()
-        binding.storyList.adapter = adapter
-        subscribeUi(adapter)
-        return binding.root
+        return binding.apply {
+            storyList.setHasFixedSize(true)
+            storyList.adapter = ChapContentAdapter().apply {
+                subscribeUi(this)
+            }
+        }.root
     }
 
     private fun subscribeUi(adapter: ChapContentAdapter) {

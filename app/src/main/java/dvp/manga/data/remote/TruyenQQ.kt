@@ -1,12 +1,9 @@
 package dvp.manga.data.remote
 
 import android.content.Context
-import com.squareup.picasso.OkHttp3Downloader
-import com.squareup.picasso.Picasso
 import dvp.manga.data.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
@@ -15,10 +12,6 @@ import org.jsoup.select.Elements
  */
 
 class TruyenQQ(private val ctx: Context) : BaseCrawler() {
-
-    init {
-        initPicasso()
-    }
 
     private val url = "http://truyenqq.com"
     override suspend fun getTopManga(): List<Manga> {
@@ -156,19 +149,19 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
     }
 
     //region init TruyenQQ
-    private fun initPicasso() {
-        val client = OkHttpClient.Builder().addInterceptor { chain ->
-            val request = chain.request()
-                .newBuilder()
-                .header("Referer", url)
-                .build()
-            chain.proceed(request)
-        }.build()
-        val okHttpDownloader = OkHttp3Downloader(client)
-        val builder = Picasso.Builder(ctx)
-        builder.downloader(okHttpDownloader)
-        Picasso.setSingletonInstance(builder.build())
-    }
+//    private fun initPicasso() {
+//        val client = OkHttpClient.Builder().addInterceptor { chain ->
+//            val request = chain.request()
+//                .newBuilder()
+//                .header("Referer", url)
+//                .build()
+//            chain.proceed(request)
+//        }.build()
+//        val okHttpDownloader = OkHttp3Downloader(client)
+//        val builder = Picasso.Builder(ctx)
+//        builder.downloader(okHttpDownloader)
+//        Picasso.setSingletonInstance(builder.build())
+//    }
 
     companion object {
         @Volatile

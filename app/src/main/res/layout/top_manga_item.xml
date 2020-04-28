@@ -19,7 +19,7 @@
 
         <dvp.manga.ui.custom.RatioImageView
             android:id="@+id/imageCover"
-            imageFromUrl="@{data.cover}"
+            loadUrl="@{data.cover}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
