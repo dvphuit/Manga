@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import dvp.manga.data.local.dao.ChapContentDao
 import dvp.manga.data.local.dao.ChapterDao
 import dvp.manga.data.local.dao.MangaDao
 import dvp.manga.data.model.ChapContent
 import dvp.manga.data.model.Chapter
+import dvp.manga.data.model.GenreConverter
 import dvp.manga.data.model.Manga
 
-@Database(entities = [Manga::class, Chapter::class, ChapContent::class], version = 1)
+@Database(entities = [Manga::class, Chapter::class, ChapContent::class], version = 1, exportSchema = false)
+@TypeConverters(GenreConverter::class)
 abstract class MangaDatabase : RoomDatabase() {
 
     abstract fun mangaDao(): MangaDao
@@ -19,18 +22,13 @@ abstract class MangaDatabase : RoomDatabase() {
     abstract fun chapContentDao(): ChapContentDao
 
     companion object {
-        private var instance: MangaDatabase? = null
-        const val DB_NAME = "manga.db"
+        private const val DB_NAME = "manga.db"
 
-        fun getInstance(ctx: Context): MangaDatabase? {
-            if (instance == null) {
-                synchronized(MangaDatabase::class.java) {
-                    if (instance == null) {
-                        instance = buildDB(ctx)
-                    }
-                }
-            }
-            return instance
+        @Volatile
+        private var instance: MangaDatabase? = null
+
+        fun getInstance(ctx: Context) = instance ?: synchronized(this) {
+            instance ?: buildDB(ctx).also { instance = it }
         }
 
         private fun buildDB(ctx: Context): MangaDatabase {

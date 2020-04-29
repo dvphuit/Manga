@@ -1,7 +1,12 @@
 package dvp.manga.data.remote
 
 import android.content.Context
-import dvp.manga.data.model.*
+import dvp.manga.data.model.ChapContent
+import dvp.manga.data.model.Chapter
+import dvp.manga.data.model.Genre
+import dvp.manga.data.model.Manga
+import dvp.manga.ui.ResultData
+import dvp.manga.utils.hash
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.nodes.Element
@@ -26,32 +31,32 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         return mangas
     }
 
-    override suspend fun getMangaFavourite(): List<Manga> {
-        val body = withContext(Dispatchers.IO) {
-            getBody("$url/truyen-yeu-thich.html?country=4").getElementsByClass("story-item")
-        }
-        return parseManga(body)
+    override suspend fun getMangaFavourite(): ResultData<List<Manga>> {
+        val body = getBody("$url/truyen-yeu-thich.html?country=4").getElementsByClass("story-item")
+        val ret = parseManga(body)
+        if (ret.isEmpty()) formatError<List<Manga>>("list empty")
+        return ResultData.success(ret)
     }
 
-    override suspend fun getMangaForBoy(): List<Manga> {
-        val body = withContext(Dispatchers.IO) {
-            getBody("$url/truyen-con-trai.html?country=4").getElementsByClass("story-item")
-        }
-        return parseManga(body)
+    override suspend fun getMangaForBoy(): ResultData<List<Manga>> {
+        val body = getBody("$url/truyen-con-trai.html?country=4").getElementsByClass("story-item")
+        val ret = parseManga(body)
+        if (ret.isEmpty()) formatError<List<Manga>>("list empty")
+        return ResultData.success(ret)
     }
 
-    override suspend fun getMangaForGirl(): List<Manga> {
-        val body = withContext(Dispatchers.IO) {
-            getBody("$url/truyen-con-gai.html?country=4").getElementsByClass("story-item")
-        }
-        return parseManga(body)
+    override suspend fun getMangaForGirl(): ResultData<List<Manga>> {
+        val body = getBody("$url/truyen-con-gai.html?country=4").getElementsByClass("story-item")
+        val ret = parseManga(body)
+        if (ret.isEmpty()) formatError<List<Manga>>("list empty")
+        return ResultData.success(ret)
     }
 
-    override suspend fun getMangaLastUpdated(): List<Manga> {
-        val body = withContext(Dispatchers.IO) {
-            getBody("$url/truyen-moi-cap-nhat.html?country=4").getElementsByClass("story-item")
-        }
-        return parseManga(body)
+    override suspend fun getMangaLastUpdated(): ResultData<List<Manga>> {
+        val body = getBody("$url/truyen-moi-cap-nhat.html?country=4").getElementsByClass("story-item")
+        val ret = parseManga(body)
+        if (ret.isEmpty()) formatError<List<Manga>>("list empty")
+        return ResultData.success(ret)
     }
 
 
@@ -109,8 +114,15 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
                 manga.href = getElementsByClass("title-book").select("a").attr("href")
                 manga.last_chap = getElementsByClass("episode-book").text()
                 manga.cover = getElementsByClass("story-cover").attr("src")
-                manga.info = parseInfo(element)
+                element.getElementsByClass("info").forEach {
+                    val value = it.text().replace(",", "")
+                    if (value.contains("tình trạng", true)) manga.status = value
+                    if (value.contains("lượt xem", true)) manga.viewed = value
+                    if (value.contains("theo dõi", true)) manga.followed = Regex("\\d+").find(value)?.value ?: "0"
+                }
+                manga.description = element.getElementsByClass("excerpt").first().text()
                 manga.genres = parseGenres(element)
+                manga.id = manga.name.hash
                 mangas.add(manga)
             }
         }
@@ -124,26 +136,15 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
             manga.cover = selectFirst("img.cover").attr("src")
             manga.href = attr("href")
             manga.last_chap = selectFirst("div.chapter").text()
+            manga.id = manga.name.hash
         }
         return manga
     }
 
-    private fun parseInfo(element: Element): Info {
-        val info = Info()
-        element.getElementsByClass("info").forEach {
-            val value = it.text().replace(",", "")
-            if (value.contains("tình trạng", true)) info.status = value
-            if (value.contains("lượt xem", true)) info.viewed = value
-            if (value.contains("theo dõi", true)) info.followed = Regex("\\d+").find(value)?.value ?: "0"
-        }
-        info.description = element.getElementsByClass("excerpt").first().text()
-        return info
-    }
-
-    private fun parseGenres(element: Element): List<Genres> {
-        val genres = mutableListOf<Genres>()
+    private fun parseGenres(element: Element): List<Genre> {
+        val genres = mutableListOf<Genre>()
         element.getElementsByClass("list-tags").select("a").forEach {
-            genres.add(Genres(it.text(), it.attr("href")))
+            genres.add(Genre(it.text(), it.attr("href")))
         }
         return genres
     }

@@ -87,7 +87,7 @@
             android:layout_marginEnd="8dp"
             android:lines="1"
             android:paddingVertical="4dp"
-            android:text="@{data.info.status}"
+            android:text="@{data.status}"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
@@ -104,7 +104,7 @@
             android:drawablePadding="4dp"
             android:drawableTint="@color/colorAccent"
             android:paddingVertical="4dp"
-            android:text="@{data.info.viewed}"
+            android:text="@{data.viewed}"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@id/img_wrapper"
             app:layout_constraintTop_toBottomOf="@id/status" />
@@ -119,7 +119,7 @@
             android:drawablePadding="4dp"
             android:drawableTint="@color/colorAccent"
             android:paddingVertical="4dp"
-            android:text="@{data.info.followed}"
+            android:text="@{data.followed}"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@id/viewed"
             app:layout_constraintTop_toBottomOf="@id/status" />
@@ -155,7 +155,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:paddingVertical="4dp"
-            android:text="@{data.info.description}"
+            android:text="@{data.description}"
             app:layout_constraintTop_toBottomOf="@id/img_wrapper" />
 
         <androidx.recyclerview.widget.RecyclerView

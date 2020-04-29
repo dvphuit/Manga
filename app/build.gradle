@@ -57,14 +57,17 @@ dependencies {
     implementation deps.navigation.fragment_ktx
 //    annotationProcessor deps.lifecycle.compiler
     implementation deps.room.runtime
+    kapt deps.room.compiler
+
     implementation deps.coroutines.android
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    annotationProcessor deps.room.compiler
+//    annotationProcessor deps.room.compiler
 
     //Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
 //    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'io.coil-kt:coil:0.10.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     //test compile
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

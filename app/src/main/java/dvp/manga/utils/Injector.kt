@@ -2,6 +2,7 @@ package dvp.manga.utils
 
 import android.app.Application
 import android.content.Context
+import dvp.manga.data.local.MangaDatabase
 import dvp.manga.data.model.Chapter
 import dvp.manga.data.model.Manga
 import dvp.manga.data.remote.TruyenQQ
@@ -21,8 +22,8 @@ import dvp.manga.ui.story.StoryVMFactory
 object Injector {
 
     private fun getMangaRepository(context: Context) = MangaRepository.getInstance(
-//        MangaDatabase.getInstance(context)!!.mangaDao(),
-        TruyenQQ.getInstance(context)
+        TruyenQQ.getInstance(context),
+        MangaDatabase.getInstance(context).mangaDao()
     )
 
     private fun getChapterRepository(context: Context) = ChapterRepository.getInstance(TruyenQQ.getInstance(context))

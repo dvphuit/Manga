@@ -23,25 +23,13 @@ class HomeViewModel internal constructor(
         emit(response)
     }
 
-    val favourite = liveData(Dispatchers.IO) {
-        val response = repository.getFavouriteMangas()
-        emit(response)
-    }
+    val favourite = repository.favourite
 
-    val lastUpdated = liveData(Dispatchers.IO) {
-        val response = repository.getLastUpdatedMangas()
-        emit(response)
-    }
+    val lastUpdated = repository.lastUpdated
 
-    val forBoy = liveData(Dispatchers.IO) {
-        val response = repository.getMangaForBoy()
-        emit(response)
-    }
+    val forBoy = repository.forBoy
 
-    val forGirl = liveData(Dispatchers.IO) {
-        val response = repository.getMangaForGirl()
-        emit(response)
-    }
+    val forGirl = repository.forGirl
 
     val recyclerViewsState = mutableMapOf<Int, Parcelable?>()
 }

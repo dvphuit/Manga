@@ -1,5 +1,6 @@
 package dvp.manga.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +62,7 @@ class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>
     }
 
     fun submitData(section: String, topMangas: List<Manga>) {
+        Log.d("TEST", "data changed $section -- ${topMangas.size}")
         this.list = topMangas
         this.section = section
         notifyDataSetChanged()

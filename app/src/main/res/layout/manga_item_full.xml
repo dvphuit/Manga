@@ -72,7 +72,7 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:paddingHorizontal="8dp"
-            android:text="@{data.info.description}"
+            android:text="@{data.description}"
             android:textColor="#959595"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -90,7 +90,7 @@
             android:drawablePadding="4dp"
             android:drawableTint="@color/colorAccent"
             android:paddingVertical="4dp"
-            android:text="@{data.info.viewed}"
+            android:text="@{data.viewed}"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_wrapper" />
@@ -105,7 +105,7 @@
             android:drawablePadding="4dp"
             android:drawableTint="@color/colorAccent"
             android:paddingVertical="4dp"
-            android:text="@{data.info.followed}"
+            android:text="@{data.followed}"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvViewed" />

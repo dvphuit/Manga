@@ -4,7 +4,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import coil.api.load
 import coil.request.CachePolicy
-import dvp.manga.data.model.Genres
+import dvp.manga.data.model.Genre
 
 @BindingAdapter("loadUrl")
 fun ImageView.loadUrl(url: String) {
@@ -18,7 +18,7 @@ fun ImageView.loadUrl(url: String) {
 
 
 @BindingAdapter("setGenres")
-fun bindGenres(view: dvp.manga.ui.custom.FlowLayout, listGenres: List<Genres>) {
+fun bindGenres(view: dvp.manga.ui.custom.FlowLayout, listGenres: List<Genre>) {
     view.setList(listGenres)
 }
 

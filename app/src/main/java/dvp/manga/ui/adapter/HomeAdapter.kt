@@ -1,5 +1,6 @@
 package dvp.manga.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import dvp.manga.data.model.MangaSection
 import dvp.manga.data.model.Section
 import dvp.manga.data.model.SectionDetail
 import dvp.manga.data.model.Top
+import dvp.manga.ui.ResultData
 import dvp.manga.ui.home.HomeFragmentDirections
 import kotlin.math.abs
 
@@ -104,8 +106,13 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
         fun bind(mangaSection: MangaSection) {
             title.text = mangaSection.title
             mangaSection.mangaList.observe(fragment) {
-                mangaAdapter.submitData(mangaSection.title, it)
-                sectionDetail = SectionDetail(mangaSection.title, it)
+                when (it) {
+                    is ResultData.Success -> {
+                        Log.d("TEST", "from remote")
+                        mangaAdapter.submitData(mangaSection.title, it.value)
+                        sectionDetail = SectionDetail(mangaSection.title, it.value)
+                    }
+                }
             }
             ViewCompat.setTransitionName(parent, getTransitionName())
             mangaList.post {

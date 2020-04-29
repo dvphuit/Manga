@@ -1,49 +1,65 @@
 package dvp.manga.data.repository
 
+import dvp.manga.data.local.dao.MangaDao
 import dvp.manga.data.model.Manga
 import dvp.manga.data.remote.BaseCrawler
+import dvp.manga.ui.responseLiveData
 
-class MangaRepository(private val crawler: BaseCrawler) {
-
-    private lateinit var mangas: List<Manga>
+class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDao) {
 
     suspend fun getMangas(page: Int): List<Manga> {
-        mangas = crawler.getMangas(page)
+        val mangas = crawler.getMangas(page)
+        dao.upsert(mangas)
         return mangas
     }
 
     suspend fun searchManga(query: String, page: Int): List<Manga> {
-        mangas = crawler.searchManga(query, page)
-        return mangas
+        return crawler.searchManga(query, page)
     }
 
     suspend fun getTopManga(): List<Manga> {
         return crawler.getTopManga()
     }
 
-    suspend fun getFavouriteMangas(): List<Manga> {
-        return crawler.getMangaFavourite()
-    }
+    val favourite = responseLiveData(
+        roomQueryToRetrieveData = { dao.getMangasBySlug("favourite") },
+        networkRequest = { crawler.getMangaFavourite() },
+        roomQueryToSaveData = { list ->
+            dao.upsert(list)
+            dao.updateSlug("favourite", list.map { it.id })
+        })
 
-    suspend fun getLastUpdatedMangas(): List<Manga> {
-        return crawler.getMangaLastUpdated()
-    }
+    val lastUpdated = responseLiveData(
+        roomQueryToRetrieveData = { dao.getMangasBySlug("last_updated") },
+        networkRequest = { crawler.getMangaLastUpdated() },
+        roomQueryToSaveData = { list ->
+            dao.upsert(list)
+            dao.updateSlug("last_updated", list.map { it.id })
+        })
 
-    suspend fun getMangaForBoy(): List<Manga> {
-        return crawler.getMangaForBoy()
-    }
+    val forBoy = responseLiveData(
+        roomQueryToRetrieveData = { dao.getMangasBySlug("boy") },
+        networkRequest = { crawler.getMangaForBoy() },
+        roomQueryToSaveData = { list ->
+            dao.upsert(list)
+            dao.updateSlug("boy", list.map { it.id })
+        })
 
-    suspend fun getMangaForGirl(): List<Manga> {
-        return crawler.getMangaForGirl()
-    }
+    val forGirl = responseLiveData(
+        roomQueryToRetrieveData = { dao.getMangasBySlug("girl") },
+        networkRequest = { crawler.getMangaForGirl() },
+        roomQueryToSaveData = { list ->
+            dao.upsert(list)
+            dao.updateSlug("girl", list.map { it.id })
+        })
 
     companion object {
         @Volatile
         private var instance: MangaRepository? = null
 
-        fun getInstance(crawler: BaseCrawler) =
+        fun getInstance(crawler: BaseCrawler, dao: MangaDao) =
             instance ?: synchronized(this) {
-                instance ?: MangaRepository(crawler).also { instance = it }
+                instance ?: MangaRepository(crawler, dao).also { instance = it }
             }
     }
 }
