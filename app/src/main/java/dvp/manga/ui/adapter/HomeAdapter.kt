@@ -116,6 +116,7 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
         }
 
         private fun gotoSection(view: View, sectionDetail: SectionDetail) {
+            seSection = sectionDetail.title //set for exit shared element
             val direction = HomeFragmentDirections.gotoSection(sectionDetail)
             val extras = FragmentNavigatorExtras(
                 parent to getTransitionName()
