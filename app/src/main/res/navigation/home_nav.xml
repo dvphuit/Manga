@@ -2,8 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/homeFragment"
-    android:id="@+id/home">
+    android:id="@+id/home"
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -14,18 +14,18 @@
             android:id="@+id/action_manga_to_detail"
             app:destination="@id/mangaDetail"
             app:exitAnim="@anim/scale_down"
-            app:popEnterAnim="@anim/scale_up"/>
+            app:popEnterAnim="@anim/scale_up" />
 
         <action
             android:id="@+id/goto_search"
             app:destination="@id/search_fragment"
-            app:exitAnim="@anim/stay"/>
+            app:exitAnim="@anim/stay" />
 
         <action
             android:id="@+id/goto_section"
             app:destination="@id/mangaSection"
             app:exitAnim="@anim/scale_down"
-            app:popEnterAnim="@anim/scale_up"/>
+            app:popEnterAnim="@anim/scale_up" />
     </fragment>
 
     <fragment
@@ -41,7 +41,11 @@
             app:argType="string" />
         <action
             android:id="@+id/action_chap_to_story"
-            app:destination="@id/story_fragment" />
+            app:destination="@id/story_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -63,7 +67,7 @@
             android:id="@+id/action_manga_to_detail"
             app:destination="@id/mangaDetail"
             app:exitAnim="@anim/scale_down"
-            app:popEnterAnim="@anim/scale_up"/>
+            app:popEnterAnim="@anim/scale_up" />
     </fragment>
 
     <fragment
@@ -78,7 +82,7 @@
             android:id="@+id/action_manga_to_detail"
             app:destination="@id/mangaDetail"
             app:exitAnim="@anim/scale_down"
-            app:popEnterAnim="@anim/scale_up"/>
+            app:popEnterAnim="@anim/scale_up" />
     </fragment>
 
 </navigation>

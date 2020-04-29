@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
+import dvp.manga.utils.gone
 import dvp.manga.utils.setupWithNavController
+import dvp.manga.utils.visible
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -30,7 +32,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigationBar() {
-        val navGraphIds = listOf(R.navigation.home_nav, R.navigation.bookmark_nav, R.navigation.setting_nav)
+        val navGraphIds = listOf(
+            R.navigation.home_nav,
+            R.navigation.bookmark_nav,
+            R.navigation.setting_nav
+        )
         currentNavController = bot_nav.setupWithNavController(
             navGraphIds = navGraphIds,
             fragmentManager = supportFragmentManager,
@@ -40,4 +46,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp() = currentNavController?.value?.navigateUp() ?: false
+
+    fun hideBotBar() {
+        bot_nav.gone()
+    }
+
+    fun showBotBar() {
+        bot_nav.visible()
+    }
 }
