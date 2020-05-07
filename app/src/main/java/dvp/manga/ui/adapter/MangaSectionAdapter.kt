@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.MangaItemBinding
+import dvp.manga.ui.home.HomeFragment
 import dvp.manga.ui.home.HomeFragmentDirections
 
 /**
@@ -50,7 +51,7 @@ class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>
         }
 
         private fun gotoDetail(manga: Manga, parent: View, cover: View) {
-            HomeAdapter.seSection = section
+            HomeFragment.navSection = section
             val direction = HomeFragmentDirections.actionMangaToDetail(manga, section)
             val extras = FragmentNavigatorExtras(
                 cover to getTransitionName()

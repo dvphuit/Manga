@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.MangaRepository
-import dvp.manga.ui.Result
+import dvp.manga.ui.SearchResult
 import kotlinx.coroutines.*
 
 class SectionViewModel internal constructor(
@@ -16,12 +16,12 @@ class SectionViewModel internal constructor(
     private var pageIndex = 1
     private val mangas = mutableListOf<Manga>()
 
-    val state = MutableLiveData<Result>()
+    val state = MutableLiveData<SearchResult>()
     fun initData(data: List<Manga>) {
         if(mangas.isNotEmpty()) return //data init 1 times
         pageIndex++
         mangas.addAll(data)
-        state.postValue(Result.Success(mangas, data.isNotEmpty()))
+        state.postValue(SearchResult.Success(mangas, data.isNotEmpty()))
     }
 
 
@@ -33,7 +33,7 @@ class SectionViewModel internal constructor(
         }
     }
 
-    private suspend fun getResult(): Result {
+    private suspend fun getResult(): SearchResult {
         try {
             val result = withContext(ioDispatcher) { repository.getMangas(pageIndex) }
 //            return if (result.isEmpty() && mangas.isEmpty()) {
@@ -44,12 +44,12 @@ class SectionViewModel internal constructor(
 //                mangas.addAll(result)
 //                Result.Success(mangas, result.isNotEmpty())
 //            }
-            return Result.Empty
+            return SearchResult.Empty
         } catch (e: Throwable) {
             if (e is CancellationException) {
                 throw e
             } else {
-                return Result.Error(e.localizedMessage!!)
+                return SearchResult.Error(e.localizedMessage!!)
             }
         }
     }

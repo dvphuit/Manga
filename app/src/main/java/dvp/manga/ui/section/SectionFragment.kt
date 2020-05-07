@@ -15,7 +15,7 @@ import androidx.navigation.fragment.navArgs
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.FragmentSectionBinding
-import dvp.manga.ui.Result
+import dvp.manga.ui.SearchResult
 import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.utils.Injector
 import dvp.manga.utils.delayForSharedElement
@@ -60,20 +60,20 @@ class SectionFragment : Fragment() {
     private fun subscribeUi(adapter: MangaAdapter) {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                is Result.Success -> {
+                is SearchResult.Success -> {
                     @Suppress("UNCHECKED_CAST")
                     adapter.submitData(it.data as List<Manga>, it.hasNext)
                     Log.d("TEST", "state success ${it.data.size}")
                 }
-                is Result.Empty -> {
+                is SearchResult.Empty -> {
                     Log.d("TEST", "state empty")
                     adapter.setNoMoreData()
                 }
-                is Result.Error -> {
+                is SearchResult.Error -> {
                     Toast.makeText(requireContext(), it.errMsg, Toast.LENGTH_SHORT).show()
                     Log.d("TEST", "state error")
                 }
-                is Result.EmptyQuery -> {
+                is SearchResult.EmptyQuery -> {
                     Toast.makeText(
                         requireContext(),
                         "Must be over 3 characters",

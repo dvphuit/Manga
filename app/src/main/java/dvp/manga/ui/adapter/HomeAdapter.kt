@@ -21,6 +21,7 @@ import dvp.manga.data.model.Section
 import dvp.manga.data.model.SectionDetail
 import dvp.manga.data.model.Top
 import dvp.manga.ui.ResultData
+import dvp.manga.ui.home.HomeFragment
 import dvp.manga.ui.home.HomeFragmentDirections
 import kotlin.math.abs
 
@@ -33,10 +34,6 @@ const val TOP_MANGA = 0
 const val SECTION = 1
 
 class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    companion object {
-        var seSection = ""
-    }
 
     private var list = emptyList<Section>()
     private var viewPool: RecyclerView.RecycledViewPool = RecyclerView.RecycledViewPool()
@@ -123,13 +120,13 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
             ViewCompat.setTransitionName(parent, getTransitionName())
             mangaList.post {
                 mangaList.layoutManager!!.onRestoreInstanceState(mangaSection.viewState)
-                if (seSection == mangaSection.title)
+                if (HomeFragment.navSection == mangaSection.title)
                     fragment.startPostponedEnterTransition()
             }
         }
 
         private fun gotoSection(view: View, sectionDetail: SectionDetail) {
-            seSection = sectionDetail.title //set for exit shared element
+            HomeFragment.navSection = sectionDetail.title //set for exit shared element
             val direction = HomeFragmentDirections.gotoSection(sectionDetail)
             val extras = FragmentNavigatorExtras(
                 parent to getTransitionName()

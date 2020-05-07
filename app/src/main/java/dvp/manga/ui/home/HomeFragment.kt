@@ -1,7 +1,6 @@
 package dvp.manga.ui.home
 
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -22,14 +21,13 @@ import dvp.manga.utils.Injector
 
 class HomeFragment : BaseFragment() {
 
+    companion object {
+        var navSection = ""
+    }
+
     private lateinit var binding: HomeFragmentBinding
     private val viewModel: HomeViewModel by viewModels {
         Injector.getHomeVMFactory(requireContext())
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -38,9 +36,11 @@ class HomeFragment : BaseFragment() {
         if (viewModel.isInitialized) {
             postponeEnterTransition()
         }
+        if(navSection == "search") startPostponedEnterTransition()
 
         return binding.apply {
             searchback.setOnClickListener {
+                navSection = "search"
                 gotoSearch(searchback, searchBar)
             }
             recyclerView.setHasFixedSize(true)

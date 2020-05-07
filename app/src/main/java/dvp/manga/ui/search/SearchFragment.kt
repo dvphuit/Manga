@@ -2,7 +2,6 @@ package dvp.manga.ui.search
 
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import androidx.lifecycle.observe
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.ActivitySearchBinding
-import dvp.manga.ui.Result
+import dvp.manga.ui.SearchResult
 import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
@@ -45,7 +44,9 @@ class SearchFragment : BaseFragment() {
     ): View? {
         val binding = ActivitySearchBinding.inflate(inflater, container, false)
         context ?: return binding.root
+        postponeEnterTransition()
         return binding.apply {
+            mangaList2.delayForSharedElement(this@SearchFragment)
             adapter = MangaAdapter(mangaList2, "search").apply {
                 subscribeUi(this)
                 registerLazyCallback { viewModel.loadMore() }
@@ -68,25 +69,18 @@ class SearchFragment : BaseFragment() {
     private fun subscribeUi(adapter: MangaAdapter) {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                is Result.Success -> {
+                is SearchResult.Success -> {
                     @Suppress("UNCHECKED_CAST")
                     adapter.submitData(it.data as List<Manga>, it.hasNext)
-                    Log.d("TEST", "state success ${it.data.size}")
                 }
-                is Result.Empty -> {
-                    Log.d("TEST", "state empty")
+                is SearchResult.Empty -> {
                     adapter.setNoMoreData()
                 }
-                is Result.Error -> {
+                is SearchResult.Error -> {
                     Toast.makeText(requireContext(), it.errMsg, Toast.LENGTH_SHORT).show()
-                    Log.d("TEST", "state error")
                 }
-                is Result.EmptyQuery -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Must be over 3 characters",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                is SearchResult.EmptyQuery -> {
+                    Toast.makeText(requireContext(), "Must be over 3 characters", Toast.LENGTH_SHORT).show()
                     adapter.submitData(emptyList(), false)
                 }
             }

@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvp.manga.data.repository.MangaRepository
-import dvp.manga.ui.Result
+import dvp.manga.ui.SearchResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -14,7 +14,7 @@ class HomeViewModel internal constructor(
 ) : ViewModel() {
 
     var isInitialized = false
-    val state = MutableLiveData<Result>()
+    val state = MutableLiveData<SearchResult>()
 
 
     val top = repository.top

@@ -6,8 +6,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.MangaRepository
-import dvp.manga.ui.Result
 import dvp.manga.ui.ResultData
+import dvp.manga.ui.SearchResult
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
@@ -67,33 +67,32 @@ class SearchViewModel(
                         is ResultData.Success -> {
                             if (result.value.isEmpty() && data.isEmpty()) {
                                 pageIndex = 1
-                                Result.Empty
+                                SearchResult.Empty
                             } else {
                                 pageIndex++
                                 data.addAll(result.value)
-                                Result.Success(data, result.value.isNotEmpty())
+                                SearchResult.Success(data, result.value.isNotEmpty())
                             }
                         }
                         is ResultData.Failure -> {
-                            Result.Error(result.message)
+                            SearchResult.Error(result.message)
                         }
                         is ResultData.Loading -> {
                         }
                     }
                 } else {
-                    Result.EmptyQuery
+                    SearchResult.EmptyQuery
                 }
             } catch (e: Throwable) {
                 if (e is CancellationException) {
                     Log.d(this.javaClass.simpleName, "search \"${it}\" was cancelled")
                     throw e
                 } else {
-                    Result.Error(e.localizedMessage!!)
+                    SearchResult.Error(e.localizedMessage!!)
                 }
-
             }
         }
-        .catch { emit(Result.TerminalError) }
+        .catch { emit(SearchResult.TerminalError) }
         .asLiveData()
 
 }
