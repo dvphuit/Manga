@@ -36,14 +36,15 @@ class SectionViewModel internal constructor(
     private suspend fun getResult(): Result {
         try {
             val result = withContext(ioDispatcher) { repository.getMangas(pageIndex) }
-            return if (result.isEmpty() && mangas.isEmpty()) {
-                pageIndex = 1
-                Result.Empty
-            } else {
-                pageIndex++
-                mangas.addAll(result)
-                Result.Success(mangas, result.isNotEmpty())
-            }
+//            return if (result.isEmpty() && mangas.isEmpty()) {
+//                pageIndex = 1
+//                Result.Empty
+//            } else {
+//                pageIndex++
+//                mangas.addAll(result)
+//                Result.Success(mangas, result.isNotEmpty())
+//            }
+            return Result.Empty
         } catch (e: Throwable) {
             if (e is CancellationException) {
                 throw e

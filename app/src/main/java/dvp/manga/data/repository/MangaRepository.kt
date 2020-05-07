@@ -1,54 +1,67 @@
 package dvp.manga.data.repository
 
 import dvp.manga.data.local.dao.MangaDao
-import dvp.manga.data.model.Manga
 import dvp.manga.data.remote.BaseCrawler
 import dvp.manga.ui.responseLiveData
 
 class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDao) {
 
-    suspend fun getMangas(page: Int): List<Manga> {
-        val mangas = crawler.getMangas(page)
-        dao.upsert(mangas)
-        return mangas
-    }
+    fun getMangas(page: Int) = responseLiveData(
+        dbQuery = { dao.getMangasBySlug("-") },
+        netCall = { crawler.getMangas(page) },
+        saveNetCall = { list ->
+            dao.upsert(list)
+            dao.updateSlug("-", list.map { it.id })
+        })
 
-    suspend fun searchManga(query: String, page: Int): List<Manga> {
-        return crawler.searchManga(query, page)
-    }
+//    fun searchManga(query: String, page: Int) = responseLiveData(
+//        dbQuery = { dao.getMangasBySlug("search") },
+//        netCall = { crawler.searchManga(query, page) },
+//        saveNetCall = { list ->
+//            dao.upsert(list)
+//            dao.updateSlug("searched", list.map { it.id })
+//        })
 
-    suspend fun getTopManga(): List<Manga> {
-        return crawler.getTopManga()
-    }
+    suspend fun searchManga(query: String, page: Int) = crawler.searchManga(query, page)
+
+    val top = responseLiveData(
+        dbQuery = { dao.getTop() },
+        netCall = { crawler.getTopManga() },
+        saveNetCall = { list ->
+            //            dao.upsert(list)
+//            dao.updateSlug("favourite", list.map { it.id })
+        })
 
     val favourite = responseLiveData(
-        roomQueryToRetrieveData = { dao.getMangasBySlug("favourite") },
-        networkRequest = { crawler.getMangaFavourite() },
-        roomQueryToSaveData = { list ->
+        dbQuery = { dao.getMangasBySlug("favourite") },
+        netCall = {
+            crawler.getMangaFavourite()
+        },
+        saveNetCall = { list ->
             dao.upsert(list)
             dao.updateSlug("favourite", list.map { it.id })
         })
 
     val lastUpdated = responseLiveData(
-        roomQueryToRetrieveData = { dao.getMangasBySlug("last_updated") },
-        networkRequest = { crawler.getMangaLastUpdated() },
-        roomQueryToSaveData = { list ->
+        dbQuery = { dao.getMangasBySlug("last_updated") },
+        netCall = { crawler.getMangaLastUpdated() },
+        saveNetCall = { list ->
             dao.upsert(list)
             dao.updateSlug("last_updated", list.map { it.id })
         })
 
     val forBoy = responseLiveData(
-        roomQueryToRetrieveData = { dao.getMangasBySlug("boy") },
-        networkRequest = { crawler.getMangaForBoy() },
-        roomQueryToSaveData = { list ->
+        dbQuery = { dao.getMangasBySlug("boy") },
+        netCall = { crawler.getMangaForBoy() },
+        saveNetCall = { list ->
             dao.upsert(list)
             dao.updateSlug("boy", list.map { it.id })
         })
 
     val forGirl = responseLiveData(
-        roomQueryToRetrieveData = { dao.getMangasBySlug("girl") },
-        networkRequest = { crawler.getMangaForGirl() },
-        roomQueryToSaveData = { list ->
+        dbQuery = { dao.getMangasBySlug("girl") },
+        netCall = { crawler.getMangaForGirl() },
+        saveNetCall = { list ->
             dao.upsert(list)
             dao.updateSlug("girl", list.map { it.id })
         })

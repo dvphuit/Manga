@@ -7,8 +7,6 @@ import dvp.manga.data.model.Genre
 import dvp.manga.data.model.Manga
 import dvp.manga.ui.ResultData
 import dvp.manga.utils.hash
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
@@ -19,90 +17,98 @@ import org.jsoup.select.Elements
 class TruyenQQ(private val ctx: Context) : BaseCrawler() {
 
     private val url = "http://truyenqq.com"
-    override suspend fun getTopManga(): List<Manga> {
-        val mangas = mutableListOf<Manga>()
-        val list = withContext(Dispatchers.IO) {
-            getBody("$url/index.html").getElementsByClass("tile is-child")
-        }
-        list.map { element ->
-            Manga(host = url)
-            mangas.add(parseTopManga(element))
-        }
-        return mangas
+    override suspend fun getTopManga(): ResultData<List<Manga>> {
+        return parseData(
+            url = "$url/index.html",
+            selector = "tile is-child",
+            parser = { parseTopManga(it) }
+        )
     }
 
     override suspend fun getMangaFavourite(): ResultData<List<Manga>> {
-        val body = getBody("$url/truyen-yeu-thich.html?country=4").getElementsByClass("story-item")
-        val ret = parseManga(body)
-        if (ret.isEmpty()) formatError<List<Manga>>("list empty")
-        return ResultData.success(ret)
+        return parseData(
+            url = "$url/truyen-yeu-thich.html?country=4",
+            selector = "story-item",
+            parser = { parseManga(it) }
+        )
     }
 
     override suspend fun getMangaForBoy(): ResultData<List<Manga>> {
-        val body = getBody("$url/truyen-con-trai.html?country=4").getElementsByClass("story-item")
-        val ret = parseManga(body)
-        if (ret.isEmpty()) formatError<List<Manga>>("list empty")
-        return ResultData.success(ret)
+        return parseData(
+            url = "$url/truyen-con-trai.html?country=4",
+            selector = "story-item",
+            parser = { parseManga(it) }
+        )
     }
 
     override suspend fun getMangaForGirl(): ResultData<List<Manga>> {
-        val body = getBody("$url/truyen-con-gai.html?country=4").getElementsByClass("story-item")
-        val ret = parseManga(body)
-        if (ret.isEmpty()) formatError<List<Manga>>("list empty")
-        return ResultData.success(ret)
+        return parseData(
+            url = "$url/truyen-con-gai.html?country=4",
+            selector = "story-item",
+            parser = { parseManga(it) }
+        )
     }
 
     override suspend fun getMangaLastUpdated(): ResultData<List<Manga>> {
-        val body = getBody("$url/truyen-moi-cap-nhat.html?country=4").getElementsByClass("story-item")
-        val ret = parseManga(body)
-        if (ret.isEmpty()) formatError<List<Manga>>("list empty")
-        return ResultData.success(ret)
+        return parseData(
+            url = "$url/truyen-moi-cap-nhat.html?country=4",
+            selector = "story-item",
+            parser = { parseManga(it) }
+        )
     }
 
 
-    override suspend fun getMangas(page: Int): List<Manga> {
-        val body = withContext(Dispatchers.IO) {
-            getBody("$url/truyen-con-trai/trang-$page.html?country=4").getElementsByClass("story-item")
-        }
-        return parseManga(body)
+    override suspend fun getMangas(page: Int): ResultData<List<Manga>> {
+        return parseData(
+            url = "$url/truyen-con-trai/trang-$page.html?country=4",
+            selector = "story-item",
+            parser = { parseManga(it) }
+        )
     }
 
-    override suspend fun getChapters(href: String): List<Chapter> {
-        val chaps = mutableListOf<Chapter>()
-        val list = withContext(Dispatchers.IO) {
-            getBody(href).getElementsByClass("works-chapter-item")
-        }
-        list.map { element ->
-            val chap = Chapter()
-            with(element) {
-                chap.name = select("div > a").text()
-                chap.href = select("div > a").attr("href")
-                chaps.add(chap)
+    override suspend fun getChapters(href: String): ResultData<List<Chapter>> {
+        return parseData(
+            url = href,
+            selector = "works-chapter-item",
+            parser = {
+                val chaps = mutableListOf<Chapter>()
+                it.map { element ->
+                    val chap = Chapter()
+                    with(element) {
+                        chap.name = select("div > a").text()
+                        chap.href = select("div > a").attr("href")
+                        chaps.add(chap)
+                    }
+                }
+                return@parseData chaps
             }
-        }
-        return chaps
+        )
     }
 
-    override suspend fun getChapContent(href: String): List<ChapContent> {
-        val contents = mutableListOf<ChapContent>()
-        val list = withContext(Dispatchers.IO) {
-            getBody(href).getElementsByClass("lazy")
-        }
-        list.map { element ->
-            val content = ChapContent()
-            with(element) {
-                content.img_url = attr("src")
-                contents.add(content)
+    override suspend fun getChapContent(href: String): ResultData<List<ChapContent>> {
+        return parseData(
+            url = href,
+            selector = "lazy",
+            parser = {
+                val contents = mutableListOf<ChapContent>()
+                it.map { element ->
+                    val content = ChapContent()
+                    with(element) {
+                        content.img_url = attr("src")
+                        contents.add(content)
+                    }
+                }
+                return@parseData contents
             }
-        }
-        return contents
+        )
     }
 
-    override suspend fun searchManga(query: String, page: Int): List<Manga> {
-        val body = withContext(Dispatchers.IO) {
-            getBody("$url/tim-kiem/trang-$page?q=$query").getElementsByClass("story-item")
-        }
-        return parseManga(body)
+    override suspend fun searchManga(query: String, page: Int): ResultData<List<Manga>> {
+        return parseData(
+            url = "$url/tim-kiem/trang-$page?q=$query",
+            selector = "story-item",
+            parser = { parseManga(it) }
+        )
     }
 
     private fun parseManga(body: Elements): List<Manga> {
@@ -129,16 +135,17 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         return mangas
     }
 
-    private fun parseTopManga(element: Element): Manga {
-        val manga = Manga()
-        with(element.selectFirst("a")) {
-            manga.name = selectFirst("h3").text()
-            manga.cover = selectFirst("img.cover").attr("src")
-            manga.href = attr("href")
-            manga.last_chap = selectFirst("div.chapter").text()
-            manga.id = manga.name.hash
+    private fun parseTopManga(list: Elements): List<Manga> {
+        return list.map { element ->
+            with(element.selectFirst("a")) {
+                Manga(
+                    name = selectFirst("h3").text(),
+                    cover = selectFirst("img.cover").attr("src"),
+                    href = attr("href"),
+                    last_chap = selectFirst("div.chapter").text()
+                )
+            }
         }
-        return manga
     }
 
     private fun parseGenres(element: Element): List<Genre> {
@@ -150,20 +157,6 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
     }
 
     //region init TruyenQQ
-//    private fun initPicasso() {
-//        val client = OkHttpClient.Builder().addInterceptor { chain ->
-//            val request = chain.request()
-//                .newBuilder()
-//                .header("Referer", url)
-//                .build()
-//            chain.proceed(request)
-//        }.build()
-//        val okHttpDownloader = OkHttp3Downloader(client)
-//        val builder = Picasso.Builder(ctx)
-//        builder.downloader(okHttpDownloader)
-//        Picasso.setSingletonInstance(builder.build())
-//    }
-
     companion object {
         @Volatile
         private var instance: TruyenQQ? = null

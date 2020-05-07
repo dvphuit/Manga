@@ -35,7 +35,9 @@ class HomeFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = HomeFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        if (viewModel.isInitialized) postponeEnterTransition()
+        if (viewModel.isInitialized) {
+            postponeEnterTransition()
+        }
 
         return binding.apply {
             searchback.setOnClickListener {
@@ -62,9 +64,10 @@ class HomeFragment : BaseFragment() {
 
     //TODO: will fix hardcode
     private fun prepareSection(): List<Section> {
+        viewModel.isInitialized = true
         return with(viewModel) {
             arrayListOf(
-                Top(topMangas),
+                Top(top),
                 MangaSection("Most favourite", favourite, recyclerViewsState[1]),
                 MangaSection("Last updated", lastUpdated, recyclerViewsState[2]),
                 MangaSection("For Boy", forBoy, recyclerViewsState[3]),

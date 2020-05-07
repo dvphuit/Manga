@@ -1,28 +1,29 @@
 package dvp.manga.data.repository
 
-import dvp.manga.data.model.ChapContent
+import dvp.manga.data.local.dao.ChapContentDao
 import dvp.manga.data.remote.BaseCrawler
+import dvp.manga.ui.responseLiveData
 
 /**
  * @author dvphu on 20,March,2020
  */
 
-class ChapContentRepository(private val crawler: BaseCrawler) {
+class ChapContentRepository(private val crawler: BaseCrawler, private val dao: ChapContentDao) {
 
-    private lateinit var contents: List<ChapContent>
-
-    suspend fun getContents(href: String): List<ChapContent> {
-        contents = crawler.getChapContent(href)
-        return contents
-    }
+    fun getChapContents(chapId: Int, href: String) = responseLiveData(
+        dbQuery = { dao.getPages(chapId) },
+        netCall = { crawler.getChapContent(href) },
+        saveNetCall = { list ->
+            dao.upsert(list)
+        })
 
 
     companion object {
         @Volatile
         private var instance: ChapContentRepository? = null
 
-        fun getInstance(crawler: BaseCrawler) = instance ?: synchronized(this) {
-            instance ?: ChapContentRepository(crawler).also { instance = it }
+        fun getInstance(crawler: BaseCrawler, dao: ChapContentDao) = instance ?: synchronized(this) {
+            instance ?: ChapContentRepository(crawler, dao).also { instance = it }
         }
     }
 

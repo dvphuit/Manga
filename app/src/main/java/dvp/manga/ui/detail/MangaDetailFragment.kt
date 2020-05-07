@@ -5,6 +5,7 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import dvp.manga.R
 import dvp.manga.databinding.MangaDetailFragmentBinding
+import dvp.manga.ui.ResultData
 import dvp.manga.ui.adapter.ChapAdapter
 import dvp.manga.utils.Injector
 
@@ -47,8 +49,19 @@ class MangaDetailFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: ChapAdapter) {
-        viewModel.chapters.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.chapters.observe(viewLifecycleOwner){
+            when(it){
+                is ResultData.Success -> {
+                    adapter.submitList(it.value)
+                    startPostponedEnterTransition()
+                }
+                is ResultData.Failure -> {
+                    Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
+                }
+                is ResultData.Loading ->{
+                    Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

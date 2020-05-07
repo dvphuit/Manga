@@ -1,6 +1,5 @@
 package dvp.manga.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
@@ -10,29 +9,26 @@ import kotlinx.coroutines.Dispatchers
  * @author dvphu on 29,April,2020
  */
 
-fun <T, L> responseLiveData(
-    roomQueryToRetrieveData: () -> LiveData<T>,
-    networkRequest: suspend () -> ResultData<L>,
-    roomQueryToSaveData: suspend (L) -> Unit
+fun <T> responseLiveData(
+    dbQuery: () -> LiveData<T>,
+    netCall: suspend () -> ResultData<T>,
+    saveNetCall: suspend (T) -> Unit
 ): LiveData<ResultData<T>> = liveData(Dispatchers.IO) {
     emit(ResultData.loading(null))
-    val source = roomQueryToRetrieveData().map { ResultData.success(it) }
-    Log.d("TEST","from db")
+    val source = dbQuery().map { ResultData.success(it) }
     emitSource(source)
-    when (val responseStatus = networkRequest()) {
+    when (val res = netCall()) {
         is ResultData.Success -> {
-            roomQueryToSaveData(responseStatus.value)
+            saveNetCall(res.value)
+            emit(res)
         }
-
         is ResultData.Failure -> {
-            emit(ResultData.failure(responseStatus.message))
+            emit(ResultData.failure(res.message))
             emitSource(source)
         }
-
         else -> {
             emit(ResultData.failure("Something went wrong, please try again later"))
             emitSource(source)
         }
     }
-
 }

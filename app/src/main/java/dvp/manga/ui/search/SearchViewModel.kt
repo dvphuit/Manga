@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.MangaRepository
 import dvp.manga.ui.Result
+import dvp.manga.ui.ResultData
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
@@ -14,6 +15,8 @@ import kotlinx.coroutines.flow.*
 
 data class QueryData(var key: String, var page: Int = 1)
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class SearchViewModel(
     private val repository: MangaRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -30,7 +33,7 @@ class SearchViewModel(
     @ExperimentalCoroutinesApi
     private val queryChannel = BroadcastChannel<QueryData>(Channel.CONFLATED)
 
-    private fun checkQuery(query: String){
+    private fun checkQuery(query: String) {
         if (preQuery != query) {
             preQuery = query
             pageIndex = 1
@@ -41,23 +44,18 @@ class SearchViewModel(
 
     fun isQueryChanged(newQuery: String) = preQuery != newQuery
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     fun submitQuery(query: String) {
         checkQuery(query)
         loadMore()
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
+
     fun loadMore() {
         viewModelScope.launch {
             queryChannel.send(QueryData(preQuery, pageIndex))
         }
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     val state = queryChannel
         .asFlow()
         .debounce(SEARCH_DELAY_MS)
@@ -65,14 +63,22 @@ class SearchViewModel(
         .mapLatest {
             try {
                 if (it.key.length >= MIN_QUERY_LENGTH) {
-                    val result = withContext(ioDispatcher) { repository.searchManga(it.key, it.page) }
-                    if (result.isEmpty() && data.isEmpty()) {
-                        pageIndex = 1
-                        Result.Empty
-                    } else {
-                        pageIndex++
-                        data.addAll(result)
-                        Result.Success(data, result.isNotEmpty())
+                    when (val result = repository.searchManga(it.key, it.page)) {
+                        is ResultData.Success -> {
+                            if (result.value.isEmpty() && data.isEmpty()) {
+                                pageIndex = 1
+                                Result.Empty
+                            } else {
+                                pageIndex++
+                                data.addAll(result.value)
+                                Result.Success(data, result.value.isNotEmpty())
+                            }
+                        }
+                        is ResultData.Failure -> {
+                            Result.Error(result.message)
+                        }
+                        is ResultData.Loading -> {
+                        }
                     }
                 } else {
                     Result.EmptyQuery

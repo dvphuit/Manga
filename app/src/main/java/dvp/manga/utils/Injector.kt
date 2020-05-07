@@ -26,9 +26,15 @@ object Injector {
         MangaDatabase.getInstance(context).mangaDao()
     )
 
-    private fun getChapterRepository(context: Context) = ChapterRepository.getInstance(TruyenQQ.getInstance(context))
+    private fun getChapterRepository(context: Context) = ChapterRepository.getInstance(
+        TruyenQQ.getInstance(context),
+        MangaDatabase.getInstance(context).chapDao()
+    )
 
-    private fun getChapContentRepository(context: Context) = ChapContentRepository.getInstance(TruyenQQ.getInstance(context))
+    private fun getChapContentRepository(context: Context) = ChapContentRepository.getInstance(
+        TruyenQQ.getInstance(context),
+        MangaDatabase.getInstance(context).chapContentDao()
+    )
 
     fun getHomeVMFactory(context: Context) = HomeVMFactory(getMangaRepository(context))
 

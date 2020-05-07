@@ -28,4 +28,7 @@ abstract class MangaDao : BaseDao<Manga>() {
 
     @Query("SELECT * FROM manga WHERE slug like '%' || :slug || '%'")
     abstract fun getMangasBySlug(slug: String): LiveData<List<Manga>>
+
+    @Query("SELECT * FROM manga WHERE slug like '%top%'")
+    abstract fun getTop(): LiveData<List<Manga>>
 }
