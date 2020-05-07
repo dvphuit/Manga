@@ -4,6 +4,7 @@ import androidx.room.*
 import androidx.room.Entity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dvp.manga.utils.hash
 import java.io.Serializable
 import java.text.DecimalFormat
 
@@ -26,9 +27,9 @@ data class Manga(
     var slug: String = ""
 ) : dvp.manga.data.model.Entity(), Serializable {
     @PrimaryKey
-    var id: Int = 0
+    var id: Int = name.hash
 
-    private fun decimalFormatted(input: String): String = DecimalFormat("#,###").format(input.toInt()) ?: "0"
+    private fun decimalFormatted(input: String?): String = DecimalFormat("#,###").format(input?.toInt()) ?: "0"
     private fun getDigit(input: String): String = Regex("\\d+").find(input)?.value ?: "0"
 
     @ColumnInfo(name = "viewed")

@@ -11,7 +11,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import dvp.manga.MainActivity
 import dvp.manga.databinding.StoryFragmentBinding
-import dvp.manga.ui.ViewState
+import dvp.manga.ui.ResultData
 import dvp.manga.ui.adapter.ChapContentAdapter
 import dvp.manga.utils.Injector
 
@@ -48,15 +48,18 @@ class StoryFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: ChapContentAdapter) {
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (it!!) {
-                ViewState.LOADING -> Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
-                ViewState.SUCCESS -> {
-                    adapter.submitList(viewModel.contents)
+        viewModel.contents.observe(viewLifecycleOwner){
+            when(it){
+                is ResultData.Success -> {
+                    adapter.submitList(it.value)
                     startPostponedEnterTransition()
                 }
-                ViewState.EMPTY -> Toast.makeText(requireContext(), "EMPTY", Toast.LENGTH_SHORT).show()
-                ViewState.ERROR -> Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
+                is ResultData.Failure -> {
+                    Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
+                }
+                is ResultData.Loading ->{
+                    Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

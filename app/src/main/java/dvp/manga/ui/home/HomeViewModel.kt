@@ -3,7 +3,6 @@ package dvp.manga.ui.home
 import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import dvp.manga.data.repository.MangaRepository
 import dvp.manga.ui.Result
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,12 +16,8 @@ class HomeViewModel internal constructor(
     var isInitialized = false
     val state = MutableLiveData<Result>()
 
-    var topMangas = liveData(Dispatchers.IO) {
-        val response = repository.getTopManga()
-        isInitialized = true
-        emit(response)
-    }
 
+    val top = repository.top
     val favourite = repository.favourite
 
     val lastUpdated = repository.lastUpdated

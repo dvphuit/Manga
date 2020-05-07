@@ -78,9 +78,15 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
 
         fun bind(top: Top) {
             top.mangaList.observe(fragment) {
-                topMangaAdapter.submitData(it)
-                topMangaListView.currentItem = it.size / 2
+
+                when (it) {
+                    is ResultData.Success -> {
+                        topMangaAdapter.submitData(it.value)
+                        topMangaListView.currentItem = it.value.size / 2
+                    }
+                }
             }
+
         }
     }
 
@@ -108,7 +114,7 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
             mangaSection.mangaList.observe(fragment) {
                 when (it) {
                     is ResultData.Success -> {
-                        Log.d("TEST", "from remote")
+                        Log.d("TEST", "section success ${it.value.size}")
                         mangaAdapter.submitData(mangaSection.title, it.value)
                         sectionDetail = SectionDetail(mangaSection.title, it.value)
                     }
