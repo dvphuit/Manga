@@ -5,12 +5,15 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import dvp.manga.MainActivity
 import dvp.manga.R
 import dvp.manga.databinding.MangaDetailFragmentBinding
 import dvp.manga.ui.ResultData
@@ -18,7 +21,7 @@ import dvp.manga.ui.adapter.ChapAdapter
 import dvp.manga.utils.Injector
 
 
-class MangaDetailFragment : Fragment() {
+class MangaDetailFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding: MangaDetailFragmentBinding
     private val args by navArgs<MangaDetailFragmentArgs>()
@@ -45,12 +48,17 @@ class MangaDetailFragment : Fragment() {
                 subscribeUi(this)
             }
             lifecycleOwner = this@MangaDetailFragment
+
+            //set click listener
+            btBack.setOnClickListener(this@MangaDetailFragment)
+            btBookmark.setOnClickListener(this@MangaDetailFragment)
+            btDownload.setOnClickListener(this@MangaDetailFragment)
         }.root
     }
 
     private fun subscribeUi(adapter: ChapAdapter) {
-        viewModel.chapters.observe(viewLifecycleOwner){
-            when(it){
+        viewModel.chapters.observe(viewLifecycleOwner) {
+            when (it) {
                 is ResultData.Success -> {
                     adapter.submitList(it.value)
                     startPostponedEnterTransition()
@@ -58,9 +66,26 @@ class MangaDetailFragment : Fragment() {
                 is ResultData.Failure -> {
                     Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
                 }
-                is ResultData.Loading ->{
+                is ResultData.Loading -> {
                     Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+    }
+
+    override fun onClick(v: View?) {
+        val animation: Animation = AnimationUtils.loadAnimation(context, R.anim.bounce)
+        v?.startAnimation(animation)
+
+        when (v) {
+            binding.btBack -> {
+                (activity as MainActivity).onBackPressed()
+            }
+            binding.btBookmark -> {
+                Toast.makeText(context, "under construction", Toast.LENGTH_SHORT).show()
+            }
+            binding.btDownload -> {
+                Toast.makeText(context, "under construction", Toast.LENGTH_SHORT).show()
             }
         }
     }

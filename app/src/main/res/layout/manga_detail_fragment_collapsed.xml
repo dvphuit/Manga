@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:transitionGroup="true"
+        android:background="@color/colorPrimary"
         tools:context=".ui.detail.MangaDetailFragment">
 
         <View
@@ -42,14 +43,39 @@
 
         <ImageButton
             android:id="@+id/bt_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginTop="8dp"
+            android:background="?selectableItemBackgroundBorderless"
             android:elevation="5dp"
-            android:src="@drawable/ic_arrow_back_padded"
-            app:layout_constraintBottom_toTopOf="@id/img_wrapper"
+            android:src="@drawable/ic_arrow_left"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/bt_bookmark"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:elevation="5dp"
+            android:src="@drawable/ic_bookmark_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/bt_download"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:elevation="5dp"
+            android:src="@drawable/ic_download"
+            app:layout_constraintEnd_toStartOf="@id/bt_bookmark"
             app:layout_constraintTop_toTopOf="parent" />
 
         <dvp.manga.ui.custom.RatioImageView
@@ -62,9 +88,9 @@
             android:adjustViewBounds="true"
             android:elevation="7dp"
             android:scaleType="centerCrop"
-            app:loadUrl="@{data.cover}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadUrl="@{data.cover}" />
 
         <TextView
             android:id="@+id/title"
@@ -80,6 +106,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/bt_back"
+            app:layout_constraintEnd_toStartOf="@id/bt_download"
             app:layout_constraintStart_toEndOf="@id/bt_back"
             app:layout_constraintTop_toTopOf="@id/bt_back" />
 

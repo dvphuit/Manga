@@ -25,6 +25,8 @@
     <slide android:slideEdge="top">
         <targets>
             <target android:targetId="@id/bt_back" />
+            <target android:targetId="@id/bt_download" />
+            <target android:targetId="@id/bt_bookmark" />
         </targets>
     </slide>
     <slide android:slideEdge="bottom">
