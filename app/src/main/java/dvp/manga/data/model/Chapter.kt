@@ -2,6 +2,7 @@ package dvp.manga.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import dvp.manga.utils.hash
 import java.io.Serializable
 
 /**
@@ -15,5 +16,5 @@ data class Chapter(
     var href: String? = null
 ) : Serializable {
     @PrimaryKey
-    var id: Int = 0
+    var id: Int = name.hash
 }

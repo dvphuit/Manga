@@ -1,6 +1,5 @@
 package dvp.manga.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,6 @@ class MangaAdapter(recyclerView: RecyclerView?, val section: String) : LazyAdapt
                 data = manga
                 ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName())
                 executePendingBindings()
-                Log.d("TEST",getTransitionName())
             }
         }
 

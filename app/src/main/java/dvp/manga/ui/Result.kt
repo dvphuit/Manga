@@ -2,12 +2,12 @@ package dvp.manga.ui
 
 import dvp.manga.data.model.Entity
 
-sealed class SearchResult {
-    class Success(val data: List<Entity>, val hasNext: Boolean) : SearchResult()
-    object Empty : SearchResult()
-    class Error(val errMsg: String) : SearchResult()
-    object EmptyQuery : SearchResult()
-    object TerminalError : SearchResult()
+sealed class FetchResult {
+    class Success(val data: List<Entity>, val hasNext: Boolean) : FetchResult()
+    object Empty : FetchResult()
+    class Error(val errMsg: String) : FetchResult()
+    object EmptyQuery : FetchResult()
+    object TerminalError : FetchResult()
 }
 
 sealed class ResultData<out T> {

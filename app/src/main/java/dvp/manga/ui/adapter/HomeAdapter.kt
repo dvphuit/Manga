@@ -1,6 +1,5 @@
 package dvp.manga.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,6 +80,7 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
                         topMangaAdapter.submitData(it.value)
                         topMangaListView.currentItem = it.value.size / 2
                     }
+                    //TODO handle view state
                 }
             }
 
@@ -107,26 +107,26 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
         }
 
         fun bind(mangaSection: MangaSection) {
-            title.text = mangaSection.title
+            title.text = mangaSection.section.value
             mangaSection.mangaList.observe(fragment) {
                 when (it) {
                     is ResultData.Success -> {
-                        Log.d("TEST", "section success ${it.value.size}")
-                        mangaAdapter.submitData(mangaSection.title, it.value)
-                        sectionDetail = SectionDetail(mangaSection.title, it.value)
+                        mangaAdapter.submitData(mangaSection.section.value, it.value)
+                        sectionDetail = SectionDetail(mangaSection.section, it.value)
                     }
+                    //TODO handle view state
                 }
             }
             ViewCompat.setTransitionName(parent, getTransitionName())
             mangaList.post {
                 mangaList.layoutManager!!.onRestoreInstanceState(mangaSection.viewState)
-                if (HomeFragment.navSection == mangaSection.title)
+                if (HomeFragment.navSection == mangaSection.section.value)
                     fragment.startPostponedEnterTransition()
             }
         }
 
         private fun gotoSection(view: View, sectionDetail: SectionDetail) {
-            HomeFragment.navSection = sectionDetail.title //set for exit shared element
+            HomeFragment.navSection = sectionDetail.section.value //set for exit shared element
             val direction = HomeFragmentDirections.gotoSection(sectionDetail)
             val extras = FragmentNavigatorExtras(
                 parent to getTransitionName()
@@ -134,7 +134,7 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
             view.findNavController().navigate(direction, extras)
         }
 
-        private fun getTransitionName() = "parent_${(list[position] as MangaSection).title}"
+        private fun getTransitionName() = "parent_${(list[position] as MangaSection).section}"
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

@@ -6,21 +6,21 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.Manga
 import dvp.manga.data.repository.MangaRepository
+import dvp.manga.ui.FetchResult
 import dvp.manga.ui.ResultData
-import dvp.manga.ui.SearchResult
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 data class QueryData(var key: String, var page: Int = 1)
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SearchViewModel(
-    private val repository: MangaRepository,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : ViewModel() {
+class SearchViewModel(private val repository: MangaRepository) : ViewModel() {
     companion object {
         const val SEARCH_DELAY_MS = 300L
         const val MIN_QUERY_LENGTH = 3
@@ -67,32 +67,32 @@ class SearchViewModel(
                         is ResultData.Success -> {
                             if (result.value.isEmpty() && data.isEmpty()) {
                                 pageIndex = 1
-                                SearchResult.Empty
+                                FetchResult.Empty
                             } else {
                                 pageIndex++
                                 data.addAll(result.value)
-                                SearchResult.Success(data, result.value.isNotEmpty())
+                                FetchResult.Success(data, result.value.isNotEmpty())
                             }
                         }
                         is ResultData.Failure -> {
-                            SearchResult.Error(result.message)
+                            FetchResult.Error(result.message)
                         }
                         is ResultData.Loading -> {
                         }
                     }
                 } else {
-                    SearchResult.EmptyQuery
+                    FetchResult.EmptyQuery
                 }
             } catch (e: Throwable) {
                 if (e is CancellationException) {
-                    Log.d(this.javaClass.simpleName, "search \"${it}\" was cancelled")
+                    Log.e(this.javaClass.simpleName, "search \"${it}\" was cancelled")
                     throw e
                 } else {
-                    SearchResult.Error(e.localizedMessage!!)
+                    FetchResult.Error(e.localizedMessage!!)
                 }
             }
         }
-        .catch { emit(SearchResult.TerminalError) }
+        .catch { emit(FetchResult.TerminalError) }
         .asLiveData()
 
 }

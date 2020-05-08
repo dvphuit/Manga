@@ -4,6 +4,7 @@ import android.util.Log
 import dvp.manga.data.model.ChapContent
 import dvp.manga.data.model.Chapter
 import dvp.manga.data.model.Manga
+import dvp.manga.data.model.SectionRoute
 import dvp.manga.ui.ResultData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,13 +17,17 @@ import org.jsoup.select.Elements
  */
 
 abstract class BaseCrawler {
+
+    val routes = mutableMapOf<SectionRoute, String>()
+
     abstract suspend fun getTopManga(): ResultData<List<Manga>>
     abstract suspend fun getMangaLastUpdated(): ResultData<List<Manga>>
     abstract suspend fun getMangaFavourite(): ResultData<List<Manga>>
     abstract suspend fun getMangaForBoy(): ResultData<List<Manga>>
     abstract suspend fun getMangaForGirl(): ResultData<List<Manga>>
     abstract suspend fun getMangas(page: Int): ResultData<List<Manga>>
-    abstract suspend fun getChapters(href: String): ResultData<List<Chapter>>
+    abstract suspend fun getMangas(section: SectionRoute?, page: Int): ResultData<List<Manga>>
+    abstract suspend fun getChapters(mangaId: Int, href: String): ResultData<List<Chapter>>
     abstract suspend fun getChapContent(href: String): ResultData<List<ChapContent>>
     abstract suspend fun searchManga(query: String, page: Int): ResultData<List<Manga>>
 
@@ -38,6 +43,7 @@ abstract class BaseCrawler {
     }
 
     protected suspend fun <T> parseData(url: String, selector: String, parser: (Elements) -> T): ResultData<T> {
+        Log.d("TEST", "request $url")
         return when (val result = getBody(url)) {
             is ResultData.Success -> {
                 val elements = result.value.getElementsByClass(selector)

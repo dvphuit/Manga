@@ -12,7 +12,7 @@ import androidx.lifecycle.observe
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.ActivitySearchBinding
-import dvp.manga.ui.SearchResult
+import dvp.manga.ui.FetchResult
 import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
@@ -69,17 +69,17 @@ class SearchFragment : BaseFragment() {
     private fun subscribeUi(adapter: MangaAdapter) {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                is SearchResult.Success -> {
+                is FetchResult.Success -> {
                     @Suppress("UNCHECKED_CAST")
                     adapter.submitData(it.data as List<Manga>, it.hasNext)
                 }
-                is SearchResult.Empty -> {
+                is FetchResult.Empty -> {
                     adapter.setNoMoreData()
                 }
-                is SearchResult.Error -> {
+                is FetchResult.Error -> {
                     Toast.makeText(requireContext(), it.errMsg, Toast.LENGTH_SHORT).show()
                 }
-                is SearchResult.EmptyQuery -> {
+                is FetchResult.EmptyQuery -> {
                     Toast.makeText(requireContext(), "Must be over 3 characters", Toast.LENGTH_SHORT).show()
                     adapter.submitData(emptyList(), false)
                 }

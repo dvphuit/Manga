@@ -14,8 +14,15 @@ abstract class Section
 data class Top(val mangaList: LiveData<ResultData<List<Manga>>>) : Section()
 
 data class MangaSection(
-    var title: String = "abc", val mangaList: LiveData<ResultData<List<Manga>>>,
+    var section: SectionRoute, val mangaList: LiveData<ResultData<List<Manga>>>,
     val viewState: Parcelable?
 ) : Section()
 
-data class SectionDetail(var title: String, var mangaList: List<Manga>) : Serializable
+data class SectionDetail(var section: SectionRoute, var mangaList: List<Manga>) : Serializable
+
+enum class SectionRoute(val value: String) {
+    LAST_UPDATE("Last update"),
+    FAVOURITE("Favourite"),
+    FOR_BOY("Boy"),
+    FOR_GIRL("Girl")
+}

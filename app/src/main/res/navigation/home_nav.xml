@@ -76,7 +76,7 @@
         android:label="Section Manga"
         tools:layout="@layout/fragment_section">
         <argument
-            android:name="section"
+            android:name="sectionDetail"
             app:argType="dvp.manga.data.model.SectionDetail" />
         <action
             android:id="@+id/action_manga_to_detail"

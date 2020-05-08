@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.MangaSection
 import dvp.manga.data.model.Section
+import dvp.manga.data.model.SectionRoute
 import dvp.manga.data.model.Top
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.adapter.HomeAdapter
@@ -68,10 +69,10 @@ class HomeFragment : BaseFragment() {
         return with(viewModel) {
             arrayListOf(
                 Top(top),
-                MangaSection("Most favourite", favourite, recyclerViewsState[1]),
-                MangaSection("Last updated", lastUpdated, recyclerViewsState[2]),
-                MangaSection("For Boy", forBoy, recyclerViewsState[3]),
-                MangaSection("For Girl", forGirl, recyclerViewsState[4])
+                MangaSection(SectionRoute.FAVOURITE, favourite, recyclerViewsState[1]),
+                MangaSection(SectionRoute.LAST_UPDATE, lastUpdated, recyclerViewsState[2]),
+                MangaSection(SectionRoute.FOR_BOY, forBoy, recyclerViewsState[3]),
+                MangaSection(SectionRoute.FOR_GIRL, forGirl, recyclerViewsState[4])
             )
         }
     }

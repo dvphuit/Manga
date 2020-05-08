@@ -1,12 +1,8 @@
 package dvp.manga.data.remote
 
 import android.content.Context
-import dvp.manga.data.model.ChapContent
-import dvp.manga.data.model.Chapter
-import dvp.manga.data.model.Genre
-import dvp.manga.data.model.Manga
+import dvp.manga.data.model.*
 import dvp.manga.ui.ResultData
-import dvp.manga.utils.hash
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
@@ -17,9 +13,28 @@ import org.jsoup.select.Elements
 class TruyenQQ(private val ctx: Context) : BaseCrawler() {
 
     private val url = "http://truyenqq.com"
+
+    init {
+        routes[SectionRoute.LAST_UPDATE] = "truyen-moi-cap-nhat"
+        routes[SectionRoute.FAVOURITE] = "truyen-yeu-thich"
+        routes[SectionRoute.FOR_BOY] = "truyen-con-trai"
+        routes[SectionRoute.FOR_GIRL] = "truyen-con-gai"
+//        http://truyenqq.com/truyen-con-gai/trang-1.html?country=4
+    }
+
+    private fun buildUrl(name: SectionRoute?, page: Int = 1, country: String = "country=4") = "$url/${routes[name]}/trang-$page?$country"
+
+    override suspend fun getMangas(section: SectionRoute?, page: Int) : ResultData<List<Manga>>{
+        return parseData(
+            url = buildUrl(section, page),
+            selector = "story-item",
+            parser = { parseManga(it) }
+        )
+    }
+
     override suspend fun getTopManga(): ResultData<List<Manga>> {
         return parseData(
-            url = "$url/index.html",
+            url = "$url/index",
             selector = "tile is-child",
             parser = { parseTopManga(it) }
         )
@@ -57,7 +72,6 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         )
     }
 
-
     override suspend fun getMangas(page: Int): ResultData<List<Manga>> {
         return parseData(
             url = "$url/truyen-con-trai/trang-$page.html?country=4",
@@ -66,21 +80,20 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         )
     }
 
-    override suspend fun getChapters(href: String): ResultData<List<Chapter>> {
+    override suspend fun getChapters(mangaId: Int, href: String): ResultData<List<Chapter>> {
         return parseData(
             url = href,
             selector = "works-chapter-item",
             parser = {
-                val chaps = mutableListOf<Chapter>()
                 it.map { element ->
-                    val chap = Chapter()
                     with(element) {
-                        chap.name = select("div > a").text()
-                        chap.href = select("div > a").attr("href")
-                        chaps.add(chap)
+                        Chapter(
+                            manga_id = mangaId,
+                            name = select("div > a").text(),
+                            href = select("div > a").attr("href")
+                        )
                     }
                 }
-                return@parseData chaps
             }
         )
     }
@@ -90,15 +103,11 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
             url = href,
             selector = "lazy",
             parser = {
-                val contents = mutableListOf<ChapContent>()
                 it.map { element ->
-                    val content = ChapContent()
                     with(element) {
-                        content.img_url = attr("src")
-                        contents.add(content)
+                        ChapContent(img_url = attr("src"))
                     }
                 }
-                return@parseData contents
             }
         )
     }
@@ -112,27 +121,26 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
     }
 
     private fun parseManga(body: Elements): List<Manga> {
-        val mangas = mutableListOf<Manga>()
-        body.map { element ->
-            val manga = Manga()
+        return body.map { element ->
             with(element) {
-                manga.name = getElementsByClass("title-book").text()
-                manga.href = getElementsByClass("title-book").select("a").attr("href")
-                manga.last_chap = getElementsByClass("episode-book").text()
-                manga.cover = getElementsByClass("story-cover").attr("src")
-                element.getElementsByClass("info").forEach {
-                    val value = it.text().replace(",", "")
-                    if (value.contains("tình trạng", true)) manga.status = value
-                    if (value.contains("lượt xem", true)) manga.viewed = value
-                    if (value.contains("theo dõi", true)) manga.followed = Regex("\\d+").find(value)?.value ?: "0"
+                Manga(
+                    name = getElementsByClass("title-book").text(),
+                    href = getElementsByClass("title-book").select("a").attr("href"),
+                    last_chap = getElementsByClass("episode-book").text(),
+                    cover = getElementsByClass("story-cover").attr("src"),
+                    description = element.getElementsByClass("excerpt").first().text(),
+                    genres = parseGenres(element)
+                ).apply {
+                    element.getElementsByClass("info").forEach {
+                        val value = it.text().replace(",", "")
+                        if (value.contains("tình trạng", true)) status = value
+                        if (value.contains("lượt xem", true)) viewed = value
+                        if (value.contains("theo dõi", true)) followed = Regex("\\d+").find(value)?.value ?: "0"
+                    }
                 }
-                manga.description = element.getElementsByClass("excerpt").first().text()
-                manga.genres = parseGenres(element)
-                manga.id = manga.name.hash
-                mangas.add(manga)
+
             }
         }
-        return mangas
     }
 
     private fun parseTopManga(list: Elements): List<Manga> {
@@ -165,6 +173,5 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
             instance ?: TruyenQQ(ctx).also { instance = it }
         }
     }
-
     //endregion
 }

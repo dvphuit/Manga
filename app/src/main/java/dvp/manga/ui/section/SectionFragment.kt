@@ -2,7 +2,6 @@ package dvp.manga.ui.section
 
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import androidx.navigation.fragment.navArgs
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.databinding.FragmentSectionBinding
-import dvp.manga.ui.SearchResult
+import dvp.manga.ui.FetchResult
 import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.utils.Injector
 import dvp.manga.utils.delayForSharedElement
@@ -46,11 +45,11 @@ class SectionFragment : Fragment() {
         context ?: return binding.root
         postponeEnterTransition()
         return binding.apply {
-            ViewCompat.setTransitionName(parent, "parent_${args.section.title}")
-            sectionTitle.text = args.section.title
+            ViewCompat.setTransitionName(parent, "parent_${args.sectionDetail.section}")
+            sectionTitle.text = args.sectionDetail.section.value
             mangaList.delayForSharedElement(this@SectionFragment)
-            mangaList.adapter = MangaAdapter(mangaList, args.section.title).apply {
-                viewModel.initData(args.section.mangaList)
+            mangaList.adapter = MangaAdapter(mangaList, args.sectionDetail.section.value).apply {
+                viewModel.initData(args.sectionDetail.mangaList)
                 registerLazyCallback { viewModel.loadMore() }
                 subscribeUi(this)
             }
@@ -58,22 +57,19 @@ class SectionFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: MangaAdapter) {
-        viewModel.state.observe(viewLifecycleOwner) {
+        viewModel.getState(args.sectionDetail.section).observe(viewLifecycleOwner) {
             when (it) {
-                is SearchResult.Success -> {
+                is FetchResult.Success -> {
                     @Suppress("UNCHECKED_CAST")
                     adapter.submitData(it.data as List<Manga>, it.hasNext)
-                    Log.d("TEST", "state success ${it.data.size}")
                 }
-                is SearchResult.Empty -> {
-                    Log.d("TEST", "state empty")
+                is FetchResult.Empty -> {
                     adapter.setNoMoreData()
                 }
-                is SearchResult.Error -> {
+                is FetchResult.Error -> {
                     Toast.makeText(requireContext(), it.errMsg, Toast.LENGTH_SHORT).show()
-                    Log.d("TEST", "state error")
                 }
-                is SearchResult.EmptyQuery -> {
+                is FetchResult.EmptyQuery -> {
                     Toast.makeText(
                         requireContext(),
                         "Must be over 3 characters",

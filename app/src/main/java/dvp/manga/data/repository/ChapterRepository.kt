@@ -12,7 +12,7 @@ class ChapterRepository(private val crawler: BaseCrawler, private val dao: Chapt
 
     fun getChaps(mangaId: Int, href: String) = responseLiveData(
         dbQuery = { dao.getChapters(mangaId) },
-        netCall = { crawler.getChapters(href) },
+        netCall = { crawler.getChapters(mangaId, href) },
         saveNetCall = { list ->
             dao.upsert(list)
         })
