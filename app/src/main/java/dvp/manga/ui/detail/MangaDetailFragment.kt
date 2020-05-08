@@ -13,11 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
 import dvp.manga.MainActivity
 import dvp.manga.R
+import dvp.manga.data.model.Chapter
 import dvp.manga.databinding.MangaDetailFragmentBinding
 import dvp.manga.ui.ResultData
 import dvp.manga.ui.adapter.ChapAdapter
+import dvp.manga.ui.adapter.ChapPageAdapter
+import dvp.manga.ui.adapter.PageChap
 import dvp.manga.utils.Injector
 
 
@@ -44,17 +49,52 @@ class MangaDetailFragment : Fragment(), View.OnClickListener {
         return binding.apply {
             ViewCompat.setTransitionName(imgWrapper, "cover_${args.section}${args.manga.name}")
             data = viewModel.manga
-            chapList.adapter = ChapAdapter().apply {
-                subscribeUi(this)
-            }
+//            chapList.adapter = ChapAdapter().apply {
+//                subscribeUi(this)
+//            }
             lifecycleOwner = this@MangaDetailFragment
-
+            setUpPagerChap()
             //set click listener
             btBack.setOnClickListener(this@MangaDetailFragment)
             btBookmark.setOnClickListener(this@MangaDetailFragment)
             btDownload.setOnClickListener(this@MangaDetailFragment)
         }.root
     }
+
+    private fun MangaDetailFragmentBinding.setUpPagerChap() {
+        val adapter = ChapPageAdapter()
+        pagerChap.adapter = adapter
+
+
+        viewModel.chapters.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResultData.Success -> {
+                    val pageChaps = mutableListOf<PageChap>()
+                    val chaps = mutableListOf<Chapter>()
+                    for (i in 0..50) {
+                        chaps.add(it.value[i])
+                        if (i % 49 == 0) {
+                            val start = 49 - i
+                            pageChaps.add(PageChap("$start - $i", chaps))
+                        }
+                    }
+                    adapter.submitData(pageChaps)
+                    TabLayoutMediator(
+                        tabChap,
+                        pagerChap,
+                        TabConfigurationStrategy { tab, position -> tab.text = pageChaps[position].page }
+                    ).attach()
+                }
+                is ResultData.Failure -> {
+                    Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
+                }
+                is ResultData.Loading -> {
+                    Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     private fun subscribeUi(adapter: ChapAdapter) {
         viewModel.chapters.observe(viewLifecycleOwner) {
@@ -76,7 +116,6 @@ class MangaDetailFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         val animation: Animation = AnimationUtils.loadAnimation(context, R.anim.bounce)
         v?.startAnimation(animation)
-
         when (v) {
             binding.btBack -> {
                 (activity as MainActivity).onBackPressed()

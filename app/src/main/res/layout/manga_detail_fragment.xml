@@ -182,18 +182,28 @@
             android:text="@{data.description}"
             app:layout_constraintTop_toBottomOf="@id/img_wrapper" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chap_list"
+        <LinearLayout
+            android:id="@+id/chap_page_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:orientation="vertical"
             android:transitionGroup="true"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="@+id/scrim"
-            app:layout_constraintTop_toBottomOf="@id/description"
-            tools:context=".ui.detail.MangaDetailFragment"
-            tools:listitem="@layout/chapter_item" />
+            app:layout_constraintVertical_weight="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description">
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_chap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabMode="scrollable"/>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/pager_chap"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
-
 </layout>
