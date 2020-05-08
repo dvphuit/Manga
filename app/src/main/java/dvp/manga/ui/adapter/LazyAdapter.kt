@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Entity
+import dvp.manga.data.model.LazyModel
 
 /**
  * @author dvphu on 24,March,2020
