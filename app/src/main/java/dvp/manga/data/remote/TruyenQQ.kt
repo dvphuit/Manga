@@ -15,12 +15,28 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
 
     private val url = "http://truyenqq.com"
 
+    val genresMap = mapOf(
+        "Action" to "$url/the-loai/action-26.html",
+        "Adventure" to "$url/the-loai/adventure-27.html",
+        "Comedy" to "$url/the-loai/comedy-28.html",
+        "Detective" to "$url/the-loai/detective-100.html",
+        "Drama" to "$url/the-loai/drama-29.html",
+        "Fantasy" to "$url/the-loai/fantasy-30.html",
+        "Isekai" to "$url/the-loai/isekai-85.html",
+        "Magic" to "$url/the-loai/magic-58.html",
+        "Psychological" to "$url/the-loai/psychological-40.html",
+        "Shounen" to "$url/the-loai/shounen-31.html",
+        "Sports" to "$url/the-loai/sports-57.html",
+        "Supernatural" to "$url/the-loai/supernatural-32.html",
+        "Webtoon" to "$url/the-loai/webtoon-55.html"
+    )
+
     init {
         routes[SectionRoute.LAST_UPDATE] = "truyen-moi-cap-nhat"
         routes[SectionRoute.FAVOURITE] = "truyen-yeu-thich"
         routes[SectionRoute.FOR_BOY] = "truyen-con-trai"
         routes[SectionRoute.FOR_GIRL] = "truyen-con-gai"
-//        http://truyenqq.com/truyen-con-gai/trang-1.html?country=4
+        routes[SectionRoute.NEW_MANGA] = "truyen-tranh-moi"
     }
 
     private fun buildUrl(name: SectionRoute?, page: Int = 1, country: String = "country=4") = "$url/${routes[name]}/trang-$page?$country"

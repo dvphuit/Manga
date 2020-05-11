@@ -21,8 +21,9 @@ data class MangaSection(
 data class SectionDetail(var section: SectionRoute, var mangaList: List<Manga>) : Serializable
 
 enum class SectionRoute(val value: String) {
-    LAST_UPDATE("Last update"),
+    LAST_UPDATE("Last Update"),
     FAVOURITE("Favourite"),
-    FOR_BOY("Boy"),
-    FOR_GIRL("Girl")
+    NEW_MANGA("New Manga"),
+    FOR_BOY("For Boy"),
+    FOR_GIRL("For Girl")
 }
