@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
 import dvp.manga.MainActivity
 import dvp.manga.R
 import dvp.manga.databinding.MangaDetailFragmentBinding
@@ -35,9 +34,9 @@ class MangaDetailFragment : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_enter)
-        returnTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_return)
-        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.detail_shared_elements)
-        sharedElementReturnTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.detail_shared_elements)
+//        exitTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_return)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_shared_elements)
+//        sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_shared_elements)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -53,7 +52,7 @@ class MangaDetailFragment : Fragment(), View.OnClickListener {
             TabLayoutMediator(
                 tabChap,
                 pagerChap,
-                TabConfigurationStrategy { tab, position -> tab.text = adapter.getTitle(position) }
+                TabLayoutMediator.TabConfigurationStrategy { tab, position -> tab.text = adapter.getTitle(position) }
             ).attach()
             //set click listener
             btBack.setOnClickListener(this@MangaDetailFragment)

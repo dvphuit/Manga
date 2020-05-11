@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
-import dvp.manga.MainActivity
 import dvp.manga.databinding.StoryFragmentBinding
 import dvp.manga.ui.ResultData
 import dvp.manga.ui.adapter.ChapContentAdapter
@@ -22,16 +21,6 @@ class StoryFragment : Fragment() {
 
     private val viewModel: StoryVM by viewModels {
         Injector.getChapContentVMFactory(requireActivity().application, requireContext(), args.chap)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as MainActivity).hideBotBar()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        (activity as MainActivity).showBotBar()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

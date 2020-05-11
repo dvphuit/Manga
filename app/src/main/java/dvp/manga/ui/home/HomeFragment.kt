@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
+import dvp.manga.MainActivity
 import dvp.manga.R
 import dvp.manga.data.model.MangaSection
 import dvp.manga.data.model.Section
@@ -90,6 +91,12 @@ class HomeFragment : BaseFragment() {
     override fun onPause() {
         super.onPause()
         saveSectionsState()
+        (activity as MainActivity).hideBotBar()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).showBotBar()
     }
 
     private fun saveSectionsState() {

@@ -16,19 +16,9 @@
         android:id="@+id/manga_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
         app:layoutDescription="@xml/collapsing_toolbar"
+        android:transitionGroup="false"
         tools:context=".ui.detail.MangaDetailFragment">
-
-        <View
-            android:id="@+id/scrim"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/toolbar_view"
@@ -184,16 +174,20 @@
 
 
         <com.google.android.material.tabs.TabLayout
+            android:transitionGroup="false"
             android:id="@+id/tab_chap"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:background="@color/colorPrimary"
             app:layout_constraintTop_toBottomOf="@id/description"
             app:tabMode="scrollable" />
 
         <androidx.viewpager2.widget.ViewPager2
+            android:transitionGroup="false"
             android:id="@+id/pager_chap"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tab_chap" />
 

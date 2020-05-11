@@ -1,6 +1,8 @@
 package dvp.manga
 
 import android.os.Bundle
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
@@ -48,10 +50,18 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp() = currentNavController?.value?.navigateUp() ?: false
 
     fun hideBotBar() {
+        val animation: Animation = TranslateAnimation(0f, 0f, 0f, bot_nav.height.toFloat())
+        animation.duration = 500
+        animation.fillAfter = true
+        bot_nav.startAnimation(animation)
         bot_nav.gone()
     }
 
     fun showBotBar() {
+        val animation: Animation = TranslateAnimation(0f, 0f,  bot_nav.height.toFloat(), 0f)
+        animation.duration = 500
+        animation.fillAfter = true
+        bot_nav.startAnimation(animation)
         bot_nav.visible()
     }
 }

@@ -8,34 +8,44 @@
         <target android:excludeId="@android:id/navigationBarBackground" />
         <target android:excludeId="@android:id/statusBarBackground" />
         <target android:excludeId="@id/img_wrapper" />
+        <target android:excludeId="@id/top_manga_list" />
+        <target android:excludeId="@id/section_title" />
+        <target android:excludeId="@id/scrim" />
+        <target android:excludeId="@id/manga_detail" />
     </targets>
-
-    <slide android:slideEdge="right">
-        <targets>
-            <target android:targetId="@id/title" />
-            <target android:targetId="@id/status" />
-            <target android:targetId="@id/viewed" />
-            <target android:targetId="@id/followed" />
-            <target android:targetId="@id/genres" />
-        </targets>
-    </slide>
-    <slide android:slideEdge="top">
-        <targets>
-            <target android:targetId="@id/bt_back" />
-        </targets>
-    </slide>
-    <slide android:slideEdge="bottom">
-        <targets>
-            <target android:targetId="@id/chap_list" />
-            <target android:targetId="@id/description" />
-        </targets>
-    </slide>
-
-    <fade android:duration="600"
-        android:fadingMode="fade_out">
+<!--    <slide android:slideEdge="bottom"/>-->
+    <explode/>
+    <fade/>
+<!--    <slide android:slideEdge="right">-->
 <!--        <targets>-->
-<!--            <target android:excludeId="@id/scrim"/>-->
+<!--            <target android:targetId="@id/title" />-->
+<!--            <target android:targetId="@id/status" />-->
+<!--            <target android:targetId="@id/viewed" />-->
+<!--            <target android:targetId="@id/followed" />-->
+<!--            <target android:targetId="@id/genres" />-->
 <!--        </targets>-->
-    </fade>
+<!--    </slide>-->
+<!--    <slide android:slideEdge="top">-->
+<!--        <targets>-->
+<!--            <target android:targetId="@id/bt_back" />-->
+<!--        </targets>-->
+<!--    </slide>-->
+<!--    <slide android:slideEdge="bottom">-->
+<!--        <targets>-->
+<!--            <target android:targetId="@id/bt_read" />-->
+<!--            <target android:targetId="@id/pager_chap" />-->
+<!--            <target android:targetId="@id/tab_chap" />-->
+<!--            <target android:targetId="@id/description" />-->
+<!--            <target android:targetId="@id/chap_item" />-->
+<!--        </targets>-->
+<!--    </slide>-->
+
+<!--    <fade-->
+<!--        android:duration="600"-->
+<!--        android:fadingMode="fade_out">-->
+<!--        &lt;!&ndash;        <targets>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <target android:excludeId="@id/scrim"/>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </targets>&ndash;&gt;-->
+<!--    </fade>-->
 
 </transitionSet>
