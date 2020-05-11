@@ -12,3 +12,7 @@ inline val Int.dp: Int
 
 inline val String?.hash: Int
     get() = if (this != null) this.hashCode() * 31 else 0
+
+
+inline val String.number: String
+    get() = Regex("(\\d+\\.\\d+)|\\d+").find(this)?.value ?: "?"

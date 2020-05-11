@@ -36,7 +36,7 @@
             android:layout_height="0dp"
             android:background="@color/colorPrimary"
             android:elevation="5dp"
-            app:layout_constraintBottom_toBottomOf="@id/description"
+            app:layout_constraintBottom_toBottomOf="@id/tab_chap"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -100,7 +100,7 @@
             android:layout_marginEnd="8dp"
             android:elevation="10dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:lines="1"
             android:paddingVertical="4dp"
             android:text="@{data.name}"
             android:textSize="18sp"
@@ -190,40 +190,20 @@
             android:text="@{data.description}"
             app:layout_constraintTop_toBottomOf="@id/img_wrapper" />
 
-        <!--        <androidx.recyclerview.widget.RecyclerView-->
-        <!--            android:id="@+id/chap_list"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-        <!--            app:layout_constraintBottom_toBottomOf="@+id/scrim"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/description"-->
-        <!--            app:layout_constraintVertical_weight="1"-->
-        <!--            tools:context=".ui.detail.MangaDetailFragment"-->
-        <!--            tools:listitem="@layout/chapter_item" />-->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_chap"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:elevation="5dp"
+            app:layout_constraintTop_toBottomOf="@id/description"
+            app:tabMode="scrollable" />
 
-        <LinearLayout
-            android:id="@+id/chap_page_layout"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager_chap"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
-            android:transitionGroup="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description"
-            app:layout_constraintVertical_weight="1">
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_chap"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                app:tabMode="scrollable"/>
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/pager_chap"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/tab_chap" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 

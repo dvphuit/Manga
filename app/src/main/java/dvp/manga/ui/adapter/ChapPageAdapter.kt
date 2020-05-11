@@ -37,14 +37,15 @@ class ChapPageAdapter : RecyclerView.Adapter<ChapPageAdapter.ViewHolder>() {
         }
 
         fun bind(value: PageChap) {
-            Log.d("TEST", "page chap size ${value.chaps.size}")
             adapter.submitList(value.chaps)
         }
     }
 
-    fun submitData(topMangas: List<PageChap>) {
-        this.list = topMangas
+    fun submitData(pageChaps: List<PageChap>) {
+        this.list = pageChaps
         notifyDataSetChanged()
     }
+
+    fun getTitle(position: Int) = list[position]?.page
 
 }

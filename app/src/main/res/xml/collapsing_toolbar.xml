@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<MotionScene xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Transition
         app:constraintSetEnd="@layout/manga_detail_fragment_collapsed"
@@ -10,95 +9,9 @@
 
         <OnSwipe
             app:dragDirection="dragUp"
-            app:touchAnchorId="@id/chap_list"
+            app:touchAnchorId="@id/pager_chap"
             app:touchAnchorSide="top" />
 
-
     </Transition>
-
-    <ConstraintSet android:id="@+id/collapsed">
-
-        <Constraint
-            android:id="@id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_view"
-            app:layout_constraintStart_toEndOf="@id/bt_back"
-            app:layout_constraintTop_toTopOf="@id/toolbar_view" >
-            <CustomAttribute
-                app:attributeName="maxLines"
-                app:customIntegerValue="1" />
-        </Constraint>
-
-        <Constraint
-            android:id="@id/bt_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:elevation="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_view"
-            app:layout_constraintStart_toStartOf="@id/toolbar_view"
-            app:layout_constraintTop_toTopOf="@id/toolbar_view" />
-
-        <Constraint
-            android:id="@id/img_wrapper"
-            android:alpha="0"
-            android:elevation="-10dp"
-            app:layout_constraintBottom_toTopOf="@id/description" />
-
-        <Constraint
-            android:id="@id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_view" />
-        <Constraint
-            android:id="@id/genres"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            app:layout_constraintBottom_toTopOf="@id/description"
-            app:layout_constraintStart_toEndOf="@id/img_wrapper" />
-        <Constraint
-            android:id="@id/liked"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            app:layout_constraintBottom_toTopOf="@id/genres" />
-        <Constraint
-            android:id="@id/followed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            app:layout_constraintBottom_toTopOf="@id/genres"
-            app:layout_constraintStart_toEndOf="@id/viewed" />
-        <Constraint
-            android:id="@id/viewed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            app:layout_constraintBottom_toTopOf="@id/genres"
-            app:layout_constraintStart_toEndOf="@id/img_wrapper" />
-        <Constraint
-            android:id="@id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            app:layout_constraintBottom_toTopOf="@id/viewed"
-            app:layout_constraintStart_toEndOf="@id/img_wrapper" />
-        <Constraint
-            android:id="@id/toolbar_view"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:elevation="10dp"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Constraint
-            android:id="@id/chap_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/description" />
-    </ConstraintSet>
 
 </MotionScene>
