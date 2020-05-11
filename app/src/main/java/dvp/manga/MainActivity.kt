@@ -1,9 +1,9 @@
 package dvp.manga
 
 import android.os.Bundle
-import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import dvp.manga.utils.gone
@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigationBar() {
         val navGraphIds = listOf(
             R.navigation.home_nav,
+            R.navigation.explore_nav,
             R.navigation.bookmark_nav,
             R.navigation.setting_nav
         )
@@ -50,18 +51,28 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp() = currentNavController?.value?.navigateUp() ?: false
 
     fun hideBotBar() {
-        val animation: Animation = TranslateAnimation(0f, 0f, 0f, bot_nav.height.toFloat())
-        animation.duration = 500
-        animation.fillAfter = true
-        bot_nav.startAnimation(animation)
-        bot_nav.gone()
+        if (!bot_nav.isVisible) return
+
+        bot_nav.apply {
+            val animation = TranslateAnimation(0f, 0f, 0f, bot_nav.height.toFloat()).apply {
+                duration = 500
+                fillAfter = true
+            }
+            startAnimation(animation)
+            gone()
+        }
     }
 
     fun showBotBar() {
-        val animation: Animation = TranslateAnimation(0f, 0f,  bot_nav.height.toFloat(), 0f)
-        animation.duration = 500
-        animation.fillAfter = true
-        bot_nav.startAnimation(animation)
-        bot_nav.visible()
+        if (bot_nav.isVisible) return
+
+        bot_nav.apply {
+            val animation = TranslateAnimation(0f, 0f, bot_nav.height.toFloat(), 0f).apply {
+                duration = 500
+                fillAfter = true
+            }
+            startAnimation(animation)
+            visible()
+        }
     }
 }

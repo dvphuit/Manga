@@ -1,4 +1,4 @@
-package dvp.manga.ui.bookmark
+package dvp.manga.ui.explore
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,17 +8,14 @@ import androidx.fragment.app.Fragment
 import dvp.manga.MainActivity
 import dvp.manga.R
 
-/**
- * A simple [Fragment] subclass.
- */
-class BookmarkFragment : Fragment() {
+class ExploreFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bookmark, container, false)
+        return inflater.inflate(R.layout.fragment_explore, container, false)
     }
 
     override fun onResume() {

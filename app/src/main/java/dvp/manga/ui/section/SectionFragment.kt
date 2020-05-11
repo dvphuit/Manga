@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
@@ -16,6 +15,7 @@ import dvp.manga.data.model.Manga
 import dvp.manga.databinding.FragmentSectionBinding
 import dvp.manga.ui.FetchResult
 import dvp.manga.ui.adapter.MangaAdapter
+import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 import dvp.manga.utils.delayForSharedElement
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,14 +24,13 @@ import kotlinx.coroutines.FlowPreview
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SectionFragment : Fragment() {
+class SectionFragment : BaseFragment() {
 
     private val args by navArgs<SectionFragmentArgs>()
 
     private val viewModel: SectionViewModel by viewModels {
         Injector.getSectionVMFactory(requireContext())
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

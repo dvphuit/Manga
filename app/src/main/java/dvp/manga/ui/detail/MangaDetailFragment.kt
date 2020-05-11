@@ -9,7 +9,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
@@ -19,10 +18,11 @@ import dvp.manga.R
 import dvp.manga.databinding.MangaDetailFragmentBinding
 import dvp.manga.ui.ResultData
 import dvp.manga.ui.adapter.ChapPageAdapter
+import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 
 
-class MangaDetailFragment : Fragment(), View.OnClickListener {
+class MangaDetailFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var binding: MangaDetailFragmentBinding
     private val args by navArgs<MangaDetailFragmentArgs>()

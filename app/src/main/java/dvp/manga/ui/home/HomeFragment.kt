@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -17,11 +18,10 @@ import dvp.manga.data.model.SectionRoute
 import dvp.manga.data.model.Top
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.adapter.HomeAdapter
-import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : Fragment() {
 
     companion object {
         var navSection = ""
@@ -87,11 +87,9 @@ class HomeFragment : BaseFragment() {
         views[0].findNavController().navigate(direction, extras)
     }
 
-
     override fun onPause() {
         super.onPause()
         saveSectionsState()
-        (activity as MainActivity).hideBotBar()
     }
 
     override fun onResume() {
