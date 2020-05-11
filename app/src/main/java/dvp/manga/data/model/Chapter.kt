@@ -11,10 +11,12 @@ import java.io.Serializable
 
 @Entity(tableName = "chapter")
 data class Chapter(
-    var manga_id: Int = 0,
-    var name: String? = null,
-    var href: String? = null
+    val manga_id: Int,
+    val index: Float,
+    val name: String,
+    val href: String,
+    val upload_date: String
 ) : Serializable {
     @PrimaryKey
-    var id: Int = name.hash
+    var id: Int = (name + manga_id).hash
 }

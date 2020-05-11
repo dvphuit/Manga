@@ -18,19 +18,36 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:selectableItemBackground"
-        android:padding="8dp"
+        android:gravity="center_vertical"
         android:onClick="@{clickListener}"
+        android:padding="8dp"
         android:stateListAnimator="@animator/press_hover">
 
         <TextView
             android:id="@+id/tvName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{data.name}"
             android:textColor="#004D40"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="8dp"
+            android:text="@{data.upload_date}"
+            android:textColor="#878787"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right" />
     </LinearLayout>
 </layout>

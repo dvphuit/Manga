@@ -11,6 +11,6 @@ import dvp.manga.data.model.Chapter
 
 @Dao
 abstract class ChapterDao : BaseDao<Chapter>() {
-    @Query("SELECT * FROM chapter WHERE manga_id = :manga_id")
+    @Query("SELECT * FROM chapter WHERE manga_id = :manga_id ORDER BY `index` DESC")
     abstract fun getChapters(manga_id: Int): LiveData<List<Chapter>>
 }

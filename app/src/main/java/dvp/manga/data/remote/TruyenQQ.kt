@@ -3,6 +3,7 @@ package dvp.manga.data.remote
 import android.content.Context
 import dvp.manga.data.model.*
 import dvp.manga.ui.ResultData
+import dvp.manga.utils.numberF
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
@@ -86,11 +87,13 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
             selector = "works-chapter-item",
             parser = {
                 it.map { element ->
-                    with(element) {
+                    with(element.select("div")) {
                         Chapter(
                             manga_id = mangaId,
-                            name = select("div > a").text(),
-                            href = select("div > a").attr("href")
+                            index = this[1].text().numberF,
+                            name = this[1].text(),
+                            href = this[1].select("a").attr("href"),
+                            upload_date = this[2].text()
                         )
                     }
                 }

@@ -1,9 +1,9 @@
 package dvp.manga.data.model
 
-import androidx.room.*
+import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import dvp.manga.utils.hash
 import java.io.Serializable
 import java.text.DecimalFormat
@@ -51,18 +51,4 @@ data class Manga(
 
 data class Genre(val text: String, val href: String) : Serializable {
     override fun toString() = text
-}
-
-class GenreConverter {
-    @TypeConverter
-    fun toGenres(json: String): List<Genre> {
-        val type = object : TypeToken<List<Genre>>() {}.type
-        return Gson().fromJson(json, type)
-    }
-
-    @TypeConverter
-    fun toJson(genres: List<Genre>): String {
-        val type = object : TypeToken<List<Genre>>() {}.type
-        return Gson().toJson(genres, type)
-    }
 }

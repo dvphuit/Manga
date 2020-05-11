@@ -8,13 +8,10 @@ import androidx.room.TypeConverters
 import dvp.manga.data.local.dao.ChapContentDao
 import dvp.manga.data.local.dao.ChapterDao
 import dvp.manga.data.local.dao.MangaDao
-import dvp.manga.data.model.ChapContent
-import dvp.manga.data.model.Chapter
-import dvp.manga.data.model.GenreConverter
-import dvp.manga.data.model.Manga
+import dvp.manga.data.model.*
 
-@Database(entities = [Manga::class, Chapter::class, ChapContent::class], version = 1, exportSchema = false)
-@TypeConverters(GenreConverter::class)
+@Database(entities = [Manga::class, Chapter::class, ChapContent::class], version = 2, exportSchema = false)
+@TypeConverters(GenreConverter::class, DateConverter::class)
 abstract class MangaDatabase : RoomDatabase() {
 
     abstract fun mangaDao(): MangaDao
