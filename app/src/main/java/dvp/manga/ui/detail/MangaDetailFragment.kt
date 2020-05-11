@@ -47,6 +47,7 @@ class MangaDetailFragment : Fragment(), View.OnClickListener {
             postponeEnterTransition()
             ViewCompat.setTransitionName(imgWrapper, "cover_${args.section}${args.manga.name}")
             data = viewModel.manga
+            //set up viewpager for chapters
             val adapter = ChapPageAdapter().apply { subscribeUi(this) }
             pagerChap.adapter = adapter
             TabLayoutMediator(
@@ -54,7 +55,6 @@ class MangaDetailFragment : Fragment(), View.OnClickListener {
                 pagerChap,
                 TabConfigurationStrategy { tab, position -> tab.text = adapter.getTitle(position) }
             ).attach()
-            lifecycleOwner = this@MangaDetailFragment
             //set click listener
             btBack.setOnClickListener(this@MangaDetailFragment)
             btBookmark.setOnClickListener(this@MangaDetailFragment)

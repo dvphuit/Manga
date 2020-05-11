@@ -12,7 +12,7 @@
 
     </data>
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
+    <dvp.manga.ui.custom.ExtMotionLayout
         android:id="@+id/manga_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -197,5 +197,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tab_chap" />
 
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+        <Button
+            android:id="@+id/bt_read"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_glow"
+            android:elevation="4dp"
+            android:paddingHorizontal="16dp"
+            android:text="Read Chap 1"
+            android:textColor="#fff"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </dvp.manga.ui.custom.ExtMotionLayout>
 </layout>
