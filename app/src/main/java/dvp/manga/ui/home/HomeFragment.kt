@@ -19,13 +19,10 @@ import dvp.manga.data.model.Top
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.adapter.HomeAdapter
 import dvp.manga.utils.Injector
+import dvp.manga.utils.SharedElementManager
 
 
 class HomeFragment : Fragment() {
-
-    companion object {
-        var navSection = ""
-    }
 
     private lateinit var binding: HomeFragmentBinding
     private val viewModel: HomeViewModel by viewModels {
@@ -36,13 +33,13 @@ class HomeFragment : Fragment() {
         binding = HomeFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
         if (viewModel.isInitialized) {
-            postponeEnterTransition()
+            SharedElementManager.postSE(this)
         }
-        if(navSection == "search") startPostponedEnterTransition()
+        SharedElementManager.startSE(SectionRoute.SEARCH)
 
         return binding.apply {
             searchback.setOnClickListener {
-                navSection = "search"
+                SharedElementManager.setRoute(SectionRoute.SEARCH)
                 gotoSearch(searchback, searchBar)
             }
             recyclerView.setHasFixedSize(true)

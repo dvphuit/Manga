@@ -17,7 +17,7 @@ import dvp.manga.ui.FetchResult
 import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
-import dvp.manga.utils.delayForSharedElement
+import dvp.manga.utils.SharedElementManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
@@ -42,12 +42,15 @@ class SectionFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentSectionBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        postponeEnterTransition()
+        SharedElementManager.postSE(this)
         return binding.apply {
             ViewCompat.setTransitionName(parent, "parent_${args.sectionDetail.section}")
             sectionTitle.text = args.sectionDetail.section.value
-            mangaList.delayForSharedElement(this@SectionFragment)
-            mangaList.adapter = MangaAdapter(mangaList, args.sectionDetail.section.value).apply {
+            mangaList.viewTreeObserver.addOnPreDrawListener {
+                SharedElementManager.startSE()
+                true
+            }
+            mangaList.adapter = MangaAdapter(mangaList, args.sectionDetail.section).apply {
                 viewModel.initData(args.sectionDetail.mangaList)
                 registerLazyCallback { viewModel.loadMore() }
                 subscribeUi(this)
@@ -67,14 +70,6 @@ class SectionFragment : BaseFragment() {
                 }
                 is FetchResult.Error -> {
                     Toast.makeText(requireContext(), it.errMsg, Toast.LENGTH_SHORT).show()
-                }
-                is FetchResult.EmptyQuery -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Must be over 3 characters",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    adapter.submitData(emptyList(), false)
                 }
             }
         }

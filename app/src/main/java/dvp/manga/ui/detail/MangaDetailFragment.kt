@@ -13,13 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
-import dvp.manga.MainActivity
 import dvp.manga.R
 import dvp.manga.databinding.MangaDetailFragmentBinding
 import dvp.manga.ui.ResultData
 import dvp.manga.ui.adapter.ChapPageAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
+import dvp.manga.utils.SharedElementManager
 
 
 class MangaDetailFragment : BaseFragment(), View.OnClickListener {
@@ -34,16 +34,14 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_enter)
-//        exitTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_return)
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_shared_elements)
-//        sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_shared_elements)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = MangaDetailFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
+        SharedElementManager.postSE(this)
         return binding.apply {
-            postponeEnterTransition()
             ViewCompat.setTransitionName(imgWrapper, "cover_${args.section}${args.manga.name}")
             data = viewModel.manga
             //set up viewpager for chapters
@@ -66,7 +64,7 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
             when (it) {
                 is ResultData.Success -> {
                     adapter.submitData(it.value)
-                    startPostponedEnterTransition()
+                    SharedElementManager.startSE()
                 }
                 is ResultData.Failure -> {
                     Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
@@ -83,7 +81,7 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
         v?.startAnimation(animation)
         when (v) {
             binding.btBack -> {
-                (activity as MainActivity).onBackPressed()
+                backPressed()
             }
             binding.btBookmark -> {
                 Toast.makeText(context, "under construction", Toast.LENGTH_SHORT).show()

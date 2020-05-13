@@ -1,6 +1,5 @@
 package dvp.manga.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,10 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Manga
+import dvp.manga.data.model.SectionRoute
 import dvp.manga.databinding.MangaItemBinding
-import dvp.manga.ui.home.HomeFragment
 import dvp.manga.ui.home.HomeFragmentDirections
+import dvp.manga.utils.SharedElementManager
 
 /**
  * @author dvphu on 24,April,2020
@@ -22,7 +22,7 @@ import dvp.manga.ui.home.HomeFragmentDirections
 class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>() {
 
     private var list = emptyList<Manga>()
-    private var section: String = ""
+    private var section: SectionRoute? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.manga_item, parent, false))
@@ -45,28 +45,30 @@ class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>
         fun bind(value: Manga) {
             with(binding) {
                 data = value
-                ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName())
+                ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName(value))
                 executePendingBindings()
             }
         }
 
         private fun gotoDetail(manga: Manga, parent: View, cover: View) {
-            HomeFragment.navSection = section
-            val direction = HomeFragmentDirections.actionMangaToDetail(manga, section)
+            SharedElementManager.setRoute(section!!)
+            val direction = HomeFragmentDirections.actionMangaToDetail(manga, section!!.value)
             val extras = FragmentNavigatorExtras(
-                cover to getTransitionName()
+                cover to getTransitionName(manga)
             )
             parent.findNavController().navigate(direction, extras)
         }
 
-        private fun getTransitionName() = "cover_$section${binding.data!!.name}"
+        private fun getTransitionName(manga: Manga) = "cover_${section?.value}${manga.name}"
     }
 
-    fun submitData(section: String, topMangas: List<Manga>) {
-        Log.d("TEST", "data changed $section -- ${topMangas.size}")
+    fun submitData(topMangas: List<Manga>) {
         this.list = topMangas
-        this.section = section
         notifyDataSetChanged()
+    }
+
+    fun setSection(section: SectionRoute) {
+        this.section = section
     }
 
 }

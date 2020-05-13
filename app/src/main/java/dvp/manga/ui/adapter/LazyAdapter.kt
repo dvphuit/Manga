@@ -96,7 +96,7 @@ abstract class LazyAdapter<T : Entity>(private val recyclerView: RecyclerView?) 
 
     override fun getItemCount() = mList.size
 
-    private fun startLazyLoad() {
+    fun startLazyLoad() {
         Handler().post(insertLoading)
         endLoadMore = true
     }

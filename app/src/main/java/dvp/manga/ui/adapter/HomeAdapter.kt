@@ -1,5 +1,6 @@
 package dvp.manga.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +21,8 @@ import dvp.manga.data.model.Section
 import dvp.manga.data.model.SectionDetail
 import dvp.manga.data.model.Top
 import dvp.manga.ui.ResultData
-import dvp.manga.ui.home.HomeFragment
 import dvp.manga.ui.home.HomeFragmentDirections
+import dvp.manga.utils.SharedElementManager
 import kotlin.math.abs
 
 
@@ -107,11 +108,12 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
         }
 
         fun bind(mangaSection: MangaSection) {
+            mangaAdapter.setSection(mangaSection.section)
             title.text = mangaSection.section.value
             mangaSection.mangaList.observe(fragment) {
                 when (it) {
                     is ResultData.Success -> {
-                        mangaAdapter.submitData(mangaSection.section.value, it.value)
+                        mangaAdapter.submitData(it.value)
                         sectionDetail = SectionDetail(mangaSection.section, it.value)
                     }
                     //TODO handle view state
@@ -120,13 +122,13 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
             ViewCompat.setTransitionName(parent, getTransitionName())
             mangaList.post {
                 mangaList.layoutManager!!.onRestoreInstanceState(mangaSection.viewState)
-                if (HomeFragment.navSection == mangaSection.section.value)
-                    fragment.startPostponedEnterTransition()
+                Log.d("TEST","binding ${mangaSection.section}")
+                SharedElementManager.startSE(mangaSection.section)
             }
         }
 
         private fun gotoSection(view: View, sectionDetail: SectionDetail) {
-            HomeFragment.navSection = sectionDetail.section.value //set for exit shared element
+            SharedElementManager.setRoute(sectionDetail.section) //set for exit shared element
             val direction = HomeFragmentDirections.gotoSection(sectionDetail)
             val extras = FragmentNavigatorExtras(
                 parent to getTransitionName()

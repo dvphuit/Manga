@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import dvp.manga.MainActivity
 
 
-abstract class BaseFragment: Fragment() {
+abstract class BaseFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
@@ -15,5 +15,10 @@ abstract class BaseFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as MainActivity).hideBotBar()
+    }
+
+    fun backPressed() {
+        if (activity is MainActivity)
+            (activity as MainActivity).onBackPressed()
     }
 }

@@ -11,12 +11,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import dvp.manga.R
 import dvp.manga.data.model.Manga
+import dvp.manga.data.model.SectionRoute
 import dvp.manga.databinding.ActivitySearchBinding
 import dvp.manga.ui.FetchResult
 import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
-import dvp.manga.utils.delayForSharedElement
+import dvp.manga.utils.SharedElementManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
@@ -44,14 +45,13 @@ class SearchFragment : BaseFragment() {
     ): View? {
         val binding = ActivitySearchBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        postponeEnterTransition()
+        SharedElementManager.postSE(this)
         return binding.apply {
-            mangaList2.delayForSharedElement(this@SearchFragment)
-            adapter = MangaAdapter(mangaList2, "search").apply {
+            SharedElementManager.startSE(mangaList2)
+            adapter = MangaAdapter(mangaList2, SectionRoute.SEARCH).apply {
                 subscribeUi(this)
                 registerLazyCallback { viewModel.loadMore() }
             }
-            mangaList2.delayForSharedElement(this@SearchFragment)
             mangaList2.adapter = adapter
             subscribeUi(adapter)
             searchView.doAfterTextChanged { searchFor(it.toString()) }

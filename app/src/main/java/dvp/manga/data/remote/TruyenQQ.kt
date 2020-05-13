@@ -15,33 +15,31 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
 
     private val url = "http://truyenqq.com"
 
-    val genresMap = mapOf(
-        "Action" to "$url/the-loai/action-26.html",
-        "Adventure" to "$url/the-loai/adventure-27.html",
-        "Comedy" to "$url/the-loai/comedy-28.html",
-        "Detective" to "$url/the-loai/detective-100.html",
-        "Drama" to "$url/the-loai/drama-29.html",
-        "Fantasy" to "$url/the-loai/fantasy-30.html",
-        "Isekai" to "$url/the-loai/isekai-85.html",
-        "Magic" to "$url/the-loai/magic-58.html",
-        "Psychological" to "$url/the-loai/psychological-40.html",
-        "Shounen" to "$url/the-loai/shounen-31.html",
-        "Sports" to "$url/the-loai/sports-57.html",
-        "Supernatural" to "$url/the-loai/supernatural-32.html",
-        "Webtoon" to "$url/the-loai/webtoon-55.html"
-    )
-
     init {
         routes[SectionRoute.LAST_UPDATE] = "truyen-moi-cap-nhat"
         routes[SectionRoute.FAVOURITE] = "truyen-yeu-thich"
         routes[SectionRoute.FOR_BOY] = "truyen-con-trai"
         routes[SectionRoute.FOR_GIRL] = "truyen-con-gai"
         routes[SectionRoute.NEW_MANGA] = "truyen-tranh-moi"
+
+        routes[SectionRoute.ACTION] = "the-loai/action-26"
+        routes[SectionRoute.ADVENTURE] = "the-loai/adventure-27"
+        routes[SectionRoute.COMEDY] = "the-loai/comedy-28"
+        routes[SectionRoute.DETECTIVE] = "the-loai/detective-100"
+        routes[SectionRoute.DRAMA] = "the-loai/drama-29"
+        routes[SectionRoute.FANTASY] = "the-loai/fantasy-30"
+        routes[SectionRoute.ISEKAI] = "the-loai/isekai-85"
+        routes[SectionRoute.MAGIC] = "the-loai/magic-58"
+        routes[SectionRoute.PSYCHOLOGICAL] = "the-loai/psychological-40"
+        routes[SectionRoute.SHOUNEN] = "the-loai/shounen-31"
+        routes[SectionRoute.SPORT] = "the-loai/sports-57"
+        routes[SectionRoute.SUPER_NATURAL] = "the-loai/supernatural-32"
+        routes[SectionRoute.WEBTOON] = "the-loai/webtoon-55"
     }
 
     private fun buildUrl(name: SectionRoute?, page: Int = 1, country: String = "country=4") = "$url/${routes[name]}/trang-$page?$country"
 
-    override suspend fun getMangas(section: SectionRoute?, page: Int) : ResultData<List<Manga>>{
+    override suspend fun getMangas(section: SectionRoute?, page: Int): ResultData<List<Manga>> {
         return parseData(
             url = buildUrl(section, page),
             selector = "story-item",

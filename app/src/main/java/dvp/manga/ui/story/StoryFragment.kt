@@ -13,6 +13,7 @@ import dvp.manga.ui.ResultData
 import dvp.manga.ui.adapter.ChapContentAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
+import dvp.manga.utils.SharedElementManager
 
 
 class StoryFragment : BaseFragment() {
@@ -27,7 +28,7 @@ class StoryFragment : BaseFragment() {
         val binding = StoryFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
         binding.root.elevation = 20f
-        postponeEnterTransition()
+        SharedElementManager.postSE(this)
         return binding.apply {
             storyList.setHasFixedSize(true)
             storyList.adapter = ChapContentAdapter().apply {
@@ -41,7 +42,7 @@ class StoryFragment : BaseFragment() {
             when(it){
                 is ResultData.Success -> {
                     adapter.submitList(it.value)
-                    startPostponedEnterTransition()
+                    SharedElementManager.startSE()
                 }
                 is ResultData.Failure -> {
                     Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()

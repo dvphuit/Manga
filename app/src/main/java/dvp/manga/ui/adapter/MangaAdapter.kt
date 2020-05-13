@@ -10,11 +10,14 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Manga
+import dvp.manga.data.model.SectionRoute
 import dvp.manga.databinding.MangaItemFullBinding
+import dvp.manga.ui.explore.ExploreFragmentDirections
 import dvp.manga.ui.home.HomeFragmentDirections
+import dvp.manga.utils.SharedElementManager
 
 
-class MangaAdapter(recyclerView: RecyclerView?, val section: String) : LazyAdapter<Manga>(recyclerView) {
+class MangaAdapter(recyclerView: RecyclerView?, val section: SectionRoute) : LazyAdapter<Manga>(recyclerView) {
 
     override fun implCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return MangaHolder(DataBindingUtil.inflate(LayoutInflater.from(parent!!.context), R.layout.manga_item_full, parent, false))
@@ -39,20 +42,27 @@ class MangaAdapter(recyclerView: RecyclerView?, val section: String) : LazyAdapt
         fun bind(manga: Manga) {
             with(binding) {
                 data = manga
-                ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName())
+                ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName(manga))
                 executePendingBindings()
+                SharedElementManager.startSE(adapterPosition)
             }
         }
 
         private fun gotoDetail(manga: Manga, parent: View, cover: View) {
-            val direction = HomeFragmentDirections.actionMangaToDetail(manga, section)
+            val direction = when (section.ordinal) {
+                //TODO fix hardcode
+                0, 1, 2, 3, 4 -> HomeFragmentDirections.actionMangaToDetail(manga, section.value)
+                else -> ExploreFragmentDirections.actionMangaToDetail(manga, section.value)
+            }
             val extras = FragmentNavigatorExtras(
-                cover to getTransitionName()
+                cover to getTransitionName(manga)
             )
             parent.findNavController().navigate(direction, extras)
+
+            SharedElementManager.setElementInfo(getTransitionName(manga), adapterPosition)
         }
 
-        private fun getTransitionName() = "cover_$section${binding.data!!.name}"
+        private fun getTransitionName(manga: Manga) = "cover_${section.value}${manga.name}"
     }
 
     override fun getItemCount() = mList.size

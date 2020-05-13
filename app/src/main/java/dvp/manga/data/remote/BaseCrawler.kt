@@ -19,6 +19,7 @@ import org.jsoup.select.Elements
 abstract class BaseCrawler {
 
     val routes = mutableMapOf<SectionRoute, String>()
+    val genresMap = mutableMapOf<String, String>()
 
     abstract suspend fun getTopManga(): ResultData<List<Manga>>
     abstract suspend fun getMangaLastUpdated(): ResultData<List<Manga>>
@@ -43,7 +44,7 @@ abstract class BaseCrawler {
     }
 
     protected suspend fun <T> parseData(url: String, selector: String, parser: (Elements) -> T): ResultData<T> {
-        Log.d("TEST", "request $url")
+        Log.d(this.javaClass.simpleName, "request $url")
         return when (val result = getBody(url)) {
             is ResultData.Success -> {
                 val elements = result.value.getElementsByClass(selector)
