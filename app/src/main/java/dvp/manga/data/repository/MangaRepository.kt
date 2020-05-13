@@ -8,14 +8,6 @@ import dvp.manga.ui.responseLiveData
 
 class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDao) {
 
-    fun getMangas(page: Int) = responseLiveData(
-        dbQuery = { dao.getMangasBySlug("-") },
-        netCall = { crawler.getMangas(page) },
-        saveNetCall = { list ->
-            dao.upsert(list)
-            dao.updateSlug("-", list.map { it.id })
-        })
-
     fun getMangas(section: SectionRoute, page: Int = 1) = responseLiveData(
         dbQuery = { dao.getMangasBySlug(section.name) },
         netCall = { crawler.getMangas(section, page) },

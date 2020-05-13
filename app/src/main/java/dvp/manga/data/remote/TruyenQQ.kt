@@ -55,46 +55,6 @@ class TruyenQQ(private val ctx: Context) : BaseCrawler() {
         )
     }
 
-    override suspend fun getMangaFavourite(): ResultData<List<Manga>> {
-        return parseData(
-            url = "$url/truyen-yeu-thich.html?country=4",
-            selector = "story-item",
-            parser = { parseManga(it) }
-        )
-    }
-
-    override suspend fun getMangaForBoy(): ResultData<List<Manga>> {
-        return parseData(
-            url = "$url/truyen-con-trai.html?country=4",
-            selector = "story-item",
-            parser = { parseManga(it) }
-        )
-    }
-
-    override suspend fun getMangaForGirl(): ResultData<List<Manga>> {
-        return parseData(
-            url = "$url/truyen-con-gai.html?country=4",
-            selector = "story-item",
-            parser = { parseManga(it) }
-        )
-    }
-
-    override suspend fun getMangaLastUpdated(): ResultData<List<Manga>> {
-        return parseData(
-            url = "$url/truyen-moi-cap-nhat.html?country=4",
-            selector = "story-item",
-            parser = { parseManga(it) }
-        )
-    }
-
-    override suspend fun getMangas(page: Int): ResultData<List<Manga>> {
-        return parseData(
-            url = "$url/truyen-con-trai/trang-$page.html?country=4",
-            selector = "story-item",
-            parser = { parseManga(it) }
-        )
-    }
-
     override suspend fun getChapters(mangaId: Int, href: String): ResultData<List<Chapter>> {
         return parseData(
             url = href,

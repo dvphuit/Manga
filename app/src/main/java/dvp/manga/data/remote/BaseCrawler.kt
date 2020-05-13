@@ -19,14 +19,9 @@ import org.jsoup.select.Elements
 abstract class BaseCrawler {
 
     val routes = mutableMapOf<SectionRoute, String>()
-    val genresMap = mutableMapOf<String, String>()
 
     abstract suspend fun getTopManga(): ResultData<List<Manga>>
-    abstract suspend fun getMangaLastUpdated(): ResultData<List<Manga>>
-    abstract suspend fun getMangaFavourite(): ResultData<List<Manga>>
-    abstract suspend fun getMangaForBoy(): ResultData<List<Manga>>
-    abstract suspend fun getMangaForGirl(): ResultData<List<Manga>>
-    abstract suspend fun getMangas(page: Int): ResultData<List<Manga>>
+
     abstract suspend fun getMangas(section: SectionRoute?, page: Int): ResultData<List<Manga>>
     abstract suspend fun getChapters(mangaId: Int, href: String): ResultData<List<Chapter>>
     abstract suspend fun getChapContent(href: String): ResultData<List<ChapContent>>
