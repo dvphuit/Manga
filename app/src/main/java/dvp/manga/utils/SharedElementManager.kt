@@ -1,5 +1,6 @@
 package dvp.manga.utils
 
+import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.data.model.SectionRoute
@@ -30,21 +31,29 @@ object SharedElementManager {
         }
     }
 
-    fun startSE(position: Int) {
-        if (position == elementPosition)
+    fun startSE(name: String, position: Int) {
+        if (name == transitionName && position == elementPosition) {
             startSE()
+            elementPosition = -1
+            transitionName = ""
+        }
     }
 
     fun startSE(route: SectionRoute) {
-        if (route == sectionRoute)
+        if (route == sectionRoute) {
             startSE()
+            sectionRoute = null
+        }
     }
 
     fun startSE(recyclerView: RecyclerView) {
-        recyclerView.viewTreeObserver.addOnPreDrawListener {
-            startSE()
-            true
-        }
+        recyclerView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                startSE()
+                recyclerView.viewTreeObserver.removeOnPreDrawListener(this)
+                return true
+            }
+        })
     }
 
     fun startSE() {

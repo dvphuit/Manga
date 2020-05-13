@@ -46,10 +46,7 @@ class SectionFragment : BaseFragment() {
         return binding.apply {
             ViewCompat.setTransitionName(parent, "parent_${args.sectionDetail.section}")
             sectionTitle.text = args.sectionDetail.section.value
-            mangaList.viewTreeObserver.addOnPreDrawListener {
-                SharedElementManager.startSE()
-                true
-            }
+            SharedElementManager.startSE(mangaList)
             mangaList.adapter = MangaAdapter(mangaList, args.sectionDetail.section).apply {
                 viewModel.initData(args.sectionDetail.mangaList)
                 registerLazyCallback { viewModel.loadMore() }

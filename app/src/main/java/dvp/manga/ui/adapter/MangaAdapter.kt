@@ -44,7 +44,7 @@ class MangaAdapter(recyclerView: RecyclerView?, val section: SectionRoute) : Laz
                 data = manga
                 ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName(manga))
                 executePendingBindings()
-                SharedElementManager.startSE(adapterPosition)
+                SharedElementManager.startSE(getTransitionName(manga), adapterPosition)
             }
         }
 

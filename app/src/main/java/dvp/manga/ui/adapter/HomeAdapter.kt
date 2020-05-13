@@ -1,6 +1,5 @@
 package dvp.manga.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,7 +74,6 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
 
         fun bind(top: Top) {
             top.mangaList.observe(fragment) {
-
                 when (it) {
                     is ResultData.Success -> {
                         topMangaAdapter.submitData(it.value)
@@ -84,7 +82,6 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
                     //TODO handle view state
                 }
             }
-
         }
     }
 
@@ -122,7 +119,6 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
             ViewCompat.setTransitionName(parent, getTransitionName())
             mangaList.post {
                 mangaList.layoutManager!!.onRestoreInstanceState(mangaSection.viewState)
-                Log.d("TEST","binding ${mangaSection.section}")
                 SharedElementManager.startSE(mangaSection.section)
             }
         }
