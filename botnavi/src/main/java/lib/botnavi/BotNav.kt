@@ -15,7 +15,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -180,6 +179,20 @@ class BotNav(context: Context, attrs: AttributeSet) : ConstraintLayout(context, 
     fun setSelectedItem(id: Int) {
         selectedItemId = id
         onClick(findViewById(id))
+    }
+
+    fun setSelectedId(id: Int) {
+        selectedPosition = this.indexOfChild(findViewById(id))
+        unHighlight(prePosition)
+        if (prePosition == selectedPosition) {
+            highlight(selectedPosition)
+        }
+        if (prePosition != selectedPosition) {
+            selectedItemId = id
+            prePosition = selectedPosition
+            highlight(selectedPosition)
+            overShotTransition(this@BotNav)
+        }
     }
 
     private var listener: TabSelectedListener? = null
