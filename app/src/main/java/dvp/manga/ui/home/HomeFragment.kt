@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.MainActivity
 import dvp.manga.R
@@ -18,11 +15,13 @@ import dvp.manga.data.model.SectionRoute
 import dvp.manga.data.model.Top
 import dvp.manga.databinding.HomeFragmentBinding
 import dvp.manga.ui.adapter.HomeAdapter
+import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
+import dvp.manga.utils.NavManager
 import dvp.manga.utils.SharedElementManager
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
 
     private lateinit var binding: HomeFragmentBinding
     private val viewModel: HomeViewModel by viewModels {
@@ -40,7 +39,7 @@ class HomeFragment : Fragment() {
         return binding.apply {
             searchback.setOnClickListener {
                 SharedElementManager.setRoute(SectionRoute.SEARCH)
-                gotoSearch(searchback, searchBar)
+                NavManager.gotoSearch(searchback, searchBar)
             }
             recyclerView.setHasFixedSize(true)
             recyclerView.adapter = HomeAdapter(this@HomeFragment).apply {
@@ -75,15 +74,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun gotoSearch(vararg views: View) {
-        val extras = FragmentNavigatorExtras(
-            views[0] to views[0].transitionName,
-            views[1] to views[1].transitionName
-        )
-        val direction = HomeFragmentDirections.gotoSearch()
-        requireView().findNavController().navigate(direction, extras)
-    }
-
     override fun onPause() {
         super.onPause()
         saveSectionsState()
@@ -103,4 +93,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+    override val withoutBotNav: Boolean = false
 }

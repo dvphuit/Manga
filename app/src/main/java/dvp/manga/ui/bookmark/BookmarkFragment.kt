@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dvp.manga.MainActivity
 import dvp.manga.R
+import dvp.manga.ui.base.BaseFragment
 
 /**
  * A simple [Fragment] subclass.
  */
-class BookmarkFragment : Fragment() {
+class BookmarkFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,8 +22,5 @@ class BookmarkFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_bookmark, container, false)
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as MainActivity).showBotBar()
-    }
+    override val withoutBotNav: Boolean = false
 }

@@ -88,4 +88,6 @@ class SearchFragment : BaseFragment() {
     }
 
 
+    override val withoutBotNav: Boolean = true
+
 }

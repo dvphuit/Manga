@@ -1,18 +1,15 @@
 package dvp.manga.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.data.model.SectionRoute
 import dvp.manga.databinding.MangaItemFullBinding
-import dvp.manga.ui.home.HomeFragmentDirections
+import dvp.manga.utils.NavManager
 import dvp.manga.utils.SharedElementManager
 
 
@@ -33,8 +30,9 @@ class MangaAdapter(recyclerView: RecyclerView?, val section: SectionRoute) : Laz
 
     inner class MangaHolder(private val binding: MangaItemFullBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.setClickListener { view ->
-                gotoDetail(binding.data!!, view, binding.imgWrapper)
+            binding.setClickListener {
+                SharedElementManager.setElementInfo(getTransitionName(binding.data!!), adapterPosition)
+                NavManager.gotoMangaDetail(section.value, binding.data!!, binding.imgWrapper)
             }
         }
 
@@ -45,16 +43,6 @@ class MangaAdapter(recyclerView: RecyclerView?, val section: SectionRoute) : Laz
                 executePendingBindings()
                 SharedElementManager.startSE(getTransitionName(manga), adapterPosition)
             }
-        }
-
-        private fun gotoDetail(manga: Manga, parent: View, cover: View) {
-            val direction = HomeFragmentDirections.actionMangaToDetail(manga, section.value)
-            val extras = FragmentNavigatorExtras(
-                cover to getTransitionName(manga)
-            )
-            parent.findNavController().navigate(direction, extras)
-
-            SharedElementManager.setElementInfo(getTransitionName(manga), adapterPosition)
         }
 
         private fun getTransitionName(manga: Manga) = "cover_${section.value}${manga.name}"

@@ -72,4 +72,6 @@ class SectionFragment : BaseFragment() {
         }
     }
 
+
+    override val withoutBotNav: Boolean = true
 }

@@ -1,17 +1,15 @@
 package dvp.manga.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Chapter
 import dvp.manga.databinding.ChapterItemBinding
-import dvp.manga.ui.detail.MangaDetailFragmentDirections
+import dvp.manga.utils.NavManager
 
 /**
  * @author dvphu on 19,March,2020
@@ -41,7 +39,7 @@ class ChapAdapter : ListAdapter<Chapter, ChapAdapter.ViewHolder>(ChapterDiffCall
 
         init {
             binding.setClickListener {
-                gotoChapContent(binding.data!!, it)
+                NavManager.gotoReadChap(binding.data!!)
             }
         }
 
@@ -51,13 +49,7 @@ class ChapAdapter : ListAdapter<Chapter, ChapAdapter.ViewHolder>(ChapterDiffCall
                 executePendingBindings()
             }
         }
-
-        private fun gotoChapContent(chap: Chapter, view: View) {
-            val direction = MangaDetailFragmentDirections.actionChapToStory(chap)
-            view.findNavController().navigate(direction)
-        }
     }
-
 
 }
 

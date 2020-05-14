@@ -1,18 +1,15 @@
 package dvp.manga.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.data.model.SectionRoute
 import dvp.manga.databinding.MangaItemBinding
-import dvp.manga.ui.home.HomeFragmentDirections
+import dvp.manga.utils.NavManager
 import dvp.manga.utils.SharedElementManager
 
 /**
@@ -38,7 +35,8 @@ class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>
 
         init {
             binding.setClickListener {
-                gotoDetail(binding.data!!, it, binding.imgWrapper)
+                SharedElementManager.setRoute(section!!)
+                NavManager.gotoMangaDetail(section!!.value, binding.data!!, binding.imgWrapper)
             }
         }
 
@@ -48,15 +46,6 @@ class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>
                 ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName(value))
                 executePendingBindings()
             }
-        }
-
-        private fun gotoDetail(manga: Manga, parent: View, cover: View) {
-            SharedElementManager.setRoute(section!!)
-            val direction = HomeFragmentDirections.actionMangaToDetail(manga, section!!.value)
-            val extras = FragmentNavigatorExtras(
-                cover to getTransitionName(manga)
-            )
-            parent.findNavController().navigate(direction, extras)
         }
 
         private fun getTransitionName(manga: Manga) = "cover_${section?.value}${manga.name}"

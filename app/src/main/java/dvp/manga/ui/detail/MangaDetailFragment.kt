@@ -92,4 +92,5 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
         }
     }
 
+    override val withoutBotNav: Boolean = true
 }

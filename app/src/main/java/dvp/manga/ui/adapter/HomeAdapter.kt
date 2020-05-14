@@ -7,8 +7,6 @@ import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -20,7 +18,7 @@ import dvp.manga.data.model.Section
 import dvp.manga.data.model.SectionDetail
 import dvp.manga.data.model.Top
 import dvp.manga.ui.ResultData
-import dvp.manga.ui.home.HomeFragmentDirections
+import dvp.manga.utils.NavManager
 import dvp.manga.utils.SharedElementManager
 import kotlin.math.abs
 
@@ -100,7 +98,8 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
                 setRecycledViewPool(viewPool)
             }
             parent.setOnClickListener {
-                gotoSection(it, sectionDetail)
+                NavManager.gotoSection(sectionDetail, it)
+                SharedElementManager.setRoute(sectionDetail.section)
             }
         }
 
@@ -121,15 +120,6 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
                 mangaList.layoutManager!!.onRestoreInstanceState(mangaSection.viewState)
                 SharedElementManager.startSE(mangaSection.section)
             }
-        }
-
-        private fun gotoSection(view: View, sectionDetail: SectionDetail) {
-            SharedElementManager.setRoute(sectionDetail.section) //set for exit shared element
-            val direction = HomeFragmentDirections.gotoSection(sectionDetail)
-            val extras = FragmentNavigatorExtras(
-                parent to getTransitionName()
-            )
-            view.findNavController().navigate(direction, extras)
         }
 
         private fun getTransitionName() = "parent_${(list[position] as MangaSection).section}"

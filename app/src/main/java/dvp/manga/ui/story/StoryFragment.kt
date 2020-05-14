@@ -38,8 +38,8 @@ class StoryFragment : BaseFragment() {
     }
 
     private fun subscribeUi(adapter: ChapContentAdapter) {
-        viewModel.contents.observe(viewLifecycleOwner){
-            when(it){
+        viewModel.contents.observe(viewLifecycleOwner) {
+            when (it) {
                 is ResultData.Success -> {
                     adapter.submitList(it.value)
                     SharedElementManager.startSE()
@@ -47,11 +47,12 @@ class StoryFragment : BaseFragment() {
                 is ResultData.Failure -> {
                     Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
                 }
-                is ResultData.Loading ->{
+                is ResultData.Loading -> {
                     Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
+    override val withoutBotNav: Boolean = true
 }
