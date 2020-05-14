@@ -1,5 +1,6 @@
 package dvp.manga.utils
 
+import android.util.Log
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -26,12 +27,16 @@ object SharedElementManager {
     }
 
     fun postSE(fragment: Fragment) {
-        currentFragment = fragment.also {
-            it.postponeEnterTransition()
+        if ((transitionName != "" && elementPosition != -1) || sectionRoute != null) {
+            Log.d("TEST", "post $transitionName -- $elementPosition -- $sectionRoute")
+            currentFragment = fragment.also {
+                it.postponeEnterTransition()
+            }
         }
     }
 
     fun startSE(name: String, position: Int) {
+        Log.d("TEST", "start route $name - $position")
         if (name == transitionName && position == elementPosition) {
             startSE()
             elementPosition = -1
@@ -40,6 +45,7 @@ object SharedElementManager {
     }
 
     fun startSE(route: SectionRoute) {
+        Log.d("TEST", "start route $route")
         if (route == sectionRoute) {
             startSE()
             sectionRoute = null
