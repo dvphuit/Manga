@@ -85,4 +85,33 @@
             app:popEnterAnim="@anim/scale_up" />
     </fragment>
 
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="dvp.manga.ui.explore.ExploreFragment"
+        android:label="fragment_explore"
+        tools:layout="@layout/fragment_explore" >
+        <action
+            android:id="@+id/action_manga_to_detail"
+            app:destination="@id/mangaDetail"
+            app:exitAnim="@anim/scale_down"
+            app:popEnterAnim="@anim/scale_up"/>
+
+        <action
+            android:id="@+id/goto_search"
+            app:destination="@id/search_fragment"
+            app:exitAnim="@anim/stay" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="dvp.manga.ui.bookmark.BookmarkFragment"
+        android:label="fragment_bookmark"
+        tools:layout="@layout/fragment_bookmark" />
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="dvp.manga.ui.setting.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+
 </navigation>

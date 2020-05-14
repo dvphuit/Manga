@@ -12,7 +12,6 @@ import dvp.manga.R
 import dvp.manga.data.model.Manga
 import dvp.manga.data.model.SectionRoute
 import dvp.manga.databinding.MangaItemFullBinding
-import dvp.manga.ui.explore.ExploreFragmentDirections
 import dvp.manga.ui.home.HomeFragmentDirections
 import dvp.manga.utils.SharedElementManager
 
@@ -49,11 +48,7 @@ class MangaAdapter(recyclerView: RecyclerView?, val section: SectionRoute) : Laz
         }
 
         private fun gotoDetail(manga: Manga, parent: View, cover: View) {
-            val direction = when (section.ordinal) {
-                //TODO fix hardcode
-                0, 1, 2, 3, 4 -> HomeFragmentDirections.actionMangaToDetail(manga, section.value)
-                else -> ExploreFragmentDirections.actionMangaToDetail(manga, section.value)
-            }
+            val direction = HomeFragmentDirections.actionMangaToDetail(manga, section.value)
             val extras = FragmentNavigatorExtras(
                 cover to getTransitionName(manga)
             )

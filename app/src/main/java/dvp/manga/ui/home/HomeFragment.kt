@@ -81,7 +81,7 @@ class HomeFragment : Fragment() {
             views[1] to views[1].transitionName
         )
         val direction = HomeFragmentDirections.gotoSearch()
-        views[0].findNavController().navigate(direction, extras)
+        requireView().findNavController().navigate(direction, extras)
     }
 
     override fun onPause() {

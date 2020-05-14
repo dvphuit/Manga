@@ -1,14 +1,11 @@
 package dvp.manga
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.animation.TranslateAnimation
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import androidx.lifecycle.LiveData
-import androidx.navigation.NavController
-import dvp.manga.utils.gone
-import dvp.manga.utils.setupWithNavController
-import dvp.manga.utils.visible
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import dvp.manga.ui.navigation.TabManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -16,63 +13,71 @@ import kotlinx.android.synthetic.main.activity_main.*
  * @author dvphu on 10,March,2020
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+    BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private var currentNavController: LiveData<NavController>? = null
+    fun hideBotBar() {
+//        if (!bot_nav.isVisible) return
+//
+//        bot_nav.apply {
+//            val animation = TranslateAnimation(0f, 0f, 0f, bot_nav.height.toFloat()).apply {
+//                duration = 500
+//                fillAfter = true
+//            }
+//            startAnimation(animation)
+//            gone()
+//        }
+    }
+
+    fun showBotBar() {
+//        if (bot_nav.isVisible) return
+//
+//        bot_nav.apply {
+//            val animation = TranslateAnimation(0f, 0f, bot_nav.height.toFloat(), 0f).apply {
+//                duration = 500
+//                fillAfter = true
+//            }
+//            startAnimation(animation)
+//            visible()
+//        }
+    }
+
+
+    private val tabManager: TabManager by lazy { TabManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(this)
+
         if (savedInstanceState == null) {
-            setupBottomNavigationBar()
+            tabManager.currentController = tabManager.navHomeController
         }
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState!!)
-        setupBottomNavigationBar()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        tabManager.onSaveInstanceState(outState)
     }
 
-    private fun setupBottomNavigationBar() {
-        val navGraphIds = listOf(
-            R.navigation.home_nav,
-            R.navigation.explore_nav,
-            R.navigation.bookmark_nav,
-            R.navigation.setting_nav
-        )
-        currentNavController = bot_nav.setupWithNavController(
-            navGraphIds = navGraphIds,
-            fragmentManager = supportFragmentManager,
-            containerId = R.id.nav_host_container,
-            intent = intent
-        )
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        tabManager.onRestoreInstanceState(savedInstanceState)
     }
 
-    override fun onSupportNavigateUp() = currentNavController?.value?.navigateUp() ?: false
-
-    fun hideBotBar() {
-        if (!bot_nav.isVisible) return
-
-        bot_nav.apply {
-            val animation = TranslateAnimation(0f, 0f, 0f, bot_nav.height.toFloat()).apply {
-                duration = 500
-                fillAfter = true
-            }
-            startAnimation(animation)
-            gone()
-        }
+    override fun supportNavigateUpTo(upIntent: Intent) {
+        tabManager.supportNavigateUpTo(upIntent)
     }
 
-    fun showBotBar() {
-        if (bot_nav.isVisible) return
+    override fun onBackPressed() {
+        tabManager.onBackPressed()
+    }
 
-        bot_nav.apply {
-            val animation = TranslateAnimation(0f, 0f, bot_nav.height.toFloat(), 0f).apply {
-                duration = 500
-                fillAfter = true
-            }
-            startAnimation(animation)
-            visible()
-        }
+    override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
+        tabManager.switchTab(menuItem.itemId)
+        return true
     }
 }

@@ -10,4 +10,25 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
+    <style name="GenreTabStyle" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabIndicatorHeight">4dp</item>
+        <item name="tabPaddingStart">3dp</item>
+        <item name="tabPaddingEnd">3dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabSelectedTextColor">@color/colorAccent</item>
+        <item name="tabTextAppearance">@style/GenreTabText</item>
+    </style>
+
+    <style name="GenreTabText">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#858585</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="fontFamily">@font/ubuntu_medium</item>
+    </style>
+
 </resources>

@@ -15,6 +15,11 @@
             app:destination="@id/mangaDetail"
             app:exitAnim="@anim/scale_down"
             app:popEnterAnim="@anim/scale_up"/>
+
+        <action
+            android:id="@+id/goto_search"
+            app:destination="@id/search_fragment"
+            app:exitAnim="@anim/stay" />
     </fragment>
 
     <fragment
@@ -45,5 +50,17 @@
         <argument
             android:name="chap"
             app:argType="dvp.manga.data.model.Chapter" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/search_fragment"
+        android:name="dvp.manga.ui.search.SearchFragment"
+        android:label="Search Manga"
+        tools:layout="@layout/activity_search">
+        <action
+            android:id="@+id/action_manga_to_detail"
+            app:destination="@id/mangaDetail"
+            app:exitAnim="@anim/scale_down"
+            app:popEnterAnim="@anim/scale_up" />
     </fragment>
 </navigation>
