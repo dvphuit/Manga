@@ -174,20 +174,18 @@
 
 
         <com.google.android.material.tabs.TabLayout
-            android:transitionGroup="false"
+            android:transitionGroup="true"
             android:id="@+id/tab_chap"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="@color/colorPrimary"
             app:layout_constraintTop_toBottomOf="@id/description"
             app:tabMode="scrollable" />
 
         <androidx.viewpager2.widget.ViewPager2
-            android:transitionGroup="false"
+            android:transitionGroup="true"
             android:id="@+id/pager_chap"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tab_chap" />
 

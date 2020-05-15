@@ -34,6 +34,7 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_enter)
+        returnTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_return)
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.detail_shared_elements)
     }
 

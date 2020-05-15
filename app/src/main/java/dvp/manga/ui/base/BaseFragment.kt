@@ -29,5 +29,10 @@ abstract class BaseFragment : Fragment() {
             (activity as MainActivity).onBackPressed()
     }
 
+    override fun onPause() {
+        super.onPause()
+//        requireView().translationZ = -10f
+    }
+
     abstract val withoutBotNav: Boolean
 }
