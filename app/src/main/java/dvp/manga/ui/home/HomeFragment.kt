@@ -39,7 +39,7 @@ class HomeFragment : BaseFragment() {
         return binding.apply {
             searchback.setOnClickListener {
                 SharedElementManager.setRoute(SectionRoute.SEARCH)
-                NavManager.gotoSearch(searchback, searchBar)
+                NavManager.gotoSearch(searchback, searchBar, toolbar)
             }
             recyclerView.setHasFixedSize(true)
             recyclerView.adapter = HomeAdapter(this@HomeFragment).apply {

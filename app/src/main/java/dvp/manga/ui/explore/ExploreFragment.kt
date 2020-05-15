@@ -24,7 +24,7 @@ class ExploreFragment : BaseFragment() {
         return binding.apply {
             searchback.setOnClickListener {
                 SharedElementManager.setRoute(SectionRoute.SEARCH)
-                NavManager.gotoSearch(searchBar, searchback)
+                NavManager.gotoSearch(searchBar, searchback, toolbar)
             }
             val adapter = GenreMangaPagerAdapter(childFragmentManager, lifecycle)
             pagerGenre.adapter = adapter
