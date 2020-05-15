@@ -11,50 +11,7 @@
         android:orientation="vertical"
         tools:context=".ui.home.HomeFragment">
 
-        <LinearLayout
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/colorPrimary"
-            android:transitionName="scrim"
-            android:elevation="2dp">
-
-            <TextView
-                android:id="@+id/titile"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="16dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/ubuntu_medium"
-                android:text="Manga"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <FrameLayout
-                android:id="@+id/search_bar"
-                android:layout_width="@dimen/search_button_width"
-                android:layout_height="@dimen/search_bar_height"
-                android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="4dp"
-                android:background="@drawable/bg_bt_search"
-                android:elevation="2dp"
-                android:transitionName="@string/transition_search_bar">
-
-                <ImageButton
-                    android:id="@+id/searchback"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="?android:selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_search_24dp"
-                    android:tint="#fff"
-                    android:transitionName="@string/transition_search_back" />
-
-            </FrameLayout>
-
-        </LinearLayout>
+        <include android:id="@+id/toolbar" layout="@layout/search_bar"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"

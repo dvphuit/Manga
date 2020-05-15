@@ -2,4 +2,5 @@
 <resources>
     <string name="transition_search_back" translatable="false">transition_search_back</string>
     <string name="transition_search_bar" translatable="false">transition_search_bar</string>
+    <string name="transition_scrim">transition_scrim</string>
 </resources>

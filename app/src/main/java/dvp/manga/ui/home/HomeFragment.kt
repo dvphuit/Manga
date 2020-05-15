@@ -19,6 +19,7 @@ import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 import dvp.manga.utils.NavManager
 import dvp.manga.utils.SharedElementManager
+import kotlinx.android.synthetic.main.search_bar.view.*
 
 
 class HomeFragment : BaseFragment() {
@@ -37,10 +38,7 @@ class HomeFragment : BaseFragment() {
         SharedElementManager.startSE(SectionRoute.SEARCH)
 
         return binding.apply {
-            searchback.setOnClickListener {
-                SharedElementManager.setRoute(SectionRoute.SEARCH)
-                NavManager.gotoSearch(searchback, searchBar, toolbar)
-            }
+            initSearchBar(binding)
             recyclerView.setHasFixedSize(true)
             recyclerView.adapter = HomeAdapter(this@HomeFragment).apply {
                 submitData(prepareSection())
@@ -60,6 +58,15 @@ class HomeFragment : BaseFragment() {
         }.root
     }
 
+    private fun initSearchBar(binding: HomeFragmentBinding){
+        with(binding.toolbar){
+            title.text = "Home Page"
+            search_back.setOnClickListener {
+                SharedElementManager.setRoute(SectionRoute.SEARCH)
+                NavManager.gotoSearch(search_back, search_bar, binding.toolbar)
+            }
+        }
+    }
     //TODO: will fix hardcode
     private fun prepareSection(): List<Section> {
         viewModel.isInitialized = true

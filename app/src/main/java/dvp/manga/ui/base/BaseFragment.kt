@@ -31,7 +31,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-//        requireView().translationZ = -10f
+        requireView().translationZ = -999f
     }
 
     abstract val withoutBotNav: Boolean

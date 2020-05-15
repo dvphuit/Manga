@@ -11,6 +11,7 @@ import dvp.manga.ui.adapter.GenreMangaPagerAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.NavManager
 import dvp.manga.utils.SharedElementManager
+import kotlinx.android.synthetic.main.search_bar.view.*
 
 
 class ExploreFragment : BaseFragment() {
@@ -22,10 +23,7 @@ class ExploreFragment : BaseFragment() {
         SharedElementManager.startSE(SectionRoute.SEARCH)
 
         return binding.apply {
-            searchback.setOnClickListener {
-                SharedElementManager.setRoute(SectionRoute.SEARCH)
-                NavManager.gotoSearch(searchBar, searchback, toolbar)
-            }
+            initSearchBar(this)
             val adapter = GenreMangaPagerAdapter(childFragmentManager, lifecycle)
             pagerGenre.adapter = adapter
             TabLayoutMediator(
@@ -34,6 +32,16 @@ class ExploreFragment : BaseFragment() {
                 TabLayoutMediator.TabConfigurationStrategy { tab, position -> tab.text = adapter.getTitle(position) }
             ).attach()
         }.root
+    }
+
+    private fun initSearchBar(binding: FragmentExploreBinding){
+        with(binding.toolbar){
+            title.text = "Explore"
+            search_back.setOnClickListener {
+                SharedElementManager.setRoute(SectionRoute.SEARCH)
+                NavManager.gotoSearch(search_back, search_bar, this)
+            }
+        }
     }
 
     override val withoutBotNav: Boolean = false

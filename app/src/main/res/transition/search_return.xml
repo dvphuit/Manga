@@ -20,12 +20,11 @@
         <target android:excludeId="@id/toolbar" />
     </targets>
 
-
     <fade android:duration="400" android:fadingMode="fade_in">
         <targets>
             <target android:targetId="@android:id/navigationBarBackground" />
             <target android:targetId="@android:id/statusBarBackground" />
-            <target android:targetId="@id/titile" />
+            <target android:targetId="@id/title" />
         </targets>
     </fade>
 

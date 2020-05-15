@@ -16,7 +16,7 @@
             android:id="@+id/scrim"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:transitionName="scrim"
+            android:transitionName="@string/transition_scrim"
             android:background="@color/scrim" />
 
         <LinearLayout
