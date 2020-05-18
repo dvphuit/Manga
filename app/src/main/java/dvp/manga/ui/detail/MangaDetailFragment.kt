@@ -44,6 +44,7 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
         SharedElementManager.postSE(this)
         return binding.apply {
             ViewCompat.setTransitionName(imgWrapper, "cover_${args.section}${args.manga.name}")
+            ViewCompat.setTransitionName(mangaDetail, "scrim_${args.section}${args.manga.name}")
             data = viewModel.manga
             //set up viewpager for chapters
             val adapter = ChapPageAdapter().apply { subscribeUi(this) }

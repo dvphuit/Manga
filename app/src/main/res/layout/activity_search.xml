@@ -30,22 +30,15 @@
             android:orientation="horizontal"
             android:transitionName="@string/transition_search_bar">
 
-            <FrameLayout
-                android:id="@+id/bt_back_wrapper"
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/searchback"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent">
-
-                <ImageButton
-                    android:id="@+id/searchback"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="?android:selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_arrow_back_padded"
-                    android:tint="#FF9800"
-                    android:transitionName="@string/transition_search_back" />
-
-            </FrameLayout>
+                android:layout_height="wrap_content"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_arrow_back_padded"
+                android:tint="@color/colorAccent"
+                android:transitionName="@string/transition_search_back" />
 
             <EditText
                 android:id="@+id/search_view"

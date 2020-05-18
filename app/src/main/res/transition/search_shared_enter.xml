@@ -10,8 +10,8 @@
 
     <transition
         class="dvp.manga.ui.custom.transition.ColorTransition"
-        app:startColor="#FF9800"
-        app:endColor="#fff">
+        app:startColor="@color/colorAccent"
+        app:endColor="@color/colorPrimary">
         <targets>
             <target android:targetId="@id/search_bar" />
             <target android:targetId="@id/searchback" />

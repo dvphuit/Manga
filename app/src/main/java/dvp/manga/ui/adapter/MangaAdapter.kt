@@ -32,7 +32,7 @@ class MangaAdapter(recyclerView: RecyclerView?, val section: SectionRoute) : Laz
         init {
             binding.setClickListener {
                 SharedElementManager.setElementInfo(getTransitionName(binding.data!!), adapterPosition)
-                NavManager.gotoMangaDetail(section.value, binding.data!!, binding.imgWrapper)
+                NavManager.gotoMangaDetail(section.value, binding.data!!, binding.imgWrapper, binding.mangaItemFull)
             }
         }
 
@@ -40,6 +40,7 @@ class MangaAdapter(recyclerView: RecyclerView?, val section: SectionRoute) : Laz
             with(binding) {
                 data = manga
                 ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName(manga))
+                ViewCompat.setTransitionName(binding.mangaItemFull, "scrim_${section.value}${manga.name}")
                 executePendingBindings()
                 SharedElementManager.startSE(getTransitionName(manga), adapterPosition)
             }
