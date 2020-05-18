@@ -14,7 +14,7 @@ import dvp.manga.ui.explore.GenreMangaFragment
 
 class GenreMangaPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    private val genres = SectionRoute.values().takeLast(SectionRoute.values().size - 5)
+    private val genres = SectionRoute.values().takeLast(SectionRoute.values().size - 6)
 
     override fun createFragment(position: Int): Fragment {
         return GenreMangaFragment.newInstance(genres[position])
