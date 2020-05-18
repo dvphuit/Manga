@@ -54,5 +54,10 @@ class StoryFragment : BaseFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        requireView().translationZ = 0f
+    }
+
     override val withoutBotNav: Boolean = true
 }
