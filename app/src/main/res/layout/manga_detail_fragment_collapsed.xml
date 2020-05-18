@@ -93,7 +93,7 @@
             android:paddingVertical="4dp"
             android:text="@{data.name}"
             android:textSize="18sp"
-            android:textStyle="bold"
+            android:textColor="#222222"
             app:layout_constraintBottom_toBottomOf="@id/bt_back"
             app:layout_constraintEnd_toStartOf="@id/bt_download"
             app:layout_constraintStart_toEndOf="@id/bt_back"
