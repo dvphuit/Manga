@@ -10,6 +10,7 @@ import kotlinx.coroutines.coroutineScope
  * @author dvphu on 29,April,2020
  */
 
+
 fun <T> responseLiveData(
     dbQuery: () -> LiveData<T>,
     netCall: suspend () -> ResultData<T>,

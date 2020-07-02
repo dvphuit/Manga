@@ -48,7 +48,7 @@ class MangaSectionAdapter : RecyclerView.Adapter<MangaSectionAdapter.ViewHolder>
             }
         }
 
-        private fun getTransitionName(manga: Manga) = "cover_${section?.value}${manga.name}"
+        private fun getTransitionName(manga: Manga) = "cover_${section?.value}${manga.id}"
     }
 
     fun submitData(topMangas: List<Manga>) {

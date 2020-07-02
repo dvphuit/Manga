@@ -40,13 +40,13 @@ class MangaAdapter(recyclerView: RecyclerView?, val section: SectionRoute) : Laz
             with(binding) {
                 data = manga
                 ViewCompat.setTransitionName(binding.imgWrapper, getTransitionName(manga))
-                ViewCompat.setTransitionName(binding.mangaItemFull, "scrim_${section.value}${manga.name}")
+                ViewCompat.setTransitionName(binding.mangaItemFull, "scrim_${section.value}${manga.id}")
                 executePendingBindings()
                 SharedElementManager.startSE(getTransitionName(manga), adapterPosition)
             }
         }
 
-        private fun getTransitionName(manga: Manga) = "cover_${section.value}${manga.name}"
+        private fun getTransitionName(manga: Manga) = "cover_${section.value}${manga.id}"
     }
 
     override fun getItemCount() = mList.size

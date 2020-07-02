@@ -8,7 +8,7 @@
 
         <variable
             name="data"
-            type="dvp.manga.data.model.Manga" />
+            type="dvp.manga.data.model.MangaInfo" />
 
     </data>
 
@@ -16,8 +16,8 @@
         android:id="@+id/manga_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutDescription="@xml/collapsing_toolbar"
         android:transitionGroup="false"
+        app:layoutDescription="@xml/collapsing_toolbar"
         tools:context=".ui.detail.MangaDetailFragment">
 
         <View
@@ -41,22 +41,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <dvp.manga.ui.custom.TwoStateAnimButton
             android:id="@+id/bt_bookmark"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_bookmark_24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:setBookmark="@{data.metaData.bookmarked}"
+            app:srcOff="@drawable/avd_bookmark_off"
+            app:srcOn="@drawable/avd_bookmark_on" />
 
 
         <ImageButton
             android:id="@+id/bt_download"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="?selectableItemBackgroundBorderless"
@@ -75,7 +77,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadUrl="@{data.cover}" />
+            app:loadUrl="@{data.manga.cover}" />
 
         <TextView
             android:id="@+id/title"
@@ -86,9 +88,9 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:paddingVertical="4dp"
-            android:text="@{data.name}"
-            android:textSize="18sp"
+            android:text="@{data.manga.name}"
             android:textColor="#222222"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/img_wrapper"
@@ -102,7 +104,7 @@
             android:layout_marginEnd="8dp"
             android:lines="1"
             android:paddingVertical="4dp"
-            android:text="@{data.status}"
+            android:text="@{data.manga.status}"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
@@ -119,7 +121,7 @@
             android:drawablePadding="4dp"
             android:drawableTint="@color/colorAccent"
             android:paddingVertical="4dp"
-            android:text="@{data.viewed}"
+            android:text="@{data.manga.viewed}"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@id/img_wrapper"
             app:layout_constraintTop_toBottomOf="@id/status" />
@@ -134,7 +136,7 @@
             android:drawablePadding="4dp"
             android:drawableTint="@color/colorAccent"
             android:paddingVertical="4dp"
-            android:text="@{data.followed}"
+            android:text="@{data.manga.followed}"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@id/viewed"
             app:layout_constraintTop_toBottomOf="@id/status" />
@@ -161,7 +163,7 @@
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/img_wrapper"
             app:layout_constraintTop_toBottomOf="@id/viewed"
-            app:setGenres="@{data.genres}" />
+            app:setGenres="@{data.manga.genres}" />
 
         <TextView
             android:id="@+id/description"
@@ -170,23 +172,23 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:paddingVertical="4dp"
-            android:text="@{data.description}"
+            android:text="@{data.manga.description}"
             app:layout_constraintTop_toBottomOf="@id/img_wrapper" />
 
 
         <com.google.android.material.tabs.TabLayout
-            android:transitionGroup="true"
             android:id="@+id/tab_chap"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:transitionGroup="true"
             app:layout_constraintTop_toBottomOf="@id/description"
             app:tabMode="scrollable" />
 
         <androidx.viewpager2.widget.ViewPager2
-            android:transitionGroup="true"
             android:id="@+id/pager_chap"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:transitionGroup="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tab_chap" />
 

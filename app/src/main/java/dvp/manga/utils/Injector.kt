@@ -24,7 +24,8 @@ object Injector {
 
     private fun getMangaRepository(context: Context) = MangaRepository.getInstance(
         TruyenQQ.getInstance(context),
-        MangaDatabase.getInstance(context).mangaDao()
+        MangaDatabase.getInstance(context).mangaDao(),
+        MangaDatabase.getInstance(context).metaDao()
     )
 
     private fun getChapterRepository(context: Context) = ChapterRepository.getInstance(
@@ -41,7 +42,7 @@ object Injector {
 
     fun getSectionVMFactory(context: Context) = SectionVMFactory(getMangaRepository(context))
 
-    fun getMangaDetailVMFactory(context: Context, manga: Manga) = MangaDetailVMFactory(getChapterRepository(context), manga)
+    fun getMangaDetailVMFactory(context: Context, manga: Manga) = MangaDetailVMFactory(getMangaRepository(context), getChapterRepository(context), manga)
 
     fun getChapContentVMFactory(app: Application, context: Context, chap: Chapter) = StoryVMFactory(app, getChapContentRepository(context), chap)
 

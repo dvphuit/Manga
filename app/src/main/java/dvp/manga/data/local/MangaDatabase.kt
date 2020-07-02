@@ -8,15 +8,17 @@ import androidx.room.TypeConverters
 import dvp.manga.data.local.dao.ChapContentDao
 import dvp.manga.data.local.dao.ChapterDao
 import dvp.manga.data.local.dao.MangaDao
+import dvp.manga.data.local.dao.MetaDataDao
 import dvp.manga.data.model.*
 
-@Database(entities = [Manga::class, Chapter::class, ChapContent::class], version = 2, exportSchema = false)
+@Database(entities = [Manga::class, Chapter::class, ChapContent::class, MetaData::class], version = 1, exportSchema = false)
 @TypeConverters(GenreConverter::class, DateConverter::class)
 abstract class MangaDatabase : RoomDatabase() {
 
     abstract fun mangaDao(): MangaDao
     abstract fun chapDao(): ChapterDao
     abstract fun chapContentDao(): ChapContentDao
+    abstract fun metaDao(): MetaDataDao
 
     companion object {
         private const val DB_NAME = "manga.db"

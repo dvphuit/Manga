@@ -30,7 +30,7 @@ abstract class BaseCrawler {
     private suspend fun getBody(url: String): ResultData<Element> {
         return try {
             withContext(Dispatchers.IO) {
-                ResultData.success(Jsoup.connect(url).timeout(5000).get().body())
+                ResultData.success(Jsoup.connect(url).timeout(15000).get().body())
             }
         } catch (e: Exception) {
             Log.e(this.javaClass.simpleName, e.localizedMessage!!)

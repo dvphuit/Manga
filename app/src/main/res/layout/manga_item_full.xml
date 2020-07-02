@@ -17,7 +17,7 @@
         android:id="@+id/manga_item_full"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:padding="8dp"
         android:background="@color/colorPrimary"
         android:foreground="?android:selectableItemBackground"
         android:onClick="@{clickListener}"
@@ -51,6 +51,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_wrapper"
             app:layout_constraintTop_toTopOf="@id/img_wrapper" />
+
+<!--        <dvp.manga.ui.custom.TwoStateAnimButton-->
+<!--            android:id="@+id/btBookmark"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="?android:selectableItemBackgroundBorderless"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            setBookmark="@{data.bookmarked}"-->
+<!--            app:srcOn="@drawable/avd_bookmark_on"-->
+<!--            app:srcOff="@drawable/avd_bookmark_off"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@id/tvTitle"/>-->
 
         <TextView
             android:id="@+id/tvLastChap"

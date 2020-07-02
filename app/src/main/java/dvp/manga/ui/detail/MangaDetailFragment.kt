@@ -5,8 +5,6 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
@@ -14,6 +12,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import dvp.manga.R
+import dvp.manga.data.model.MangaInfo
 import dvp.manga.databinding.MangaDetailFragmentBinding
 import dvp.manga.ui.ResultData
 import dvp.manga.ui.adapter.ChapPageAdapter
@@ -26,6 +25,7 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var binding: MangaDetailFragmentBinding
     private val args by navArgs<MangaDetailFragmentArgs>()
+    private var mangaInfo: MangaInfo? = null
 
     private val viewModel: MangaDetailVM by viewModels {
         Injector.getMangaDetailVMFactory(requireContext(), args.manga)
@@ -43,9 +43,13 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
         context ?: return binding.root
         SharedElementManager.postSE(this)
         return binding.apply {
-            ViewCompat.setTransitionName(imgWrapper, "cover_${args.section}${args.manga.name}")
-            ViewCompat.setTransitionName(mangaDetail, "scrim_${args.section}${args.manga.name}")
-            data = viewModel.manga
+            ViewCompat.setTransitionName(imgWrapper, "cover_${args.section}${args.manga.id}")
+            ViewCompat.setTransitionName(mangaDetail, "scrim_${args.section}${args.manga.id}")
+//            data = args.manga
+            viewModel.manga.observe(viewLifecycleOwner) {
+                mangaInfo = it
+                data = it
+            }
             //set up viewpager for chapters
             val adapter = ChapPageAdapter().apply { subscribeUi(this) }
             pagerChap.adapter = adapter
@@ -79,14 +83,12 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        val animation: Animation = AnimationUtils.loadAnimation(context, R.anim.bounce)
-        v?.startAnimation(animation)
         when (v) {
             binding.btBack -> {
                 backPressed()
             }
             binding.btBookmark -> {
-                Toast.makeText(context, "under construction", Toast.LENGTH_SHORT).show()
+                viewModel.setBookmark(mangaInfo!!)
             }
             binding.btDownload -> {
                 Toast.makeText(context, "under construction", Toast.LENGTH_SHORT).show()

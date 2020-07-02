@@ -1,19 +1,40 @@
 package dvp.manga.data.repository
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
+import dvp.manga.data.local.DaoManager
 import dvp.manga.data.local.dao.MangaDao
+import dvp.manga.data.local.dao.MetaDataDao
+import dvp.manga.data.model.MangaInfo
+import dvp.manga.data.model.MetaData
 import dvp.manga.data.model.SectionRoute
 import dvp.manga.data.remote.BaseCrawler
 import dvp.manga.ui.fetchData
 import dvp.manga.ui.responseLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDao) {
+class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDao, private val metaDao: MetaDataDao) {
+
+    fun getMangaInfo(mangaId: Int): LiveData<MangaInfo> = liveData(Dispatchers.IO) {
+        emitSource(dao.getMangaInf(mangaId))
+    }
+
+    suspend fun saveMetaData(metaData: MetaData) {
+        withContext(Dispatchers.IO) {
+            metaDao.upsert(metaData)
+        }
+    }
 
     fun getMangas(section: SectionRoute, page: Int = 1) = responseLiveData(
         dbQuery = { dao.getMangasBySlug(section.name) },
         netCall = { crawler.getMangas(section, page) },
         saveNetCall = { list ->
             dao.upsert(list)
-            dao.updateSlug(section.name, list.map { it.id })
+            DaoManager.getInstance().addQueue {
+                metaDao.upsertMetaSlug(list, section.name)
+            }
         })
 
     suspend fun fetchMangas(section: SectionRoute, page: Int = 1) =
@@ -21,14 +42,14 @@ class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDa
             netCall = { crawler.getMangas(section, page) },
             saveNetCall = { list ->
                 dao.upsert(list)
-                dao.updateSlug(section.name, list.map { it.id })
+
             })
 
     suspend fun searchManga(query: String, page: Int) =
         fetchData(
             netCall = { crawler.searchManga(query, page) },
             saveNetCall = { list ->
-//                dao.upsert(list)
+                //                dao.upsert(list)
 //                dao.updateSlug(section.name, list.map { it.id })
             })
 
@@ -44,9 +65,9 @@ class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDa
         @Volatile
         private var instance: MangaRepository? = null
 
-        fun getInstance(crawler: BaseCrawler, dao: MangaDao) =
+        fun getInstance(crawler: BaseCrawler, dao: MangaDao, metaDao: MetaDataDao) =
             instance ?: synchronized(this) {
-                instance ?: MangaRepository(crawler, dao).also { instance = it }
+                instance ?: MangaRepository(crawler, dao, metaDao).also { instance = it }
             }
     }
 }

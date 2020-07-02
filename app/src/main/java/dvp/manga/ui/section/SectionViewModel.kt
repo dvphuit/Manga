@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import dvp.manga.data.model.Manga
 import dvp.manga.data.model.SectionRoute
 import dvp.manga.data.repository.MangaRepository
-import dvp.manga.ui.ResultData
 import dvp.manga.ui.FetchResult
+import dvp.manga.ui.ResultData
 import kotlinx.coroutines.*
 
 class SectionViewModel internal constructor(private val repository: MangaRepository) : ViewModel() {
@@ -18,6 +18,14 @@ class SectionViewModel internal constructor(private val repository: MangaReposit
 
     private val state = MutableLiveData<FetchResult>()
     private lateinit var section: SectionRoute
+
+//    fun setBookmark(position: Int) {
+//        viewModelScope.launch {
+//            mangas[position].bookmarked = !mangas[position].bookmarked
+//            repository.update(mangas[position])
+//            state.postValue(FetchResult.Success(mangas, true))
+//        }
+//    }
 
     fun initData(data: List<Manga>) {
         if (mangas.isNotEmpty()) return //data init 1 times

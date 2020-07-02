@@ -57,6 +57,7 @@ dependencies {
     implementation deps.navigation.fragment_ktx
 //    annotationProcessor deps.lifecycle.compiler
     implementation deps.room.runtime
+    implementation deps.room.ktx
     kapt deps.room.compiler
 
     implementation deps.coroutines.android

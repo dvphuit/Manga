@@ -21,6 +21,14 @@ class ExploreModel internal constructor(val repository: MangaRepository) : ViewM
     private val state = MutableLiveData<FetchResult>()
     private lateinit var section: SectionRoute
 
+//    fun setBookmark(position: Int) {
+//        viewModelScope.launch {
+//            mangas[position].bookmarked = !mangas[position].bookmarked
+//            repository.update(mangas[position])
+//            state.postValue(FetchResult.Success(mangas, true))
+//        }
+//    }
+
     fun getState(section: SectionRoute): LiveData<FetchResult> {
         this.section = section
         return state
