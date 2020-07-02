@@ -1,8 +1,10 @@
 package dvp.manga.ui.detail
 
+import android.util.Log
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dvp.manga.data.model.Chapter
 import dvp.manga.data.model.Manga
 import dvp.manga.data.model.MangaInfo
 import dvp.manga.data.model.MetaData
@@ -23,12 +25,17 @@ class MangaDetailVM(private val mangaRepo: MangaRepository, chapRepo: ChapterRep
     val pageChaps = Transformations.map(chapters) {
         when (it) {
             is ResultData.Success -> {
-                val ret = it.value.reversed().chunked(chapPerPage).map { chaps ->
-                    val end = chaps.first().name.number
-                    val start = chaps.last().name.number
-                    PageChap("$start - $end", chaps.reversed())
+                val pageChaps = mutableListOf<PageChap>()
+                val listChap = mutableListOf<Chapter>()
+                it.value.reversed().map { chap ->
+                    listChap.add(chap)
+                    if (chap.index % chapPerPage == 0f) {
+                        val end = listChap.last().name.number
+                        val start = listChap.first().name.number
+                        PageChap("$start - $end", listChap.reversed())
+                    }
                 }
-                return@map ResultData.success(ret.reversed())
+                return@map ResultData.success(pageChaps.reversed())
             }
             is ResultData.Failure -> {
                 return@map ResultData.failure<List<PageChap>>(it.message)
