@@ -5,6 +5,8 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 /**
  * @author dvphu on 29,April,2020
@@ -38,17 +40,17 @@ fun <T> responseLiveData(
 suspend fun <T> fetchData(
     netCall: suspend () -> ResultData<T>,
     saveNetCall: suspend (T) -> Unit
-): ResultData<T> = coroutineScope {
+): ResultData<T> = withContext(Dispatchers.IO) {
     when (val res = netCall()) {
         is ResultData.Success -> {
             saveNetCall(res.value)
-            return@coroutineScope res
+            return@withContext res
         }
         is ResultData.Failure -> {
-            return@coroutineScope ResultData.failure<T>(res.message)
+            return@withContext ResultData.failure<T>(res.message)
         }
         else -> {
-            return@coroutineScope ResultData.failure<T>("Something went wrong, please try again later")
+            return@withContext ResultData.failure<T>("Something went wrong, please try again later")
         }
     }
 }

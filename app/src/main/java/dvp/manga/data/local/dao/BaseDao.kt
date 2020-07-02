@@ -1,5 +1,6 @@
 package dvp.manga.data.local.dao
 
+import android.util.Log
 import androidx.room.*
 
 /**

@@ -1,6 +1,5 @@
 package dvp.manga.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import dvp.manga.data.local.DaoManager
@@ -13,6 +12,8 @@ import dvp.manga.data.remote.BaseCrawler
 import dvp.manga.ui.fetchData
 import dvp.manga.ui.responseLiveData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDao, private val metaDao: MetaDataDao) {
@@ -32,7 +33,7 @@ class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDa
         netCall = { crawler.getMangas(section, page) },
         saveNetCall = { list ->
             dao.upsert(list)
-            DaoManager.getInstance().addQueue {
+            DaoManager.getInstance().addQueue{
                 metaDao.upsertMetaSlug(list, section.name)
             }
         })
@@ -49,7 +50,7 @@ class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDa
         fetchData(
             netCall = { crawler.searchManga(query, page) },
             saveNetCall = { list ->
-                //                dao.upsert(list)
+                dao.upsert(list)
 //                dao.updateSlug(section.name, list.map { it.id })
             })
 
