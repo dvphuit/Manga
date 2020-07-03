@@ -2,12 +2,14 @@ package dvp.manga.ui.detail
 
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
@@ -19,6 +21,7 @@ import dvp.manga.ui.adapter.ChapPageAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 import dvp.manga.utils.SharedElementManager
+import kotlinx.coroutines.launch
 
 
 class MangaDetailFragment : BaseFragment(), View.OnClickListener {
@@ -88,7 +91,7 @@ class MangaDetailFragment : BaseFragment(), View.OnClickListener {
                 backPressed()
             }
             binding.btBookmark -> {
-                viewModel.setBookmark(mangaInfo!!)
+                viewModel.setBookmark(mangaInfo!!, binding.btBookmark.isChecked)
             }
             binding.btDownload -> {
                 Toast.makeText(context, "under construction", Toast.LENGTH_SHORT).show()

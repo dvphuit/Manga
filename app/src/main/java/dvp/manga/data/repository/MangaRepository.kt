@@ -1,5 +1,6 @@
 package dvp.manga.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import dvp.manga.data.local.DaoManager
@@ -24,6 +25,7 @@ class MangaRepository(private val crawler: BaseCrawler, private val dao: MangaDa
 
     suspend fun saveMetaData(metaData: MetaData) {
         withContext(Dispatchers.IO) {
+            Log.d("TEST","save bookmark $metaData")
             metaDao.upsert(metaData)
         }
     }

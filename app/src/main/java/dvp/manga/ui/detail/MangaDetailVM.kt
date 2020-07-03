@@ -10,6 +10,7 @@ import dvp.manga.data.repository.ChapterRepository
 import dvp.manga.data.repository.MangaRepository
 import dvp.manga.ui.ResultData
 import dvp.manga.ui.adapter.PagedChap
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MangaDetailVM(private val mangaRepo: MangaRepository, chapRepo: ChapterRepository, _manga: Manga) : ViewModel() {
@@ -41,13 +42,11 @@ class MangaDetailVM(private val mangaRepo: MangaRepository, chapRepo: ChapterRep
     }
 
 
-    fun setBookmark(mangaInfo: MangaInfo) {
-        viewModelScope.launch {
-            val state = mangaInfo.metaData?.bookmarked ?: false
-//            mangaInfo.metaData?.bookmarked = !state
+    fun setBookmark(mangaInfo: MangaInfo, isChecked: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
             val metaData = MetaData(
                 manga_id = mangaInfo.manga!!.id,
-                bookmarked = !state
+                bookmarked = isChecked
             )
             mangaRepo.saveMetaData(metaData)
         }
