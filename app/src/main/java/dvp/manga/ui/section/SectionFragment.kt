@@ -18,13 +18,14 @@ import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 import dvp.manga.utils.SharedElementManager
+import kotlinx.android.synthetic.main.fragment_section.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SectionFragment : BaseFragment() {
+class SectionFragment : BaseFragment(), View.OnClickListener {
 
     private val args by navArgs<SectionFragmentArgs>()
 
@@ -44,6 +45,7 @@ class SectionFragment : BaseFragment() {
         context ?: return binding.root
         SharedElementManager.postSE(this)
         return binding.apply {
+            btBack.setOnClickListener(this@SectionFragment)
             ViewCompat.setTransitionName(parent, "parent_${args.sectionDetail.section}")
             sectionTitle.text = args.sectionDetail.section.value
             SharedElementManager.startSE(mangaList)
@@ -74,4 +76,10 @@ class SectionFragment : BaseFragment() {
 
 
     override val withoutBotNav: Boolean = true
+
+    override fun onClick(v: View?) {
+        when (v) {
+            bt_back -> requireActivity().onBackPressed()
+        }
+    }
 }

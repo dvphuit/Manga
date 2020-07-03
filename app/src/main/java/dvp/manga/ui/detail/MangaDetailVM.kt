@@ -1,18 +1,15 @@
 package dvp.manga.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dvp.manga.data.model.Chapter
 import dvp.manga.data.model.Manga
 import dvp.manga.data.model.MangaInfo
 import dvp.manga.data.model.MetaData
 import dvp.manga.data.repository.ChapterRepository
 import dvp.manga.data.repository.MangaRepository
 import dvp.manga.ui.ResultData
-import dvp.manga.ui.adapter.PageChap
-import dvp.manga.utils.number
+import dvp.manga.ui.adapter.PagedChap
 import kotlinx.coroutines.launch
 
 class MangaDetailVM(private val mangaRepo: MangaRepository, chapRepo: ChapterRepository, _manga: Manga) : ViewModel() {
@@ -25,20 +22,17 @@ class MangaDetailVM(private val mangaRepo: MangaRepository, chapRepo: ChapterRep
     val pageChaps = Transformations.map(chapters) {
         when (it) {
             is ResultData.Success -> {
-                val pageChaps = mutableListOf<PageChap>()
-                val listChap = mutableListOf<Chapter>()
-                it.value.reversed().map { chap ->
-                    listChap.add(chap)
-                    if (chap.index % chapPerPage == 0f) {
-                        val end = listChap.last().name.number
-                        val start = listChap.first().name.number
-                        PageChap("$start - $end", listChap.reversed())
+                val grouped = it.value
+                    .groupBy { chap -> (chap.index / (chapPerPage + .1)).toInt() }
+                    .map { (_, chaps) ->
+                        val first = chaps.first().index.toInt()
+                        val last = chaps.last().index.toInt()
+                        PagedChap("$first - $last", chaps)
                     }
-                }
-                return@map ResultData.success(pageChaps.reversed())
+                return@map ResultData.success(grouped)
             }
             is ResultData.Failure -> {
-                return@map ResultData.failure<List<PageChap>>(it.message)
+                return@map ResultData.failure<List<PagedChap>>(it.message)
             }
             is ResultData.Loading -> {
                 return@map ResultData.loading(null)
