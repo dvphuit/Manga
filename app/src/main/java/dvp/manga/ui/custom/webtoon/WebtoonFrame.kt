@@ -1,4 +1,4 @@
-package dvp.manga.ui.custom
+package dvp.manga.ui.custom.webtoon
 
 /**
  * @author dvphu on 28,April,2020
@@ -10,6 +10,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.widget.FrameLayout
+import dvp.manga.ui.custom.webtoon.WebtoonRecyclerView
 
 /**
  * Frame layout which contains a [WebtoonRecyclerView]. It's needed to handle touch events,

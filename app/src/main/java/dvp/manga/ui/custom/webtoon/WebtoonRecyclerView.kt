@@ -1,4 +1,4 @@
-package  dvp.manga.ui.custom
+package  dvp.manga.ui.custom.webtoon
 
 import android.animation.Animator
 import android.animation.AnimatorSet

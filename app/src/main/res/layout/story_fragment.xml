@@ -9,18 +9,18 @@
         android:background="#fff"
         tools:context=".ui.story.StoryFragment">
 
-        <dvp.manga.ui.custom.WebtoonFrame
+        <dvp.manga.ui.custom.webtoon.WebtoonFrame
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <dvp.manga.ui.custom.WebtoonRecyclerView
+            <dvp.manga.ui.custom.webtoon.WebtoonRecyclerView
                 android:id="@+id/story_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:context=".ui.story.StoryFragment"
                 tools:listitem="@layout/chap_content_item" />
-        </dvp.manga.ui.custom.WebtoonFrame>
+        </dvp.manga.ui.custom.webtoon.WebtoonFrame>
 
     </FrameLayout>
 

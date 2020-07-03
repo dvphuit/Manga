@@ -1,4 +1,4 @@
-package dvp.manga.ui.custom
+package dvp.manga.ui.custom.webtoon
 
 import android.content.Context
 import android.os.Handler
