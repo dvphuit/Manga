@@ -23,7 +23,7 @@ class MangaDetailVM(private val mangaRepo: MangaRepository, chapRepo: ChapterRep
         when (it) {
             is ResultData.Success -> {
                 val grouped = it.value
-                    .groupBy { chap -> (chap.index / (chapPerPage + .1)).toInt() }
+                    .groupBy { chap -> (chap.index / (chapPerPage + .05)).toInt() }
                     .map { (_, chaps) ->
                         val first = chaps.first().index.toInt()
                         val last = chaps.last().index.toInt()
