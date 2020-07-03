@@ -1,12 +1,14 @@
 package dvp.manga
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.animation.TranslateAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import dvp.manga.utils.gone
+import dvp.manga.utils.hideKeyboard
 import dvp.manga.utils.setupWithNavController
 import dvp.manga.utils.visible
 import kotlinx.android.synthetic.main.activity_main.*
@@ -76,5 +78,12 @@ class MainActivity : AppCompatActivity() {
             startAnimation(animation)
             visible()
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        when (ev?.action) {
+            MotionEvent.ACTION_DOWN -> currentFocus?.hideKeyboard()
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }

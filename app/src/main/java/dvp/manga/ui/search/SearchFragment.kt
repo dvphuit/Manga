@@ -18,6 +18,7 @@ import dvp.manga.ui.adapter.MangaAdapter
 import dvp.manga.ui.base.BaseFragment
 import dvp.manga.utils.Injector
 import dvp.manga.utils.SharedElementManager
+import dvp.manga.utils.showKeyboard
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
@@ -39,23 +40,23 @@ class SearchFragment : BaseFragment() {
         sharedElementReturnTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_shared_return)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = ActivitySearchBinding.inflate(inflater, container, false)
         context ?: return binding.root
         SharedElementManager.postSE(this)
         return binding.apply {
-            SharedElementManager.startSE(mangaList2)
-            adapter = MangaAdapter(mangaList2, SectionRoute.SEARCH).apply {
+            SharedElementManager.startSE(mangaList)
+            adapter = MangaAdapter(mangaList, SectionRoute.SEARCH).apply {
+                mangaList.adapter = this
                 subscribeUi(this)
                 registerLazyCallback { viewModel.loadMore() }
             }
-            mangaList2.adapter = adapter
-            subscribeUi(adapter)
-            searchView.doAfterTextChanged { searchFor(it.toString()) }
-            searchView.requestFocus()
+            searchView.apply {
+                doAfterTextChanged { searchFor(it.toString()) }
+                requestFocus()
+                showKeyboard()
+            }
+            searchback.setOnClickListener { backPressed() }
         }.root
     }
 
@@ -89,5 +90,4 @@ class SearchFragment : BaseFragment() {
 
 
     override val withoutBotNav: Boolean = true
-
 }
