@@ -52,12 +52,13 @@ class MainActivity : AppCompatActivity() {
 
     fun hideBotBar() {
         if(!bot_nav.isVisible) return
-
         bot_nav.apply {
-            val animation = TranslateAnimation(0f, 0f, 0f, bot_nav.height.toFloat()).apply {
-                duration = 500
-                fillAfter = true
-            }
+            val animation = TranslateAnimation(
+                0f,
+                0f,
+                0f,
+                height.toFloat()
+            ).apply { duration = 500 }
             startAnimation(animation)
             gone()
         }
@@ -65,12 +66,13 @@ class MainActivity : AppCompatActivity() {
 
     fun showBotBar() {
         if(bot_nav.isVisible) return
-
         bot_nav.apply {
-            val animation = TranslateAnimation(0f, 0f, bot_nav.height.toFloat(), 0f).apply {
-                duration = 500
-                fillAfter = true
-            }
+            val animation = TranslateAnimation(
+                0f,
+                0f,
+                height.toFloat(),
+                0f
+            ).apply { duration = 500 }
             startAnimation(animation)
             visible()
         }
