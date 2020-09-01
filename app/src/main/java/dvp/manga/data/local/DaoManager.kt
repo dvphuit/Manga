@@ -1,5 +1,6 @@
 package dvp.manga.data.local
 
+import android.graphics.drawable.Animatable2
 import android.util.Log
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -26,6 +27,7 @@ class DaoManager {
                 it.await().invoke()
             }
         }
+
     }
 
     private suspend fun <T> ReceiveChannel<Deferred<T>>.debounce(

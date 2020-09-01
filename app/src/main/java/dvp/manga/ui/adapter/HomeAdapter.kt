@@ -141,9 +141,10 @@ class HomeAdapter(val fragment: Fragment) : RecyclerView.Adapter<RecyclerView.Vi
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            0 -> TOP_MANGA
-            else -> SECTION
+        return when (list[position]) {
+            is Top -> TOP_MANGA
+            is MangaSection -> SECTION
+            else -> -1
         }
     }
 }
